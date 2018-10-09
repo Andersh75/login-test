@@ -1,13 +1,12 @@
 import { LitElement, html } from '@polymer/lit-element';
 import '@vaadin/vaadin-checkbox';
 import '@vaadin/vaadin-radio-button';
-// import { connect } from 'pwa-helpers/connect-mixin.js';
 import { connectmixin } from './connect-mixin.js';
 // import { storeCreator } from './store.js';
 import './x-radiogroup';
 import { Router } from '@vaadin/router';
-import { usermixin} from './usermixin.js';
-import { storeCreator } from './store.js';
+import { usermixin } from './usermixin.js';
+
 
 
 const ONE_INCREMENT = 'ONE_INCREMENT';
@@ -19,70 +18,7 @@ const oneincrement = () => {
   };
 
 
-
-
-export class XLoggedin extends LitElement {
-    connectedCallback() {
-        super.connectedCallback();
-        let that = this;
-        this.username;
-        if (firebase.auth().currentUser.email == 'ahell@kth.se') {
-        this.username = 'ahell';
-        } else {
-            this.username = 'ohej';
-        }
-        this.db = new PouchDB(this.username);
-        this.db.allDocs({
-        include_docs: true,
-        attachments: true
-        }).then(function (result) {
-            console.log('RESULT');
-            console.log(result)
-            let initState = null;
-            if (result.rows.length) {
-                initState = result.rows[0].doc.state
-            } else {
-                initState = {
-                one: 74,
-                two: 47
-                }
-            }
-
-            console.log('INIT STATE TO STORE CREATOR');
-            console.log(initState);
-
-            that.store = storeCreator(that.username, initState, that.db);
-            that.__storeUnsubscribe = that.store.subscribe(() => that._stateChanged(that.store.getState()));
-            console.log(that.store);
-        // // that.store.subscribe(() => that._stateChanged(that.store.getState()));
-        // // that._stateChanged(that.store.getState());
-        // }
-        
-
-        
-        }).catch(function (err) {
-        console.log(err);
-        });
-
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {      
-                console.log('User Logged In');
-            } else {
-                that.__storeUnsubscribe();
-                console.log('UNSUBSCRIBED');
-            }
-        });
-    }
-
-    disconnectedCallback() {
-        this.db = null;
-        this.store = null;
-        this.__storeUnsubscribe();
-    
-        if (super.disconnectedCallback) {
-          super.disconnectedCallback();
-        }
-      }
+export class XLoggedin extends connectmixin(usermixin(LitElement)) {
 
     static get properties() {
         return {
@@ -175,6 +111,10 @@ export class XLoggedin extends LitElement {
             Router.go('/user/four');
         }
     }
+}
+
+customElements.define('x-loggedin', XLoggedin);   
+
 
     // onClick(e) {
     //     // store.dispatch(oneincrement());
@@ -196,9 +136,6 @@ export class XLoggedin extends LitElement {
     //     // console.log(this.shadowRoot.querySelector('#foo'));
 
     // }
-}
-
-customElements.define('x-loggedin', XLoggedin);   
 
 // function XLoggedinCreator(theuser) {
     
@@ -223,3 +160,57 @@ customElements.define('x-loggedin', XLoggedin);
         //     <vaadin-radio-button id="bar" name="bar" ?checked=${this.barchecked} @checked-changed=${this.onClick.bind(this)}>Bar</vaadin-radio-button>
         //     <vaadin-radio-button id="baz" name="baz" ?checked=${this.bazchecked} @checked-changed=${this.onClick.bind(this)}>Baz</vaadin-radio-button> 
         // `
+
+
+
+
+            // connectedCallback() {
+    //     super.connectedCallback();
+    //     // let that = this;
+    //     // this.username;
+    //     // if (firebase.auth().currentUser.email == 'ahell@kth.se') {
+    //     // this.username = 'ahell';
+    //     // } else {
+    //     //     this.username = 'ohej';
+    //     // }
+    //     // this.db = new PouchDB(this.username);
+    //     // this.db.allDocs({
+    //     // include_docs: true,
+    //     // attachments: true
+    //     // }).then(function (result) {
+    //     //     console.log('RESULT');
+    //     //     console.log(result)
+    //     //     let initState = null;
+    //     //     if (result.rows.length) {
+    //     //         initState = result.rows[0].doc.state
+    //     //     } else {
+    //     //         initState = {
+    //     //         one: 74,
+    //     //         two: 47
+    //     //         }
+    //     //     }
+
+    //     //     console.log('INIT STATE TO STORE CREATOR');
+    //     //     console.log(initState);
+
+    //     //     that.store = storeCreator(that.username, initState, that.db);
+    //     //     that.__storeUnsubscribe = that.store.subscribe(() => that._stateChanged(that.store.getState()));
+    //     //     console.log(that.store);
+    //     // // // that.store.subscribe(() => that._stateChanged(that.store.getState()));
+    //     // // // that._stateChanged(that.store.getState());
+        
+
+        
+    //     // }).catch(function (err) {
+    //     // console.log(err);
+    //     // });
+
+    //     // firebase.auth().onAuthStateChanged(function(user) {
+    //     //     if (user) {      
+    //     //         console.log('User Logged In');
+    //     //     } else {
+    //     //         that.__storeUnsubscribe();
+    //     //         console.log('UNSUBSCRIBED');
+    //     //     }
+    //     // });
+    // }

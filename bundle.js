@@ -19854,6 +19854,27 @@ var MyModule = (function (exports) {
     //   </template>
     // </dom-module>
 
+    class XLoggedout extends LitElement {
+        render() {
+            return html`
+        <style>
+            .bg {
+                background-color: red;
+                width: 100vw;
+                height: 90vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        </style>
+        <div class="bg">
+        </div>
+        `
+        }
+    }
+
+    customElements.define('x-loggedout', XLoggedout);
+
     class Lumo$1 extends HTMLElement {
       static get version() {
         return '1.2.0';
@@ -20053,60 +20074,6 @@ var MyModule = (function (exports) {
     $_documentContainer$9.innerHTML = `<custom-style>
   <style>
     html {
-      --lumo-size-xs: 1.625rem;
-      --lumo-size-s: 1.875rem;
-      --lumo-size-m: 2.25rem;
-      --lumo-size-l: 2.75rem;
-      --lumo-size-xl: 3.5rem;
-
-      /* Icons */
-      --lumo-icon-size-s: 1.25em;
-      --lumo-icon-size-m: 1.5em;
-      --lumo-icon-size-l: 2.25em;
-      /* For backwards compatibility */
-      --lumo-icon-size: var(--lumo-icon-size-m);
-    }
-  </style>
-</custom-style>`;
-
-    document.head.appendChild($_documentContainer$9.content);
-
-    const $_documentContainer$a = document.createElement('template');
-
-    $_documentContainer$a.innerHTML = `<custom-style>
-  <style>
-    html {
-      /* Square */
-      --lumo-space-xs: 0.25rem;
-      --lumo-space-s: 0.5rem;
-      --lumo-space-m: 1rem;
-      --lumo-space-l: 1.5rem;
-      --lumo-space-xl: 2.5rem;
-
-      /* Wide */
-      --lumo-space-wide-xs: calc(var(--lumo-space-xs) / 2) var(--lumo-space-xs);
-      --lumo-space-wide-s: calc(var(--lumo-space-s) / 2) var(--lumo-space-s);
-      --lumo-space-wide-m: calc(var(--lumo-space-m) / 2) var(--lumo-space-m);
-      --lumo-space-wide-l: calc(var(--lumo-space-l) / 2) var(--lumo-space-l);
-      --lumo-space-wide-xl: calc(var(--lumo-space-xl) / 2) var(--lumo-space-xl);
-
-      /* Tall */
-      --lumo-space-tall-xs: var(--lumo-space-xs) calc(var(--lumo-space-xs) / 2);
-      --lumo-space-tall-s: var(--lumo-space-s) calc(var(--lumo-space-s) / 2);
-      --lumo-space-tall-m: var(--lumo-space-m) calc(var(--lumo-space-m) / 2);
-      --lumo-space-tall-l: var(--lumo-space-l) calc(var(--lumo-space-l) / 2);
-      --lumo-space-tall-xl: var(--lumo-space-xl) calc(var(--lumo-space-xl) / 2);
-    }
-  </style>
-</custom-style>`;
-
-    document.head.appendChild($_documentContainer$a.content);
-
-    const $_documentContainer$b = document.createElement('template');
-
-    $_documentContainer$b.innerHTML = `<custom-style>
-  <style>
-    html {
       --lumo-border-radius: 0.25em;
 
       /* Shadows */
@@ -20118,389 +20085,180 @@ var MyModule = (function (exports) {
   </style>
 </custom-style>`;
 
-    document.head.appendChild($_documentContainer$b.content);
+    document.head.appendChild($_documentContainer$9.content);
 
-    const $_documentContainer$c = document.createElement('template');
+    const $_documentContainer$a = document.createElement('template');
 
-    $_documentContainer$c.innerHTML = `<custom-style>
-  <style>
-    html {
-      /* Font families */
-      --lumo-font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-
-      /* Font sizes */
-      --lumo-font-size-xxs: .75rem;
-      --lumo-font-size-xs: .8125rem;
-      --lumo-font-size-s: .875rem;
-      --lumo-font-size-m: 1rem;
-      --lumo-font-size-l: 1.125rem;
-      --lumo-font-size-xl: 1.375rem;
-      --lumo-font-size-xxl: 1.75rem;
-      --lumo-font-size-xxxl: 2.5rem;
-
-      /* Line heights */
-      --lumo-line-height-xs: 1.25;
-      --lumo-line-height-s: 1.375;
-      --lumo-line-height-m: 1.625;
-    }
-
-  </style>
-</custom-style><dom-module id="lumo-typography">
+    $_documentContainer$a.innerHTML = `<dom-module id="lumo-checkbox" theme-for="vaadin-checkbox">
   <template>
-    <style>
-      html {
-        font-family: var(--lumo-font-family);
-        font-size: var(--lumo-font-size, var(--lumo-font-size-m));
-        line-height: var(--lumo-line-height-m);
-        -webkit-text-size-adjust: 100%;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-
-      /* Can’t combine with the above selector because that doesn’t work in browsers without native shadow dom */
-      :host {
-        font-family: var(--lumo-font-family);
-        font-size: var(--lumo-font-size, var(--lumo-font-size-m));
-        line-height: var(--lumo-line-height-m);
-        -webkit-text-size-adjust: 100%;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-
-      small,
-      [theme~="font-size-s"] {
-        font-size: var(--lumo-font-size-s);
-        line-height: var(--lumo-line-height-s);
-      }
-
-      [theme~="font-size-xs"] {
-        font-size: var(--lumo-font-size-xs);
-        line-height: var(--lumo-line-height-xs);
-      }
-
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        font-weight: 600;
-        line-height: var(--lumo-line-height-xs);
-        margin-top: 1.25em;
-      }
-
-      h1 {
-        font-size: var(--lumo-font-size-xxxl);
-        margin-bottom: 0.75em;
-      }
-
-      h2 {
-        font-size: var(--lumo-font-size-xxl);
-        margin-bottom: 0.5em;
-      }
-
-      h3 {
-        font-size: var(--lumo-font-size-xl);
-        margin-bottom: 0.5em;
-      }
-
-      h4 {
-        font-size: var(--lumo-font-size-l);
-        margin-bottom: 0.5em;
-      }
-
-      h5 {
-        font-size: var(--lumo-font-size-m);
-        margin-bottom: 0.25em;
-      }
-
-      h6 {
-        font-size: var(--lumo-font-size-xs);
-        margin-bottom: 0;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-      }
-
-      p {
-        margin-top: 0.5em;
-        margin-bottom: 0.75em;
-      }
-
-      a {
-        text-decoration: none;
-      }
-
-      a:hover {
-        text-decoration: underline;
-      }
-
-      hr {
-        display: block;
-        align-self: stretch;
-        height: 1px;
-        border: 0;
-        padding: 0;
-        margin: var(--lumo-space-s) calc(var(--lumo-border-radius) / 2);
-        background-color: var(--lumo-contrast-10pct);
+    <style include="lumo-checkbox-style lumo-checkbox-effects">
+      /* IE11 only */
+      ::-ms-backdrop,
+      [part="checkbox"] {
+        line-height: 1;
       }
     </style>
   </template>
-</dom-module>`;
-
-    document.head.appendChild($_documentContainer$c.content);
-
-    const $_documentContainer$d = document.createElement('template');
-
-    $_documentContainer$d.innerHTML = `<dom-module id="lumo-button" theme-for="vaadin-button">
+</dom-module><dom-module id="lumo-checkbox-style">
   <template>
     <style>
       :host {
-        /* Sizing */
-        --lumo-button-size: var(--lumo-size-m);
-        min-width: calc(var(--lumo-button-size) * 2);
-        height: var(--lumo-button-size);
-        padding: 0 calc(var(--lumo-button-size) / 3 + var(--lumo-border-radius) / 2);
-        margin: var(--lumo-space-xs) 0;
-        box-sizing: border-box;
-        /* Style */
-        font-family: var(--lumo-font-family);
-        font-size: var(--lumo-font-size-m);
-        font-weight: 500;
-        color: var(--lumo-primary-text-color);
-        background-color: var(--lumo-contrast-5pct);
-        border-radius: var(--lumo-border-radius);
-        cursor: default;
         -webkit-tap-highlight-color: transparent;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: default;
+        outline: none;
       }
 
-      /* Set only for the internal parts so we don’t affect the host vertical alignment */
-      [part="label"],
-      [part="prefix"],
-      [part="suffix"] {
-        line-height: var(--lumo-line-height-xs);
+      [part="label"]:not([empty]) {
+        margin: 0.1875em 0.875em 0.1875em 0.375em;
       }
 
-      [part="label"] {
-        padding: calc(var(--lumo-button-size) / 6) 0;
+      [part="checkbox"] {
+        width: calc(1em + 2px);
+        height: calc(1em + 2px);
+        margin: 0.1875em;
+        position: relative;
+        border-radius: var(--lumo-border-radius);
+        background-color: var(--lumo-contrast-20pct);
+        transition: transform 0.2s cubic-bezier(.12, .32, .54, 2), background-color 0.15s;
+        pointer-events: none;
+        line-height: 1.2;
       }
 
-      :host([theme~="small"]) {
-        font-size: var(--lumo-font-size-s);
-        --lumo-button-size: var(--lumo-size-s);
+      :host([indeterminate]) [part="checkbox"],
+      :host([checked]) [part="checkbox"] {
+        background-color: var(--lumo-primary-color);
       }
 
-      :host([theme~="large"]) {
-        font-size: var(--lumo-font-size-l);
-        --lumo-button-size: var(--lumo-size-l);
+      /* Needed to align the checkbox nicely on the baseline */
+      [part="checkbox"]::before {
+        content: "\\2003";
       }
 
-      /* This needs to be the last selector for it to take priority */
-      :host([disabled][disabled]) {
+      /* Checkmark */
+      [part="checkbox"]::after {
+        content: "";
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border: 0 solid var(--lumo-primary-contrast-color);
+        border-width: 0.1875em 0 0 0.1875em;
+        box-sizing: border-box;
+        transform-origin: 0 0;
+        position: absolute;
+        top: 0.8125em;
+        left: 0.5em;
+        transform: scale(0.55) rotate(-135deg);
+        opacity: 0;
+      }
+
+      :host([checked]) [part="checkbox"]::after {
+        opacity: 1;
+        width: 0.625em;
+        height: 1.0625em;
+      }
+
+      /* Indeterminate checkmark */
+
+      :host([indeterminate]) [part="checkbox"]::after {
+        transform: none;
+        opacity: 1;
+        top: 45%;
+        height: 10%;
+        left: 22%;
+        right: 22%;
+        width: auto;
+        border: 0;
+        background-color: var(--lumo-primary-contrast-color);
+        transition: opacity 0.25s;
+      }
+
+      /* Focus ring */
+
+      :host([focus-ring]) [part="checkbox"] {
+        box-shadow: 0 0 0 3px var(--lumo-primary-color-50pct);
+      }
+
+      /* Disabled */
+
+      :host([disabled]) {
         pointer-events: none;
         color: var(--lumo-disabled-text-color);
-        background-color: var(--lumo-contrast-5pct);
       }
 
-      /* For interaction states */
-      :host::before,
-      :host::after {
-        content: "";
-        /* We rely on the host always being relative */
-        position: absolute;
-        z-index: 1;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background-color: currentColor;
+      :host([disabled]) [part="label"] ::slotted(*) {
+        color: inherit;
+      }
+
+      :host([disabled]) [part="checkbox"] {
+        background-color: var(--lumo-contrast-10pct);
+      }
+
+      :host([disabled]) [part="checkbox"]::after {
+        border-color: var(--lumo-contrast-30pct);
+      }
+
+      :host([indeterminate][disabled]) [part="checkbox"]::after {
+        background-color: var(--lumo-contrast-30pct);
+      }
+    </style>
+  </template>
+</dom-module><dom-module id="lumo-checkbox-effects">
+  <template>
+    <style>
+      /* Transition the checkmark if activated with the mouse (disabled for grid select-all this way) */
+      :host(:hover) [part="checkbox"]::after {
+        transition: width 0.1s, height 0.25s;
+      }
+
+      /* Used for activation "halo" */
+      [part="checkbox"]::before {
+        color: transparent;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
         border-radius: inherit;
+        background-color: inherit;
+        transform: scale(1.4);
         opacity: 0;
-        transition: opacity 0.2s;
-        pointer-events: none;
+        transition: transform 0.1s, opacity 0.8s;
       }
 
       /* Hover */
 
-      :host(:hover)::before {
-        opacity: 0.05;
+      :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part="checkbox"] {
+        background-color: var(--lumo-contrast-30pct);
       }
 
       /* Disable hover for touch devices */
       @media (pointer: coarse) {
-        :host(:not([active]):hover)::before {
-          opacity: 0;
+        :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part="checkbox"] {
+          background-color: var(--lumo-contrast-20pct);
         }
       }
 
       /* Active */
 
-      :host::after {
-        transition: opacity 1.4s, transform 0.1s;
-        filter: blur(8px);
+      :host([active]) [part="checkbox"] {
+        transform: scale(0.9);
+        transition-duration: 0.05s;
       }
 
-      :host([active])::before {
-        opacity: 0.1;
-        transition-duration: 0s;
+      :host([active][checked]) [part="checkbox"] {
+        transform: scale(1.1);
       }
 
-      :host([active])::after {
-        opacity: 0.1;
-        transition-duration: 0s, 0s;
+      :host([active]:not([checked])) [part="checkbox"]::before {
+        transition-duration: 0.01s, 0.01s;
         transform: scale(0);
-      }
-
-      /* Keyboard focus */
-
-      :host([focus-ring]) {
-        box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
-      }
-
-      /* Types (primary, tertiary, tertiary-inline */
-
-      :host([theme~="tertiary"]),
-      :host([theme~="tertiary-inline"]) {
-        background-color: transparent !important;
-        transition: opacity 0.2s;
-        min-width: 0;
-      }
-
-      :host([theme~="tertiary"])::before,
-      :host([theme~="tertiary-inline"])::before {
-        display: none;
-      }
-
-      :host([theme~="tertiary"]) {
-        padding: 0 calc(var(--lumo-button-size) / 6);
-      }
-
-      @media (hover: hover) {
-        :host([theme*="tertiary"]:not([active]):hover) {
-          opacity: 0.8;
-        }
-      }
-
-      :host([theme~="tertiary"][active]),
-      :host([theme~="tertiary-inline"][active]) {
-        opacity: 0.5;
-        transition-duration: 0s;
-      }
-
-      :host([theme~="tertiary-inline"]) {
-        margin: 0;
-        height: auto;
-        padding: 0;
-        line-height: inherit;
-        font-size: inherit;
-      }
-
-      :host([theme~="tertiary-inline"]) [part="label"] {
-        padding: 0;
-        line-height: inherit;
-      }
-
-      :host([theme~="primary"]) {
-        background-color: var(--lumo-primary-color);
-        color: var(--lumo-primary-contrast-color);
-        font-weight: 600;
-        min-width: calc(var(--lumo-button-size) * 2.5);
-      }
-
-      :host([theme~="primary"]:hover)::before {
-        opacity: 0.1;
-      }
-
-      :host([theme~="primary"][active])::before {
-        background-color: var(--lumo-shade-20pct);
-      }
-
-      @media (pointer: coarse) {
-        :host([theme~="primary"][active])::before {
-          background-color: var(--lumo-shade-60pct);
-        }
-
-        :host([theme~="primary"]:not([active]):hover)::before {
-          opacity: 0;
-        }
-      }
-
-      :host([theme~="primary"][active])::after {
-        opacity: 0.2;
-      }
-
-      /* Colors (success, error, contrast) */
-
-      :host([theme~="success"]) {
-        color: var(--lumo-success-text-color);
-      }
-
-      :host([theme~="success"][theme~="primary"]) {
-        background-color: var(--lumo-success-color);
-        color: var(--lumo-success-contrast-color);
-      }
-
-      :host([theme~="error"]) {
-        color: var(--lumo-error-text-color);
-      }
-
-      :host([theme~="error"][theme~="primary"]) {
-        background-color: var(--lumo-error-color);
-        color: var(--lumo-error-contrast-color);
-      }
-
-      :host([theme~="contrast"]) {
-        color: var(--lumo-contrast);
-      }
-
-      :host([theme~="contrast"][theme~="primary"]) {
-        background-color: var(--lumo-contrast);
-        color: var(--lumo-base-color);
-      }
-
-      /* Icons */
-
-      [part] ::slotted(iron-icon) {
-        display: inline-block;
-        width: var(--lumo-icon-size-m);
-        height: var(--lumo-icon-size-m);
-      }
-
-      /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
-      [part] ::slotted(iron-icon[icon^="vaadin:"]) {
-        padding: 0.25em;
-        box-sizing: border-box !important;
-      }
-
-      [part="prefix"] {
-        margin-left: -0.25em;
-        margin-right: 0.25em;
-      }
-
-      [part="suffix"] {
-        margin-left: 0.25em;
-        margin-right: -0.25em;
-      }
-
-      /* Icon-only */
-
-      :host([theme~="icon"]) {
-        min-width: var(--lumo-button-size);
-        padding-left: calc(var(--lumo-button-size) / 4);
-        padding-right: calc(var(--lumo-button-size) / 4);
-      }
-
-      :host([theme~="icon"]) [part="prefix"],
-      :host([theme~="icon"]) [part="suffix"] {
-        margin-left: 0;
-        margin-right: 0;
+        opacity: 0.4;
       }
     </style>
   </template>
 </dom-module>`;
 
-    document.head.appendChild($_documentContainer$d.content);
+    document.head.appendChild($_documentContainer$a.content);
 
     /**
      * @polymerMixin
@@ -21433,1917 +21191,6 @@ var MyModule = (function (exports) {
     This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
     */
     /**
-     * `<vaadin-button>` is a Web Component providing an accessible and customizable button.
-     *
-     * ```html
-     * <vaadin-button>
-     * </vaadin-button>
-     * ```
-     *
-     * ```js
-     * document.querySelector('vaadin-button').addEventListener('click', () => alert('Hello World!'));
-     * ```
-     *
-     * ### Styling
-     *
-     * The following shadow DOM parts are exposed for styling:
-     *
-     * Part name | Description
-     * ----------------|----------------
-     * `label` | The label (text) inside the button
-     * `prefix` | A slot for e.g. an icon before the label
-     * `suffix` | A slot for e.g. an icon after the label
-     *
-     *
-     * The following attributes are exposed for styling:
-     *
-     * Attribute | Description
-     * --------- | -----------
-     * `active` | Set when the button is pressed down, either with mouse, touch or the keyboard.
-     * `disabled` | Set when the button is disabled.
-     * `focus-ring` | Set when the button is focused using the keyboard.
-     * `focused` | Set when the button is focused.
-     *
-     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
-     *
-     * @memberof Vaadin
-     * @mixes Vaadin.ElementMixin
-     * @mixes Vaadin.ControlStateMixin
-     * @mixes Vaadin.ThemableMixin
-     * @mixes Polymer.GestureEventListeners
-     * @demo demo/index.html
-     */
-    class ButtonElement extends
-      ElementMixin$1(
-        ControlStateMixin(
-          ThemableMixin(
-            GestureEventListeners(PolymerElement)))) {
-      static get template() {
-        return html$1`
-    <style>
-      :host {
-        display: inline-block;
-        position: relative;
-        outline: none;
-        white-space: nowrap;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      /* Ensure the button is always aligned on the baseline */
-      .vaadin-button-container::before {
-        content: "\\2003";
-        display: inline-block;
-        width: 0;
-      }
-
-      .vaadin-button-container {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        width: 100%;
-        height: 100%;
-        min-height: inherit;
-        text-shadow: inherit;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      [part="prefix"],
-      [part="suffix"] {
-        flex: none;
-      }
-
-      [part="label"] {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      #button {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        cursor: inherit;
-      }
-    </style>
-    <div class="vaadin-button-container">
-      <div part="prefix">
-        <slot name="prefix"></slot>
-      </div>
-      <div part="label">
-        <slot></slot>
-      </div>
-      <div part="suffix">
-        <slot name="suffix"></slot>
-      </div>
-    </div>
-    <button id="button" type="button"></button>
-`;
-      }
-
-      static get is() {
-        return 'vaadin-button';
-      }
-
-      static get version() {
-        return '2.1.0';
-      }
-
-      ready() {
-        super.ready();
-
-        // Leaving default role in the native button, makes navigation announcement
-        // being different when using focus navigation (tab) versus using normal
-        // navigation (arrows). The first way announces the label on a button
-        // since the focus is moved programmatically, and the second on a group.
-        this.setAttribute('role', 'button');
-        this.$.button.setAttribute('role', 'presentation');
-
-        this._addActiveListeners();
-      }
-
-      /**
-       * @protected
-       */
-      disconnectedCallback() {
-        super.disconnectedCallback();
-
-        // `active` state is preserved when the element is disconnected between keydown and keyup events.
-        // reproducible in `<vaadin-date-picker>` when closing on `Cancel` or `Today` click.
-        if (this.hasAttribute('active')) {
-          this.removeAttribute('active');
-        }
-      }
-
-      _addActiveListeners() {
-        addListener(this, 'down', () => !this.disabled && this.setAttribute('active', ''));
-        addListener(this, 'up', () => this.removeAttribute('active'));
-        this.addEventListener('keydown', e => !this.disabled && [13, 32].indexOf(e.keyCode) >= 0 && this.setAttribute('active', ''));
-        this.addEventListener('keyup', () => this.removeAttribute('active'));
-        this.addEventListener('blur', () => this.removeAttribute('active'));
-      }
-
-      /**
-       * @protected
-       */
-      get focusElement() {
-        return this.$.button;
-      }
-    }
-
-    customElements.define(ButtonElement.is, ButtonElement);
-
-    const $_documentContainer$e = document.createElement('template');
-
-    $_documentContainer$e.innerHTML = `<dom-module id="lumo-text-field" theme-for="vaadin-text-field">
-  <template>
-    <style>
-      :host {
-        --lumo-text-field-size: var(--lumo-size-m);
-        color: var(--lumo-body-text-color);
-        font-size: var(--lumo-font-size-m);
-        font-family: var(--lumo-font-family);
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        -webkit-tap-highlight-color: transparent;
-        padding: var(--lumo-space-xs) 0;
-      }
-
-      :host::before {
-        height: var(--lumo-text-field-size);
-        box-sizing: border-box;
-        display: inline-flex;
-        align-items: center;
-      }
-
-      [part="label"] {
-        align-self: flex-start;
-        color: var(--lumo-secondary-text-color);
-        font-weight: 500;
-        font-size: var(--lumo-font-size-s);
-        margin-left: calc(var(--lumo-border-radius) / 4);
-        transition: color 0.2s;
-        line-height: 1;
-        padding-bottom: 0.5em;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        position: relative;
-        max-width: 100%;
-        box-sizing: border-box;
-      }
-
-      :host([has-label])::before {
-        /* Label height + margin */
-        margin-top: calc(var(--lumo-font-size-s) * 1.5);
-      }
-
-      :host([has-label]) {
-        padding-top: var(--lumo-space-m);
-      }
-
-      :host([focused]:not([readonly])) [part="label"] {
-        color: var(--lumo-primary-text-color);
-      }
-
-      :host([required]) [part="label"] {
-        padding-right: 1em;
-      }
-
-      /* Used for required and invalid indicators */
-      [part="label"]::after {
-        content: var(--lumo-required-field-indicator, "•");
-        transition: opacity 0.2s;
-        opacity: 0;
-        color: var(--lumo-primary-text-color);
-        position: absolute;
-        right: 0;
-        width: 1em;
-        text-align: center;
-      }
-
-      [part="value"],
-      [part="input-field"] ::slotted([part="value"]) {
-        cursor: inherit;
-        min-height: var(--lumo-text-field-size);
-        padding: 0 0.25em;
-        --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
-        -webkit-mask-image: var(--_lumo-text-field-overflow-mask-image);
-      }
-
-      [part="value"]:focus {
-        -webkit-mask-image: none;
-        mask-image: none;
-      }
-
-      /*
-        TODO: CSS custom property in \`mask-image\` causes crash in Edge
-        see https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15415089/
-      */
-      @-moz-document url-prefix() {
-        [part="value"],
-        [part="input-field"] ::slotted([part="value"]) {
-          mask-image: var(--_lumo-text-field-overflow-mask-image);
-        }
-      }
-
-      [part="value"]::-webkit-input-placeholder {
-        color: inherit;
-        transition: opacity 0.175s 0.05s;
-        opacity: 0.5;
-      }
-
-      [part="value"]:-ms-input-placeholder {
-        color: inherit;
-        opacity: 0.5;
-      }
-
-      [part="value"]::-moz-placeholder {
-        color: inherit;
-        transition: opacity 0.175s 0.05s;
-        opacity: 0.5;
-      }
-
-      [part="value"]::placeholder {
-        color: inherit;
-        transition: opacity 0.175s 0.1s;
-        opacity: 0.5;
-      }
-
-      [part="input-field"] {
-        border-radius: var(--lumo-border-radius);
-        background-color: var(--lumo-contrast-10pct);
-        padding: 0 calc(0.375em + var(--lumo-border-radius) / 4 - 1px);
-        font-weight: 500;
-        line-height: 1;
-        position: relative;
-        cursor: text;
-        box-sizing: border-box;
-      }
-
-      /* Used for hover and activation effects */
-      [part="input-field"]::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        border-radius: inherit;
-        pointer-events: none;
-        background-color: var(--lumo-contrast-50pct);
-        opacity: 0;
-        transition: transform 0.15s, opacity 0.2s;
-        transform-origin: 100% 0;
-      }
-
-      /* Hover */
-
-      :host(:hover:not([readonly]):not([focused])) [part="label"] {
-        color: var(--lumo-body-text-color);
-      }
-
-      :host(:hover:not([readonly]):not([focused])) [part="input-field"]::after {
-        opacity: 0.1;
-      }
-
-      /* Touch device adjustment */
-      @media (pointer: coarse) {
-        :host(:hover:not([readonly]):not([focused])) [part="label"] {
-          color: var(--lumo-secondary-text-color);
-        }
-
-        :host(:hover:not([readonly]):not([focused])) [part="input-field"]::after {
-          opacity: 0;
-        }
-
-        :host(:active:not([readonly]):not([focused])) [part="input-field"]::after {
-          opacity: 0.2;
-        }
-      }
-
-      /* Trigger when not focusing using the keyboard */
-      :host([focused]:not([focus-ring]):not([readonly])) [part="input-field"]::after {
-        transform: scaleX(0);
-        transition-duration: 0.15s, 1s;
-      }
-
-      /* Focus-ring */
-
-      :host([focus-ring]) [part="input-field"] {
-        box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
-      }
-
-      /* Read-only and disabled */
-      :host([readonly]) [part="value"]::-webkit-input-placeholder,
-      :host([disabled]) [part="value"]::-webkit-input-placeholder {
-        opacity: 0;
-      }
-
-      :host([readonly]) [part="value"]:-ms-input-placeholder,
-      :host([disabled]) [part="value"]:-ms-input-placeholder {
-        opacity: 0;
-      }
-
-      :host([readonly]) [part="value"]::-moz-placeholder,
-      :host([disabled]) [part="value"]::-moz-placeholder {
-        opacity: 0;
-      }
-
-      :host([readonly]) [part="value"]::placeholder,
-      :host([disabled]) [part="value"]::placeholder {
-        opacity: 0;
-      }
-
-      /* Read-only */
-
-      :host([readonly]) [part="input-field"] {
-        color: var(--lumo-secondary-text-color);
-        background-color: transparent;
-        cursor: default;
-      }
-
-      :host([readonly]) [part="input-field"]::after {
-        background-color: transparent;
-        opacity: 1;
-        border: 1px dashed var(--lumo-contrast-30pct);
-      }
-
-      /* Disabled style */
-
-      :host([disabled]) {
-        pointer-events: none;
-      }
-
-      :host([disabled]) [part="input-field"] {
-        background-color: var(--lumo-contrast-5pct);
-      }
-
-      :host([disabled]) [part="label"],
-      :host([disabled]) [part="value"],
-      :host([disabled]) [part="input-field"] ::slotted(*) {
-        color: var(--lumo-disabled-text-color);
-        -webkit-text-fill-color: var(--lumo-disabled-text-color);
-      }
-
-      /* Required field style */
-
-      :host([required]:not([has-value])) [part="label"]::after {
-        opacity: 1;
-      }
-
-      /* Invalid style */
-
-      :host([invalid]) [part="label"]::after {
-        color: var(--lumo-error-text-color);
-      }
-
-      :host([invalid]) [part="input-field"] {
-        background-color: var(--lumo-error-color-10pct);
-      }
-
-      :host([invalid]) [part="input-field"]::after {
-        background-color: var(--lumo-error-color-50pct);
-      }
-
-      :host([invalid][focus-ring]) [part="input-field"] {
-        box-shadow: 0 0 0 2px var(--lumo-error-color-50pct);
-      }
-
-      /* Error message */
-
-      [part="error-message"] {
-        margin-left: calc(var(--lumo-border-radius) / 4);
-        font-size: var(--lumo-font-size-xs);
-        line-height: var(--lumo-line-height-xs);
-        color: var(--lumo-error-text-color);
-        will-change: max-height;
-        transition: 0.4s max-height;
-        max-height: 5em;
-      }
-
-      /* Margin that doesn’t reserve space when there’s no error message */
-      [part="error-message"]:not(:empty)::before,
-      [part="error-message"]:not(:empty)::after {
-        content: "";
-        display: block;
-        height: 0.4em;
-      }
-
-      :host(:not([invalid])) [part="error-message"] {
-        max-height: 0;
-        overflow: hidden;
-      }
-
-      /* Small theme */
-
-      :host([theme~="small"]) {
-        font-size: var(--lumo-font-size-s);
-        --lumo-text-field-size: var(--lumo-size-s);
-      }
-
-      :host([theme~="small"][has-label]) [part="label"] {
-        font-size: var(--lumo-font-size-xs);
-      }
-
-      :host([theme~="small"][has-label]) [part="error-message"] {
-        font-size: var(--lumo-font-size-xxs);
-      }
-
-      /* Text align */
-
-      :host([theme~="align-center"]) [part="value"] {
-        text-align: center;
-        --_lumo-text-field-overflow-mask-image: none;
-      }
-
-      :host([theme~="align-right"]) [part="value"] {
-        text-align: right;
-        --_lumo-text-field-overflow-mask-image: none;
-      }
-
-      @-moz-document url-prefix() {
-        /* Firefox is smart enough to align overflowing text to right */
-        :host([theme~="align-right"]) [part="value"] {
-          --_lumo-text-field-overflow-mask-image: linear-gradient(to right, transparent 0.25em, #000 1.5em);
-        }
-      }
-
-      /* Slotted content */
-
-      [part="input-field"] ::slotted(:not([part]):not(iron-icon)) {
-        color: var(--lumo-secondary-text-color);
-        font-weight: 400;
-      }
-
-      /* Slotted icons */
-
-      [part="input-field"] ::slotted(iron-icon) {
-        color: var(--lumo-contrast-60pct);
-        width: var(--lumo-icon-size-m);
-        height: var(--lumo-icon-size-m);
-      }
-
-      /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
-      [part="input-field"] ::slotted(iron-icon[icon^="vaadin:"]) {
-        padding: 0.25em;
-        box-sizing: border-box !important;
-      }
-    </style>
-  </template>
-</dom-module>`;
-
-    document.head.appendChild($_documentContainer$e.content);
-
-    /**
-    @license
-    Copyright (c) 2017 Vaadin Ltd.
-    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
-    */
-    const $_documentContainer$f = document.createElement('template');
-
-    $_documentContainer$f.innerHTML = `<dom-module id="vaadin-text-field-shared-styles">
-  <template>
-    <style>
-      :host {
-        display: inline-flex;
-        outline: none;
-      }
-
-      :host::before {
-        content: "\\2003";
-        width: 0;
-        display: inline-block;
-        /* Size and position this element on the same vertical position as the input-field element
-           to make vertical align for the host element work as expected */
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      .vaadin-text-field-container,
-      .vaadin-text-area-container {
-        display: flex;
-        flex-direction: column;
-        min-width: 100%;
-        max-width: 100%;
-        width: var(--vaadin-text-field-default-width, 12em);
-      }
-
-      [part="label"]:empty {
-        display: none;
-      }
-
-      [part="input-field"] {
-        display: flex;
-        align-items: center;
-        flex: auto;
-      }
-
-      /* Reset the native input styles */
-      [part="value"] {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        outline: none;
-        margin: 0;
-        padding: 0;
-        border: 0;
-        border-radius: 0;
-        min-width: 0;
-        font: inherit;
-        font-size: 1em;
-        line-height: normal;
-        color: inherit;
-        background-color: transparent;
-        /* Disable default invalid style in Firefox */
-        box-shadow: none;
-      }
-
-      [part="input-field"] ::slotted(*) {
-        flex: none;
-      }
-
-      /* Slotted by vaadin-dropdown-menu-text-field */
-      [part="value"],
-      [part="input-field"] ::slotted([part="value"]) {
-        flex: auto;
-        white-space: nowrap;
-        overflow: hidden;
-        width: 100%;
-        height: 100%;
-      }
-
-      [part="value"]::-ms-clear {
-        display: none;
-      }
-    </style>
-  </template>
-</dom-module>`;
-
-    document.head.appendChild($_documentContainer$f.content);
-
-    /**
-     * @polymerMixin
-     * @mixes Vaadin.ControlStateMixin
-     */
-    const TextFieldMixin = subclass => class VaadinTextFieldMixin extends ControlStateMixin(subclass) {
-      static get properties() {
-        return {
-          /**
-           * Whether the value of the control can be automatically completed by the browser.
-           * List of available options at:
-           * https://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete
-           */
-          autocomplete: {
-            type: String
-          },
-
-          /**
-           * This is a property supported by Safari that is used to control whether
-           * autocorrection should be enabled when the user is entering/editing the text.
-           * Possible values are:
-           * on: Enable autocorrection.
-           * off: Disable autocorrection.
-           */
-          autocorrect: {
-            type: String
-          },
-
-          /**
-           * This is a property supported by Safari and Chrome that is used to control whether
-           * autocapitalization should be enabled when the user is entering/editing the text.
-           * Possible values are:
-           * characters: Characters capitalization.
-           * words: Words capitalization.
-           * sentences: Sentences capitalization.
-           * none: No capitalization.
-           */
-          autocapitalize: {
-            type: String
-          },
-
-          /**
-           * Error to show when the input value is invalid.
-           */
-          errorMessage: {
-            type: String,
-            value: ''
-          },
-
-          /**
-           * String used for the label element.
-           */
-          label: {
-            type: String,
-            value: '',
-            observer: '_labelChanged'
-          },
-
-          /**
-           * Maximum number of characters (in Unicode code points) that the user can enter.
-           */
-          maxlength: {
-            type: Number
-          },
-
-          /**
-           * Minimum number of characters (in Unicode code points) that the user can enter.
-           */
-          minlength: {
-            type: Number
-          },
-
-          /**
-           * The name of the control, which is submitted with the form data.
-           */
-          name: {
-            type: String
-          },
-
-          /**
-           * A hint to the user of what can be entered in the control.
-           */
-          placeholder: {
-            type: String
-          },
-
-          /**
-           * This attribute indicates that the user cannot modify the value of the control.
-           */
-          readonly: {
-            type: Boolean,
-            reflectToAttribute: true
-          },
-
-          /**
-           * Specifies that the user must fill in a value.
-           */
-          required: {
-            type: Boolean,
-            reflectToAttribute: true
-          },
-
-
-          /**
-           * The initial value of the control.
-           * It can be used for two-way data binding.
-           */
-          value: {
-            type: String,
-            value: '',
-            observer: '_valueChanged',
-            notify: true
-          },
-
-          /**
-           * This property is set to true when the control value is invalid.
-           */
-          invalid: {
-            type: Boolean,
-            reflectToAttribute: true,
-            notify: true,
-            value: false
-          },
-
-          /**
-           * When set to true, user is prevented from typing a value that
-           * conflicts with the given `pattern`.
-           */
-          preventInvalidInput: {
-            type: Boolean
-          },
-
-          _labelId: {
-            type: String
-          },
-
-          _errorId: {
-            type: String
-          }
-        };
-      }
-
-      get focusElement() {
-        return this.root.querySelector('[part=value]');
-      }
-
-      _onInput(e) {
-        if (this.preventInvalidInput) {
-          const input = this.focusElement;
-          if (input.value.length > 0 && !this.checkValidity()) {
-            input.value = this.value || '';
-          }
-        }
-      }
-
-      _onChange(e) {
-        // In the Shadow DOM, the `change` event is not leaked into the
-        // ancestor tree, so we must do this manually.
-        const changeEvent = new CustomEvent('change', {
-          detail: {
-            sourceEvent: e
-          },
-          bubbles: e.bubbles,
-          cancelable: e.cancelable,
-        });
-        this.dispatchEvent(changeEvent);
-      }
-
-      _valueChanged(newVal, oldVal) {
-        // setting initial value to empty string, skip validation
-        if (newVal === '' && oldVal === undefined) {
-          return;
-        }
-        if (this.invalid) {
-          this.validate();
-        }
-        if (newVal !== '' && newVal != null) {
-          this.setAttribute('has-value', '');
-        } else {
-          this.removeAttribute('has-value');
-        }
-      }
-
-      _labelChanged(label) {
-        if (label !== '' && label != null) {
-          this.setAttribute('has-label', '');
-        } else {
-          this.removeAttribute('has-label');
-        }
-      }
-
-      /**
-       * Returns true if the current input value satisfies all constraints (if any)
-       * @returns {boolean}
-       */
-      checkValidity() {
-        if (this.required || this.pattern || this.maxlength || this.minlength) {
-          return this.focusElement.checkValidity();
-        } else {
-          return !this.invalid;
-        }
-      }
-
-
-      ready() {
-        super.ready();
-        if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
-          this.updateStyles();
-        }
-
-        var uniqueId = TextFieldMixin._uniqueId = 1 + TextFieldMixin._uniqueId || 0;
-        this._errorId = `${this.constructor.is}-error-${uniqueId}`;
-        this._labelId = `${this.constructor.is}-label-${uniqueId}`;
-
-        if (navigator.userAgent.match(/Trident/)) {
-          this._addIEListeners();
-        }
-      }
-
-      /**
-       * Returns true if `value` is valid.
-       * `<iron-form>` uses this to check the validity or all its elements.
-       *
-       * @return {boolean} True if the value is valid.
-       */
-      validate() {
-        return !(this.invalid = !this.checkValidity());
-      }
-
-      _addIEListeners() {
-        // IE11 dispatches `input` event in following cases:
-        // - focus or blur, when placeholder attribute is set
-        // - placeholder attribute value changed
-        // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/101220/
-        const prevent = e => {
-          e.stopImmediatePropagation();
-          this.focusElement.removeEventListener('input', prevent);
-        };
-        const shouldPreventInput = () => this.placeholder && this.focusElement.addEventListener('input', prevent);
-        this.focusElement.addEventListener('focusin', shouldPreventInput);
-        this.focusElement.addEventListener('focusout', shouldPreventInput);
-        this._createPropertyObserver('placeholder', shouldPreventInput);
-      }
-
-      _getActiveErrorId(invalid, errorMessage, errorId) {
-        return errorMessage && invalid ? errorId : undefined;
-      }
-
-      _getActiveLabelId(label, labelId) {
-        return label ? labelId : undefined;
-      }
-
-      _getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
-        return (!this._getActiveErrorId(invalid, errorMessage, errorId)).toString();
-      }
-
-      /**
-       * @protected
-       */
-      attributeChangedCallback(prop, oldVal, newVal) {
-        super.attributeChangedCallback(prop, oldVal, newVal);
-        // Needed until Edge has CSS Custom Properties (present in Edge Preview)
-        if (!(window.ShadyCSS && window.ShadyCSS.nativeCss) &&
-          /^(focused|focus-ring|invalid|disabled|placeholder|has-value)$/.test(prop)) {
-          this.updateStyles();
-        }
-
-        // Safari has an issue with repainting shadow root element styles when a host attribute changes.
-        // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        if (isSafari && this.root) {
-          const WEBKIT_PROPERTY = '-webkit-backface-visibility';
-          this.root.querySelectorAll('*').forEach(el => {
-            el.style[WEBKIT_PROPERTY] = 'visible';
-            el.style[WEBKIT_PROPERTY] = '';
-          });
-        }
-      }
-
-      /**
-       * Fired when the user commits a value change.
-       *
-       * @event change
-       */
-    };
-
-    /**
-    @license
-    Copyright (c) 2017 Vaadin Ltd.
-    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
-    */
-    /**
-     * `<vaadin-text-field>` is a Web Component for text field control in forms.
-     *
-     * ```html
-     * <vaadin-text-field label="First Name">
-     * </vaadin-text-field>
-     * ```
-     *
-     * ### Prefixes and suffixes
-     *
-     * These are child elements of a `<vaadin-text-field>` that are displayed
-     * inline with the input, before or after.
-     * In order for an element to be considered as a prefix, it must have the slot
-     * attribute set to `prefix` (and similarly for `suffix`).
-     *
-     * ```html
-     * <vaadin-text-field label="Email address">
-     *   <div slot="prefix">Sent to:</div>
-     *   <div slot="suffix">@vaadin.com</div>
-     * </vaadin-text-area>
-     * ```
-     *
-     * ### Styling
-     *
-     * The following custom properties are available for styling:
-     *
-     * Custom property | Description | Default
-     * ----------------|-------------|-------------
-     * `--vaadin-text-field-default-width` | Set the default width of the input field | `12em`
-     *
-     * The following shadow DOM parts are available for styling:
-     *
-     * Part name | Description
-     * ----------------|----------------
-     * `label` | The label element
-     * `input-field` | The element that wraps prefix, value and suffix
-     * `value` | The text value element inside the `input-field` element
-     * `error-message` | The error message element
-     *
-     * The following state attributes are available for styling:
-     *
-     * Attribute    | Description | Part name
-     * -------------|-------------|------------
-     * `disabled` | Set to a disabled text field | :host
-     * `has-value` | Set when the element has a value | :host
-     * `has-label` | Set when the element has a label | :host
-     * `invalid` | Set when the element is invalid | :host
-     * `focused` | Set when the element is focused | :host
-     * `focus-ring` | Set when the element is keyboard focused | :host
-     * `readonly` | Set to a readonly text field | :host
-     *
-     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
-     *
-     * @memberof Vaadin
-     * @mixes Vaadin.TextFieldMixin
-     * @mixes Vaadin.ThemableMixin
-     * @demo demo/index.html
-     */
-    class TextFieldElement extends ElementMixin$1(TextFieldMixin(ThemableMixin(PolymerElement))) {
-      static get template() {
-        return html$1`
-    <style include="vaadin-text-field-shared-styles">
-      /* polymer-cli linter breaks with empty line */
-    </style>
-
-    <div class="vaadin-text-field-container">
-
-      <label part="label" on-click="focus" id="[[_labelId]]">[[label]]</label>
-
-      <div part="input-field">
-
-        <slot name="prefix"></slot>
-
-        <input part="value" autocomplete\$="[[autocomplete]]" autocorrect\$="[[autocorrect]]" autocapitalize\$="[[autocapitalize]]" autofocus\$="[[autofocus]]" disabled\$="[[disabled]]" list="[[list]]" maxlength\$="[[maxlength]]" minlength\$="[[minlength]]" pattern="[[pattern]]" placeholder\$="[[placeholder]]" readonly\$="[[readonly]]" aria-readonly\$="[[readonly]]" required\$="[[required]]" aria-required\$="[[required]]" value="{{value::input}}" title="[[title]]" on-blur="validate" on-input="_onInput" on-change="_onChange" aria-describedby\$="[[_getActiveErrorId(invalid, errorMessage, _errorId)]]" aria-labelledby\$="[[_getActiveLabelId(label, _labelId)]]" aria-invalid\$="[[invalid]]">
-
-        <slot name="suffix"></slot>
-
-      </div>
-
-      <div part="error-message" id="[[_errorId]]" aria-live="assertive" aria-hidden\$="[[_getErrorMessageAriaHidden(invalid, errorMessage, _errorId)]]">[[errorMessage]]</div>
-
-    </div>
-`;
-      }
-
-      static get is() {
-        return 'vaadin-text-field';
-      }
-
-      static get version() {
-        return '2.1.2';
-      }
-
-      static get properties() {
-        return {
-          /**
-           * Identifies a list of pre-defined options to suggest to the user.
-           * The value must be the id of a <datalist> element in the same document.
-           */
-          list: {
-            type: String
-          },
-
-          /**
-           * A regular expression that the value is checked against.
-           * The pattern must match the entire value, not just some subset.
-           */
-          pattern: {
-            type: String
-          },
-
-          /**
-           * Message to show to the user when validation fails.
-           */
-          title: {
-            type: String
-          }
-        };
-      }
-    }
-
-    customElements.define(TextFieldElement.is, TextFieldElement);
-
-    const $_documentContainer$g = document.createElement('template');
-
-    $_documentContainer$g.innerHTML = `<custom-style>
-  <style>
-    @font-face {
-      font-family: 'lumo-icons';
-      src: url(data:application/font-woff;charset=utf-8;base64,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) format('woff');
-      font-weight: normal;
-      font-style: normal;
-    }
-
-    html {
-      --lumo-icons-angle-down: "\\ea01";
-      --lumo-icons-angle-left: "\\ea02";
-      --lumo-icons-angle-right: "\\ea03";
-      --lumo-icons-angle-up: "\\ea04";
-      --lumo-icons-arrow-down: "\\ea05";
-      --lumo-icons-arrow-left: "\\ea06";
-      --lumo-icons-arrow-right: "\\ea07";
-      --lumo-icons-arrow-up: "\\ea08";
-      --lumo-icons-bar-chart: "\\ea09";
-      --lumo-icons-bell: "\\ea0a";
-      --lumo-icons-calendar: "\\ea0b";
-      --lumo-icons-checkmark: "\\ea0c";
-      --lumo-icons-chevron-down: "\\ea0d";
-      --lumo-icons-chevron-left: "\\ea0e";
-      --lumo-icons-chevron-right: "\\ea0f";
-      --lumo-icons-chevron-up: "\\ea10";
-      --lumo-icons-clock: "\\ea11";
-      --lumo-icons-cog: "\\ea12";
-      --lumo-icons-cross: "\\ea13";
-      --lumo-icons-download: "\\ea14";
-      --lumo-icons-dropdown: "\\ea15";
-      --lumo-icons-edit: "\\ea16";
-      --lumo-icons-error: "\\ea17";
-      --lumo-icons-eye: "\\ea18";
-      --lumo-icons-eye-disabled: "\\ea19";
-      --lumo-icons-menu: "\\ea1a";
-      --lumo-icons-minus: "\\ea1b";
-      --lumo-icons-phone: "\\ea1c";
-      --lumo-icons-play: "\\ea1d";
-      --lumo-icons-plus: "\\ea1e";
-      --lumo-icons-reload: "\\ea1f";
-      --lumo-icons-search: "\\ea20";
-      --lumo-icons-upload: "\\ea21";
-      --lumo-icons-user: "\\ea22";
-    }
-  </style>
-</custom-style>`;
-
-    document.head.appendChild($_documentContainer$g.content);
-
-    const $_documentContainer$h = document.createElement('template');
-
-    $_documentContainer$h.innerHTML = `<dom-module id="lumo-field-button">
-  <template>
-    <style>
-      [part\$="button"] {
-        flex: none;
-        width: 1em;
-        height: 1em;
-        line-height: 1;
-        font-size: var(--lumo-icon-size-m);
-        text-align: center;
-        color: var(--lumo-contrast-60pct);
-        transition: 0.2s color;
-        cursor: default;
-      }
-
-      :host(:not([readonly])) [part\$="button"]:hover {
-        color: var(--lumo-contrast-90pct);
-      }
-
-      :host([disabled]) [part\$="button"],
-      :host([readonly]) [part\$="button"] {
-        color: var(--lumo-contrast-20pct);
-      }
-
-      [part\$="button"]::before {
-        font-family: "lumo-icons";
-      }
-    </style>
-  </template>
-</dom-module>`;
-
-    document.head.appendChild($_documentContainer$h.content);
-
-    const $_documentContainer$i = document.createElement('template');
-
-    $_documentContainer$i.innerHTML = `<dom-module id="lumo-password-field" theme-for="vaadin-password-field">
-  <template>
-    <style include="lumo-field-button">
-      [part="reveal-button"]::before {
-        content: var(--lumo-icons-eye);
-      }
-
-      :host([password-visible]) [part="reveal-button"]::before {
-        content: var(--lumo-icons-eye-disabled);
-      }
-
-      /* Make it easy to hide the button across the whole app */
-      [part="reveal-button"] {
-        display: var(--lumo-password-field-reveal-button-display, block);
-      }
-    </style>
-  </template>
-</dom-module>`;
-
-    document.head.appendChild($_documentContainer$i.content);
-
-    /**
-    @license
-    Copyright (c) 2017 Vaadin Ltd.
-    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
-    */
-    const $_documentContainer$j = document.createElement('template');
-
-    $_documentContainer$j.innerHTML = `<custom-style>
-  <style>
-    @font-face {
-      font-family: 'vaadin-password-field-icons';
-      src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAAYMAAsAAAAABcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDxIFgGNtYXAAAAFoAAAAVAAAAFQXVtKIZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAAAfwAAAH8yBLEP2hlYWQAAAPAAAAANgAAADYN+RfTaGhlYQAAA/gAAAAkAAAAJAfCA8dobXR4AAAEHAAAABgAAAAYDgAAAGxvY2EAAAQ0AAAADgAAAA4BJgCSbWF4cAAABEQAAAAgAAAAIAAMAFpuYW1lAAAEZAAAAYYAAAGGmUoJ+3Bvc3QAAAXsAAAAIAAAACAAAwAAAAMDVQGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA6QEDwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAIOkB//3//wAAAAAAIOkA//3//wAB/+MXBAADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAwAAAHoEAALGABQAJABFAAABIg4CMTAeAjMyPgIxMC4CIwc+ATEwBhUUFjEHMCY1NDYTIi4CJz4BNw4BFRQeAjMyPgI1NCYnHgEXDgMjAgChyHAnN3rAiYjFfjsncMihrRg7IA1GExmnY5ZqQg8PWGAFCChGXTU1XUYoCAVgWA8RRW2ZZALGZnpmUmJSUGBQaHxoYA8FRSIhJQ0rIiYz/lQvQkYVInswEygYNV1GKChGXTUYKBMrgCIVRkIvAAAABQAA/8AEAAPAABoAJgA6AEcAVwAAAQceARcOAyMiJicHHgEzMj4CMTAuAicHNCYnATIWMzI+AhMBLgEjIg4CMTAeAhcHFTMBNQEuASc+ATcOARUUFhc3BzAmNTQ2MT4BMTAGFQYWAzo0UlMPEUVtmWQiNR0zJ1QsiMV+OxEsTTw6AgT+zA8dDjVdRijT/ucnXjWhyHAnGTNQN9MtA9P9AE1ZFA9YYAUILSY6QBMZGDsgBAsCczMrcyIWQ0AtCAQzDgtQYFAzS1ckeQ4bCv7TBihGXQH7/uYKEGZ6Zic5RBzNLQPTLf0tIVoYInswEygYNWMihgwrISc5DwVHJiIlAAEAAAAAAADkyo21Xw889QALBAAAAAAA1W1pqwAAAADVbWmrAAD/wAQAA8AAAAAIAAIAAAAAAAAAAQAAA8D/wAAABAAAAAAABAAAAQAAAAAAAAAAAAAAAAAAAAYEAAAAAAAAAAAAAAACAAAABAAAAAQAAAAAAAAAAAoAFAAeAH4A/gAAAAEAAAAGAFgABQAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAOAK4AAQAAAAAAAQAHAAAAAQAAAAAAAgAHAGAAAQAAAAAAAwAHADYAAQAAAAAABAAHAHUAAQAAAAAABQALABUAAQAAAAAABgAHAEsAAQAAAAAACgAaAIoAAwABBAkAAQAOAAcAAwABBAkAAgAOAGcAAwABBAkAAwAOAD0AAwABBAkABAAOAHwAAwABBAkABQAWACAAAwABBAkABgAOAFIAAwABBAkACgA0AKRpY29tb29uAGkAYwBvAG0AbwBvAG5WZXJzaW9uIDEuMABWAGUAcgBzAGkAbwBuACAAMQAuADBpY29tb29uAGkAYwBvAG0AbwBvAG5pY29tb29uAGkAYwBvAG0AbwBvAG5SZWd1bGFyAFIAZQBnAHUAbABhAHJpY29tb29uAGkAYwBvAG0AbwBvAG5Gb250IGdlbmVyYXRlZCBieSBJY29Nb29uLgBGAG8AbgB0ACAAZwBlAG4AZQByAGEAdABlAGQAIABiAHkAIABJAGMAbwBNAG8AbwBuAC4AAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) format('woff');
-      font-weight: normal;
-      font-style: normal;
-    }
-  </style>
-</custom-style><dom-module id="vaadin-password-field-template">
-  <template>
-    <style>
-      /* Hide the native eye icon for IE/Edge */
-      ::-ms-reveal {
-        display: none;
-      }
-
-      [part="reveal-button"][hidden] {
-        display: none !important;
-      }
-    </style>
-
-    <div part="reveal-button" on-mousedown="_revealButtonMouseDown" on-touchend="_togglePasswordVisibilityTouchend" on-click="_togglePasswordVisibility" hidden\$="[[revealButtonHidden]]">
-    </div>
-  </template>
-  
-</dom-module>`;
-
-    document.head.appendChild($_documentContainer$j.content);
-    let memoizedTemplate;
-
-    /**
-     * `<vaadin-password-field>` is a Web Component for password field control in forms.
-     *
-     * ```html
-     * <vaadin-password-field label="Password">
-     * </vaadin-password-field>
-     * ```
-     *
-     * ### Styling
-     *
-     * See vaadin-text-field.html for the styling documentation
-     *
-     * In addition to vaadin-text-field parts, here's the list of vaadin-password-field specific parts
-     *
-     * Part name       | Description
-     * ----------------|----------------------------------------------------
-     * `reveal-button` | The eye icon which toggles the password visibility
-     *
-     * In addition to vaadin-text-field state attributes, here's the list of vaadin-password-field specific attributes
-     *
-     * Attribute    | Description | Part name
-     * -------------|-------------|------------
-     * `password-visible` | Set when the password is visible | :host
-     *
-     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
-     *
-     * @memberof Vaadin
-     * @extends Vaadin.TextFieldElement
-     * @demo demo/index.html
-     */
-    class PasswordFieldElement extends TextFieldElement {
-      static get is() {
-        return 'vaadin-password-field';
-      }
-
-      static get version() {
-        return '2.1.2';
-      }
-
-      static get properties() {
-        return {
-          /**
-           * Set to true to hide the eye icon which toggles the password visibility.
-           */
-          revealButtonHidden: {
-            type: Boolean,
-            value: false
-          },
-
-          /**
-           * True if the password is visible ([type=text]).
-           */
-          passwordVisible: {
-            type: Boolean,
-            value: false,
-            reflectToAttribute: true,
-            observer: '_passwordVisibleChange',
-            readOnly: true
-          }
-        };
-      }
-
-      static get template() {
-        if (!memoizedTemplate) {
-          // Clone the superclass template
-          memoizedTemplate = super.template.cloneNode(true);
-
-          // Retrieve this element's dom-module template
-          const thisTemplate = DomModule.import(this.is + '-template', 'template');
-          const revealButton = thisTemplate.content.querySelector('[part="reveal-button"]');
-          const styles = thisTemplate.content.querySelector('style');
-
-          // Append reveal-button and styles to the text-field template
-          const inputField = memoizedTemplate.content.querySelector('[part="input-field"]');
-          inputField.appendChild(revealButton);
-          memoizedTemplate.content.appendChild(styles);
-        }
-
-        return memoizedTemplate;
-      }
-
-      ready() {
-        super.ready();
-        this.focusElement.type = 'password';
-        this.focusElement.autocapitalize = 'off';
-
-        this.addEventListener('blur', () => {
-          if (!this._passwordVisibilityChanging) {
-            this._setPasswordVisible(false);
-            if (this._cachedChangeEvent) {
-              this._onChange(this._cachedChangeEvent);
-            }
-          }
-        });
-      }
-
-      _onChange(e) {
-        if (this._passwordVisibilityChanging) {
-          this._cachedChangeEvent = e;
-        } else {
-          this._cachedChangeEvent = null;
-          super._onChange(e);
-        }
-      }
-
-      _revealButtonMouseDown(e) {
-        if (this.hasAttribute('focused')) {
-          e.preventDefault();
-        }
-      }
-
-      _togglePasswordVisibilityTouchend(e) {
-        // Cancel the following click event
-        e.preventDefault();
-        this._togglePasswordVisibility();
-        this.focusElement.focus();
-      }
-
-      _togglePasswordVisibility() {
-        this._passwordVisibilityChanging = true;
-        this.focusElement.blur();
-        this._setPasswordVisible(!this.passwordVisible);
-        this.focusElement.focus();
-        this._passwordVisibilityChanging = false;
-      }
-
-      _passwordVisibleChange(passwordVisible) {
-        this.focusElement.type = passwordVisible ? 'text' : 'password';
-      }
-    }
-
-    customElements.define(PasswordFieldElement.is, PasswordFieldElement);
-
-    const $_documentContainer$k = document.createElement('template');
-
-    $_documentContainer$k.innerHTML = `<dom-module id="whcg-text-field-styles" theme-for="vaadin-text-field">
-  <template>
-    <style>
-
-    :host::before {
-      font-size: var(--whcg-host-before-font-size);
-      height: var(--whcg-host-before-height);
-      box-sizing: border-box;
-      display: inline-flex;
-      align-items: center;
-    }
-    
-    :host {        
-      font-size: var(--whcg-host-font-size);
-      padding-top: var(--whcg-host-padding-top);
-      padding-bottom: var(--whcg-host-padding-bottom);
-      padding-left: var(--whcg-host-padding-left);
-      padding-right: var(--whcg-host-padding-right);
-      box-sizing: border-box;
-    }
-
-    :host([has-label]) {
-      padding-top: var(--whcg-host-haslabel-padding-top);
-      padding-bottom: var(--whcg-host-haslabel-padding-bottom);
-      padding-left: var(--whcg-host-haslabel-padding-left);
-      padding-right: var(--whcg-host-haslabel-padding-right);
-    }
-
-    [part="label"] {
-      font-weight: var(--whcg-label-font-weight);
-      font-size: var(--whcg-label-font-size);
-      font-family: var(--whcg-label-font-family);
-      line-height: 1;
-      color: var(--whcg-label-color);
-      align-self: flex-start;
-      padding-top: var(--whcg-label-padding-top);
-      padding-bottom: var(--whcg-label-padding-bottom);
-      padding-right: var(--whcg-label-padding-right);
-      padding-left: var(--whcg-label-padding-left);
-
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      position: relative;
-      max-width: 100%;
-      box-sizing: border-box;
-    }
-
-    :host(.dark) [part="label"] {
-      color: var(--whcg-label-host__dark-color);
-    }
-
-    :host([focused]:not([readonly])) [part="label"] {
-      color: var(--whcg-label-host-focused-not-readonly-color);
-    }
-
-    :host(:hover:not([focused])) [part="label"] {
-      color: var(--whcg-label-host-hover-not-focused-color);
-    }
-
-    :host([focused]) [part="label"] {
-      color: var(--whcg-label-host-focused-color);
-    }
-
-    [part="input-field"] {
-      font-size: var(--whcg-input-field-font-size);
-      font-weight: var(--whcg-input-field-font-weight);
-      font-family: var(--whcg-input-field-font-family);
-      line-height: 1;
-      
-      background-color: var(--whcg-input-field-background-color);
-      border-radius: var(--whcg-input-field-border-radius);
-      border-style: var(--whcg-input-field-border-style);
-      border-width: var(--whcg-input-field-border-width);
-      border-color: var(--whcg-input-field-border-color);
-      padding-top: var(--whcg-input-field-padding-top);
-      padding-bottom: var(--whcg-input-field-padding-bottom);
-      padding-left: var(--whcg-input-field-padding-left);
-      padding-right: var(--whcg-input-field-padding-right);
-
-      position: relative;
-      cursor: text;
-      box-sizing: border-box;
-    }
-
-    :host(.dark) [part="input-field"] {
-      background-color: var(--whcg-input-field-host__dark-background-color);
-    }
-    :host(.shadow) [part="input-field"] {
-      box-shadow: var(--whcg-input-field-host__shadow-box-shadow);
-    }
-
-
-    [part="value"] {
-      cursor: inherit;
-      color: var(--whcg-value-color);
-      min-height: var(--whcg-value-min-height);
-      padding: 0 0.25em;
-    }
-
-    :host(.dark) [part="value"] {
-      color: var(--whcg-value-host__dark-color);
-    }
-
-
-    [part="value"]::placeholder {
-      color: var(--whcg-value-placeholder-color);;
-    }
-
-
-
-  </style>
-  </template>
-</dom-module>`;
-
-    document.head.appendChild($_documentContainer$k.content);
-
-    class WhcgTextField extends PolymerElement {
-        static get template() {
-            return html$1 `
-        <style>
-        vaadin-text-field {
-                --whcg-host-before-font-size: var(--whcg-text-field-host-before-font-size);
-                --whcg-host-before-height: var(--whcg-text-field-host-before-height);
-
-                --whcg-host-padding-top: var(--whcg-text-field-host-padding-top);
-                --whcg-host-padding-bottom: var(--whcg-text-field-host-padding-bottom);
-                --whcg-host-padding-left: var(--whcg-text-field-host-padding-left);
-                --whcg-host-padding-right: var(--whcg-text-field-host-padding-right);
-                --whcg-host-haslabel-padding-top: var(--whcg-text-field-host-haslabel-padding-top);
-                --whcg-host-haslabel-padding-bottom: var(--whcg-text-field-host-haslabel-padding-bottom);
-                --whcg-host-haslabel-padding-left: var(--whcg-text-field-host-haslabel-padding-left);
-                --whcg-host-haslabel-padding-right: var(--whcg-text-field-host-haslabel-padding-right);
-
-                --whcg-label-font-size: var(--whcg-text-field-label-font-size);
-                --whcg-label-font-weight: var(--whcg-text-field-label-font-weight);
-                --whcg-label-font-family: var(--whcg-text-field-label-font-family);
-
-                --whcg-label-color: var(--whcg-text-field-label-color);
-                --whcg-label-host-focused-color: var(--whcg-text-field-label-host-focused-color);
-                --whcg-label-host-hover-not-focused-color: var(--whcg-text-field-label-host-hover-not-focused-color);
-                --whcg-label-host__dark-color: var(--whcg-text-field-label-host__dark-color);
-
-                --whcg-label-padding-top: var(--whcg-text-field-label-padding-top);
-                --whcg-label-padding-bottom: var(--whcg-text-field-label-padding-bottom);
-                --whcg-label-padding-left: var(--whcg-text-field-label-padding-left);
-                --whcg-label-padding-right: var(--whcg-text-field-label-padding-right);
-
-                --whcg-input-field-font-family: var(--whcg-text-field-input-field-font-family);
-                --whcg-input-field-font-size: var(--whcg-text-field-input-field-font-size);
-                --whcg-input-field-font-weight: var(--whcg-text-field-input-field-font-weight);
-                --whcg-input-field-background-color: var(--whcg-text-field-input-field-background-color);
-                --whcg-input-field-host__dark-background-color: var(--whcg-text-field-input-field-host__dark-background-color);
-
-                --whcg-input-field-host__shadow-box-shadow: var(--whcg-text-field-input-field-host__shadow-box-shadow);
-                
-                --whcg-input-field-border-radius: var(--whcg-text-field-input-field-border-radius);
-                --whcg-input-field-border-style: var(--whcg-text-field-input-field-border-style);
-                --whcg-input-field-border-width: var(--whcg-text-field-input-field-border-width);
-                --whcg-input-field-border-color: var(--whcg-text-field-input-field-border-color);
-                --whcg-input-field-padding-top: var(--whcg-text-field-input-field-padding-top);
-                --whcg-input-field-padding-bottom: var(--whcg-text-field-input-field-padding-bottom);
-                --whcg-input-field-padding-left: var(--whcg-text-field-input-field-padding-left);
-                --whcg-input-field-padding-right: var(--whcg-text-field-input-field-padding-right);
-              
-                --whcg-value-color: var(--whcg-text-field-value-color);
-                --whcg-value-placeholder-color: var(--whcg-text-field-value-placeholder-color);
-                --whcg-value-host__dark-color: var(--whcg-text-field-value-host__dark-color);
-                --whcg-value-min-height: var(--whcg-text-field-value-min-height);  
-
-             }
-            
-        </style>
-      
-    <vaadin-text-field value="{{value}}" label="{{label}}" placeholder="{{placeholder}}">
-    </vaadin-text-field>
-    `;
-        }
-
-        static get properties() {
-
-            return {
-
-                label: {
-                    type: String,
-                    notify: true,
-                    readOnly: false,
-                },
-                value: {
-                    type: String,
-                    notify: true,
-                    readOnly: false,
-                    observer: '_valueChanged'
-                },
-                placeholder: {
-                    type: String,
-                    notify: true,
-                    readOnly: false,
-                },
-                suffix: {
-                    type: String,
-                    notify: true,
-                    readOnly: false,
-                },
-                kind: {
-                    type: String,
-                    notify: true,
-                    readOnly: false,
-                },
-                period: {
-                    type: String,
-                    notify: true,
-                    readOnly: false,
-                },
-                valueoutput: {
-                    type: String,
-                    notify: true,
-                    readOnly: false,
-                }
-            }
-        }
-
-        _valueChanged() {
-            // console.log('new value');
-            // console.log(this.value);
-            this.valueoutput = this.value;
-        }
-
-        connectedCallback() {
-            super.connectedCallback();
-            let event = new CustomEvent('childrenattached', {bubbles: true, composed: true});
-            // console.log('dispatchingEvent!!');
-            this.dispatchEvent(event);
-        }
-    }
-
-    window.customElements.define('whcg-text-field', WhcgTextField);
-
-    const $_documentContainer$l = document.createElement('template');
-
-    $_documentContainer$l.innerHTML = `<dom-module id="whcg-button-styles" theme-for="vaadin-button">
-  <template>
-    <style>
-    :host {
-      font-size: var(--whcg-host-font-size);
-      min-width: var(--whcg-host-min-width);
-      height: var(--whcg-host-height);
-      padding-top: var(--whcg-host-padding-top);
-      padding-bottom: var(--whcg-host-padding-bottom);
-      padding-left: var(--whcg-host-padding-left);
-      padding-right: var(--whcg-host-padding-right);
-      box-sizing: border-box;
-      background-color: var(--whcg-host-background-color);
-      border-radius: var(--whcg-host-border-radius);
-      border-style: var(--whcg-host-border-style);
-      border-width: var(--whcg-host-border-width);
-      border-color: var(--whcg-host-border-color);
-      cursor: default;
-    }
-    
-    [part="label"] {
-      font-size: var(--whcg-label-font-size);
-      font-family: var(--whcg-label-font-family);
-      font-weight: var(--whcg-label-font-weight);
-      line-height: var(--whcg-label-line-height);
-      color: var(--whcg-label-color);
-      padding-top: var(--whcg-label-padding-top);
-      padding-bottom: var(--whcg-label-padding-bottom);
-      padding-left: var(--whcg-label-padding-left);
-      padding-right: var(--whcg-label-padding-right);
-    }
-
-  </style>
-  </template>
-</dom-module>`;
-
-    document.head.appendChild($_documentContainer$l.content);
-
-    class WhcgButton extends PolymerElement {
-        static get template() {
-            return html$1`
-
-        <style>
-             vaadin-button {
-                --whcg-host-font-size: var(--whcg-button-host-font-size);
-                --whcg-host-background-color: var(--whcg-button-host-background-color);
-                --whcg-host-border-radius: var(--whcg-button-host-border-radius);
-                --whcg-host-border-style: var(--whcg-button-host-border-style);
-                --whcg-host-border-width: var(--whcg-button-host-border-width);
-                --whcg-host-border-color: var(--whcg-button-host-border-color);
-                --whcg-host-height: var(--whcg-button-host-height);
-                --whcg-host-min-width: var(--whcg-button-host-min-width);
-                --whcg-host-padding-top: var(--whcg-button-host-padding-top);
-                --whcg-host-padding-bottom: var(--whcg-button-host-padding-bottom);
-                --whcg-host-padding-left: var(--whcg-button-host-padding-left);
-                --whcg-host-padding-right: var(--whcg-button-host-padding-right);
-                
-                --whcg-label-font-size: var(--whcg-button-label-font-size);
-                --whcg-label-font-weight: var(--whcg-button-label-font-weight);
-                --whcg-label-font-family: var(--whcg-button-label-font-family);
-                --whcg-label-line-height: var(--whcg-button-label-line-height); 
-                --whcg-label-padding-top: var(--whcg-button-label-padding-top);
-                --whcg-label-padding-bottom: var(--whcg-button-label-padding-bottom);
-                --whcg-label-padding-left: var(--whcg-button-label-padding-left);
-                --whcg-label-padding-right: var(--whcg-button-label-padding-right);
-                --whcg-label-color: var(--whcg-button-label-color);
-             }
-        </style>
-
-        <vaadin-button>
-            <slot></slot>
-        </vaadin-button>
-
-    `;
-        }
-
-        static get properties() {
-
-            return {
-
-            }
-        }
-
-        
-
-        
-
-    }
-
-    window.customElements.define('whcg-button', WhcgButton);
-
-    const usermixin = (element) => {
-        return class UserMixedin extends element {
-            static get properties() {
-                return {
-                    user: {type: Object}
-                };
-            }
-
-            constructor() {
-                super();
-                this.user = firebase.auth();
-            }
-        } 
-    };
-
-    const theuser = firebase.auth();
-
-    class XLogin extends usermixin(LitElement) {
-        firstUpdated() {
-            this.user.onAuthStateChanged(function(user) {
-                if (user) {      
-                    console.log('User Logged In');
-                    Router.go('/user');
-                } else {
-                    console.log('User Logged Out');
-                    Router.go('/');
-                }
-            });
-        }
-
-        render() {
-            return html`
-        <whcg-text-field id="name" placeholder="email..."></whcg-text-field>
-        <whcg-text-field id="password" placeholder="password..."></whcg-text-field>
-        <whcg-button @click=${this.onClick.bind(this)}>LOGIN</whcg-button>
-        `
-        }
-
-
-
-        onClick(e) {
-            let email = this.shadowRoot.querySelector('#name').value;
-            let password = this.shadowRoot.querySelector('#password').value;
-            this.user.signInWithEmailAndPassword(email, password).catch(function(error) {
-                console.log('Login Error');
-            });
-        }
-    }
-
-    customElements.define('x-login', XLogin);
-
-    class XUser extends LitElement {
-        render() {
-            return html`
-        <style>
-            .bg {
-                background-color: orange;
-                width: 80vw;
-                height: 90vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        </style>
-        <div class="bg">
-            <vaadin-button @click=${this.onClick.bind(this)}>LOGOUT</vaadin-button>
-            <vaadin-button @click=${this.onGreen.bind(this)}>GREEN</vaadin-button>
-        </div>
-        `
-        }
-
-        onClick(e) {
-            firebase.auth().signOut().then(function() {
-                console.log('Sign-out successful');
-              }).catch(function(error) {
-                console.log('Error Signing Out');
-              });
-        }
-
-        onGreen(e) {
-            Router.go('/user/green');
-        }
-    }
-
-    customElements.define('x-user', XUser);
-
-    class XLoggedout extends LitElement {
-        render() {
-            return html`
-        <style>
-            .bg {
-                background-color: red;
-                width: 100vw;
-                height: 90vh;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        </style>
-        <div class="bg">
-        </div>
-        `
-        }
-    }
-
-    customElements.define('x-loggedout', XLoggedout);
-
-    const $_documentContainer$m = document.createElement('template');
-
-    $_documentContainer$m.innerHTML = `<dom-module id="lumo-checkbox" theme-for="vaadin-checkbox">
-  <template>
-    <style include="lumo-checkbox-style lumo-checkbox-effects">
-      /* IE11 only */
-      ::-ms-backdrop,
-      [part="checkbox"] {
-        line-height: 1;
-      }
-    </style>
-  </template>
-</dom-module><dom-module id="lumo-checkbox-style">
-  <template>
-    <style>
-      :host {
-        -webkit-tap-highlight-color: transparent;
-        -webkit-user-select: none;
-        user-select: none;
-        cursor: default;
-        outline: none;
-      }
-
-      [part="label"]:not([empty]) {
-        margin: 0.1875em 0.875em 0.1875em 0.375em;
-      }
-
-      [part="checkbox"] {
-        width: calc(1em + 2px);
-        height: calc(1em + 2px);
-        margin: 0.1875em;
-        position: relative;
-        border-radius: var(--lumo-border-radius);
-        background-color: var(--lumo-contrast-20pct);
-        transition: transform 0.2s cubic-bezier(.12, .32, .54, 2), background-color 0.15s;
-        pointer-events: none;
-        line-height: 1.2;
-      }
-
-      :host([indeterminate]) [part="checkbox"],
-      :host([checked]) [part="checkbox"] {
-        background-color: var(--lumo-primary-color);
-      }
-
-      /* Needed to align the checkbox nicely on the baseline */
-      [part="checkbox"]::before {
-        content: "\\2003";
-      }
-
-      /* Checkmark */
-      [part="checkbox"]::after {
-        content: "";
-        display: inline-block;
-        width: 0;
-        height: 0;
-        border: 0 solid var(--lumo-primary-contrast-color);
-        border-width: 0.1875em 0 0 0.1875em;
-        box-sizing: border-box;
-        transform-origin: 0 0;
-        position: absolute;
-        top: 0.8125em;
-        left: 0.5em;
-        transform: scale(0.55) rotate(-135deg);
-        opacity: 0;
-      }
-
-      :host([checked]) [part="checkbox"]::after {
-        opacity: 1;
-        width: 0.625em;
-        height: 1.0625em;
-      }
-
-      /* Indeterminate checkmark */
-
-      :host([indeterminate]) [part="checkbox"]::after {
-        transform: none;
-        opacity: 1;
-        top: 45%;
-        height: 10%;
-        left: 22%;
-        right: 22%;
-        width: auto;
-        border: 0;
-        background-color: var(--lumo-primary-contrast-color);
-        transition: opacity 0.25s;
-      }
-
-      /* Focus ring */
-
-      :host([focus-ring]) [part="checkbox"] {
-        box-shadow: 0 0 0 3px var(--lumo-primary-color-50pct);
-      }
-
-      /* Disabled */
-
-      :host([disabled]) {
-        pointer-events: none;
-        color: var(--lumo-disabled-text-color);
-      }
-
-      :host([disabled]) [part="label"] ::slotted(*) {
-        color: inherit;
-      }
-
-      :host([disabled]) [part="checkbox"] {
-        background-color: var(--lumo-contrast-10pct);
-      }
-
-      :host([disabled]) [part="checkbox"]::after {
-        border-color: var(--lumo-contrast-30pct);
-      }
-
-      :host([indeterminate][disabled]) [part="checkbox"]::after {
-        background-color: var(--lumo-contrast-30pct);
-      }
-    </style>
-  </template>
-</dom-module><dom-module id="lumo-checkbox-effects">
-  <template>
-    <style>
-      /* Transition the checkmark if activated with the mouse (disabled for grid select-all this way) */
-      :host(:hover) [part="checkbox"]::after {
-        transition: width 0.1s, height 0.25s;
-      }
-
-      /* Used for activation "halo" */
-      [part="checkbox"]::before {
-        color: transparent;
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-        border-radius: inherit;
-        background-color: inherit;
-        transform: scale(1.4);
-        opacity: 0;
-        transition: transform 0.1s, opacity 0.8s;
-      }
-
-      /* Hover */
-
-      :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part="checkbox"] {
-        background-color: var(--lumo-contrast-30pct);
-      }
-
-      /* Disable hover for touch devices */
-      @media (pointer: coarse) {
-        :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part="checkbox"] {
-          background-color: var(--lumo-contrast-20pct);
-        }
-      }
-
-      /* Active */
-
-      :host([active]) [part="checkbox"] {
-        transform: scale(0.9);
-        transition-duration: 0.05s;
-      }
-
-      :host([active][checked]) [part="checkbox"] {
-        transform: scale(1.1);
-      }
-
-      :host([active]:not([checked])) [part="checkbox"]::before {
-        transition-duration: 0.01s, 0.01s;
-        transform: scale(0);
-        opacity: 0.4;
-      }
-    </style>
-  </template>
-</dom-module>`;
-
-    document.head.appendChild($_documentContainer$m.content);
-
-    /**
-    @license
-    Copyright (c) 2017 Vaadin Ltd.
-    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
-    */
-    /**
      * `<vaadin-checkbox>` is a Web Component for customized checkboxes.
      *
      * ```html
@@ -23631,9 +21478,9 @@ var MyModule = (function (exports) {
 
     customElements.define(CheckboxElement.is, CheckboxElement);
 
-    const $_documentContainer$n = document.createElement('template');
+    const $_documentContainer$b = document.createElement('template');
 
-    $_documentContainer$n.innerHTML = `<dom-module id="lumo-radio-button" theme-for="vaadin-radio-button">
+    $_documentContainer$b.innerHTML = `<dom-module id="lumo-radio-button" theme-for="vaadin-radio-button">
   <template>
     <style>
       :host {
@@ -23749,7 +21596,7 @@ var MyModule = (function (exports) {
   </template>
 </dom-module>`;
 
-    document.head.appendChild($_documentContainer$n.content);
+    document.head.appendChild($_documentContainer$b.content);
 
     /**
     @license
@@ -23961,50 +21808,6 @@ var MyModule = (function (exports) {
     }
 
     customElements.define(RadioButtonElement.is, RadioButtonElement);
-
-    class XRadiogroup extends LitElement {
-        static get properties() {
-            return {
-              selected: {type: String, reflect: true}
-            };
-          }
-        
-        render() {
-            return html`
-            <slot @slotchange=${this.onSlotchange.bind(this)}></slot>
-        `
-        }
-
-        onCheckedChanged(e) {
-            if(e.detail.value) {
-                console.log('e');
-                console.log(e);
-                this.selected = e.path[0].attributes['name'].value;
-                console.log('selected');
-                console.log(this.selected);
-                this.dispatchEvent(new CustomEvent('selected-changed', {
-                    detail: {
-                      selected: this.selected
-                    }
-                  }));
-                let buttons = this.shadowRoot.querySelector('slot').assignedNodes().filter((node) => { return node.nodeName !== '#text'; });
-                buttons.forEach(button => {
-                    if(button !== e.path[0]) {
-                        button.removeAttribute('checked');
-                    }
-                });
-            }
-        }
-
-        onSlotchange({target}) {
-            let buttons = target.assignedNodes();
-            buttons.forEach(button => {
-                button.addEventListener('checked-changed', this.onCheckedChanged.bind(this));
-            });
-          }
-    }
-
-    customElements.define('x-radiogroup', XRadiogroup);
 
     var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -26089,65 +23892,20 @@ var MyModule = (function (exports) {
       };
     };
 
-    // import { persistentReducer } from 'redux-pouchdb-plus';
-    // import { persistentStore } from 'redux-pouchdb-plus';
+    function reducer(state, action) {
+        switch (action.type) {
+        case 'ONE_INCREMENT':
+            return {...state, one: state.one + 1}
+        case 'TWO_INCREMENT':
+            return {...state, two: state.two + 1}
+        default:
+            return state
+        }
+    }
 
-
-
-    // let dbChoice = 1;
-    // const db = (reducerName, store, additionalOptions) => {
-    //   if (dbChoice === 1)
-    //     return new PouchDB('dbname1');
-    //   else
-    //     return new PouchDB('dbname2');
-    // }
-
-    function storeCreator$1(theuser, initialState, db) {
-        console.log('theuser!');
-        console.log(theuser);
-        // let username;
-
-        // if (theuser.currentUser.email == 'ahell@kth.se') {
-        //     username = 'ahell';
-        // } else {
-        //     username = 'ohej';
-        // }
+    function storeCreator(username, state, db) {   
         
-        // let db = new PouchDB(username);
-        
-        // var couchDB = new PouchDB(`http://plex:1111111111@127.0.0.1:5984/${username}`);
-        
-        
-        // db
-        // .replicate
-        // .from(couchDB)
-        // .on('complete', (info) => {   
-        //     db.sync(couchDB, { live: true, retry: true })
-        //     console.log('info');
-        //     console.log(info); 
-        // })
-        // .on('error', (info) => {
-        //     console.log('error');
-        //     console.log(info);
-        // })
-        // .on('change', (info) => {
-        //     console.log('change');
-        //     console.log(info);
-        // });
-
-
-        // console.log(db);
-        // db.allDocs({
-        //     include_docs: true,
-        //     attachments: true
-        //   }).then(function (result) {
-        //     console.log(result);
-        //   }).catch(function (err) {
-        //     console.log(err);
-        //   });
-        
-        
-        var logger = reduxLogger.logger;
+        const logger = reduxLogger.logger;
         
         const applyMiddlewares = Redux.applyMiddleware(
             logger
@@ -26157,34 +23915,150 @@ var MyModule = (function (exports) {
             applyMiddlewares,
             persistentStore(db)
         )(Redux.createStore);
-        
 
-        
-        // let initialState = {
-        //     one: 74,
-        //     two: 47
-        // }
-        
-        
-        function counter(state, action) {
-            switch (action.type) {
-            case 'ONE_INCREMENT':
-                return {...state, one: state.one + 1}
-            case 'TWO_INCREMENT':
-                return {...state, two: state.two + 1}
-            default:
-                return state
-            }
-        }
-
-
-        console.log('INITIAL STATE');
-        console.log(initialState);
-        
-        const store = createStoreWithMiddleware(persistentReducer(counter, theuser), initialState);
+        const store = createStoreWithMiddleware(persistentReducer(reducer, username), state);
 
         return store;
     }
+
+    const initState = {
+        one: 74,
+        two: 47
+    };
+
+    const connectmixin = (element) => {
+      return class ConnectMixin extends element {
+
+        // This is called every time something is updated in the store.
+        _stateChanged(state) {
+          throw new Error('_stateChanged() not implemented', this);
+        }
+
+        disconnectedCallback() {
+          if (super.disconnectedCallback) {
+            super.disconnectedCallback();
+          }
+          this.__storeUnsubscribe();
+        }
+
+        connectedCallback() {
+          if (super.connectedCallback) {
+            super.connectedCallback();
+          }
+
+          let that = this;
+          let username = this.user.currentUser.email.replace("@", "at");
+          username = username.replace(".", "dot");
+          let db = new PouchDB(username);
+          let couchDB = new PouchDB(`http://plex:1111111111@127.0.0.1:5984/${username}`);
+          
+          db
+          .replicate
+          .from(couchDB)
+          .on('complete', (info) => {   
+            db.sync(couchDB, { live: true, retry: true });
+              console.log('info');
+              console.log(info); 
+          })
+          .on('error', (info) => {
+              console.log('error');
+              console.log(info);
+          })
+          .on('change', (info) => {
+              console.log('change');
+              console.log(info);
+          });
+
+          db.allDocs({
+          include_docs: true,
+          attachments: true
+          }).then(function (result) {
+              let state;
+              if (result.rows.length) {
+                  state = result.rows[0].doc.state;
+              } else {
+                  state = initState;
+              }
+              that.store = storeCreator(username, state, db);
+              that.__storeUnsubscribe = that.store.subscribe(() => that._stateChanged(that.store.getState()));
+              that._stateChanged(that.store.getState());
+              }).catch(function (err) {
+                console.log(err);
+              });
+
+              that.user.onAuthStateChanged(function(user) {
+              if (user) {      
+                  console.log('User Logged In');
+              } else {
+                  that.__storeUnsubscribe();
+                  console.log('UNSUBSCRIBED');
+              }
+          });
+        }
+      };
+
+    };
+
+    class XRadiogroup extends LitElement {
+        static get properties() {
+            return {
+              selected: {type: String, reflect: true}
+            };
+          }
+        
+        render() {
+            return html`
+            <slot @slotchange=${this.onSlotchange.bind(this)}></slot>
+        `
+        }
+
+        onCheckedChanged(e) {
+            if(e.detail.value) {
+                console.log('e');
+                console.log(e);
+                this.selected = e.path[0].attributes['name'].value;
+                console.log('selected');
+                console.log(this.selected);
+                this.dispatchEvent(new CustomEvent('selected-changed', {
+                    detail: {
+                      selected: this.selected
+                    }
+                  }));
+                let buttons = this.shadowRoot.querySelector('slot').assignedNodes().filter((node) => { return node.nodeName !== '#text'; });
+                buttons.forEach(button => {
+                    if(button !== e.path[0]) {
+                        button.removeAttribute('checked');
+                    }
+                });
+            }
+        }
+
+        onSlotchange({target}) {
+            let buttons = target.assignedNodes();
+            buttons.forEach(button => {
+                button.addEventListener('checked-changed', this.onCheckedChanged.bind(this));
+            });
+          }
+    }
+
+    customElements.define('x-radiogroup', XRadiogroup);
+
+    const usermixin = (element) => {
+        return class UserMixedin extends element {
+            static get properties() {
+                return {
+                    user: {type: Object}
+                };
+            }
+
+            constructor() {
+                super();
+                this.user = firebase.auth();
+            }
+        } 
+    };
+
+    const theuser = firebase.auth();
 
     const ONE_INCREMENT = 'ONE_INCREMENT';
 
@@ -26195,70 +24069,7 @@ var MyModule = (function (exports) {
       };
 
 
-
-
-    class XLoggedin extends LitElement {
-        connectedCallback() {
-            super.connectedCallback();
-            let that = this;
-            this.username;
-            if (firebase.auth().currentUser.email == 'ahell@kth.se') {
-            this.username = 'ahell';
-            } else {
-                this.username = 'ohej';
-            }
-            this.db = new PouchDB(this.username);
-            this.db.allDocs({
-            include_docs: true,
-            attachments: true
-            }).then(function (result) {
-                console.log('RESULT');
-                console.log(result);
-                let initState = null;
-                if (result.rows.length) {
-                    initState = result.rows[0].doc.state;
-                } else {
-                    initState = {
-                    one: 74,
-                    two: 47
-                    };
-                }
-
-                console.log('INIT STATE TO STORE CREATOR');
-                console.log(initState);
-
-                that.store = storeCreator$1(that.username, initState, that.db);
-                that.__storeUnsubscribe = that.store.subscribe(() => that._stateChanged(that.store.getState()));
-                console.log(that.store);
-            // // that.store.subscribe(() => that._stateChanged(that.store.getState()));
-            // // that._stateChanged(that.store.getState());
-            // }
-            
-
-            
-            }).catch(function (err) {
-            console.log(err);
-            });
-
-            firebase.auth().onAuthStateChanged(function(user) {
-                if (user) {      
-                    console.log('User Logged In');
-                } else {
-                    that.__storeUnsubscribe();
-                    console.log('UNSUBSCRIBED');
-                }
-            });
-        }
-
-        disconnectedCallback() {
-            this.db = null;
-            this.store = null;
-            this.__storeUnsubscribe();
-        
-            if (super.disconnectedCallback) {
-              super.disconnectedCallback();
-            }
-          }
+    class XLoggedin extends connectmixin(usermixin(LitElement)) {
 
         static get properties() {
             return {
@@ -26351,6 +24162,10 @@ var MyModule = (function (exports) {
                 Router.go('/user/four');
             }
         }
+    }
+
+    customElements.define('x-loggedin', XLoggedin);   
+
 
         // onClick(e) {
         //     // store.dispatch(oneincrement());
@@ -26372,9 +24187,6 @@ var MyModule = (function (exports) {
         //     // console.log(this.shadowRoot.querySelector('#foo'));
 
         // }
-    }
-
-    customElements.define('x-loggedin', XLoggedin);   
 
     // function XLoggedinCreator(theuser) {
         
@@ -26399,6 +24211,2161 @@ var MyModule = (function (exports) {
             //     <vaadin-radio-button id="bar" name="bar" ?checked=${this.barchecked} @checked-changed=${this.onClick.bind(this)}>Bar</vaadin-radio-button>
             //     <vaadin-radio-button id="baz" name="baz" ?checked=${this.bazchecked} @checked-changed=${this.onClick.bind(this)}>Baz</vaadin-radio-button> 
             // `
+
+
+
+
+                // connectedCallback() {
+        //     super.connectedCallback();
+        //     // let that = this;
+        //     // this.username;
+        //     // if (firebase.auth().currentUser.email == 'ahell@kth.se') {
+        //     // this.username = 'ahell';
+        //     // } else {
+        //     //     this.username = 'ohej';
+        //     // }
+        //     // this.db = new PouchDB(this.username);
+        //     // this.db.allDocs({
+        //     // include_docs: true,
+        //     // attachments: true
+        //     // }).then(function (result) {
+        //     //     console.log('RESULT');
+        //     //     console.log(result)
+        //     //     let initState = null;
+        //     //     if (result.rows.length) {
+        //     //         initState = result.rows[0].doc.state
+        //     //     } else {
+        //     //         initState = {
+        //     //         one: 74,
+        //     //         two: 47
+        //     //         }
+        //     //     }
+
+        //     //     console.log('INIT STATE TO STORE CREATOR');
+        //     //     console.log(initState);
+
+        //     //     that.store = storeCreator(that.username, initState, that.db);
+        //     //     that.__storeUnsubscribe = that.store.subscribe(() => that._stateChanged(that.store.getState()));
+        //     //     console.log(that.store);
+        //     // // // that.store.subscribe(() => that._stateChanged(that.store.getState()));
+        //     // // // that._stateChanged(that.store.getState());
+            
+
+            
+        //     // }).catch(function (err) {
+        //     // console.log(err);
+        //     // });
+
+        //     // firebase.auth().onAuthStateChanged(function(user) {
+        //     //     if (user) {      
+        //     //         console.log('User Logged In');
+        //     //     } else {
+        //     //         that.__storeUnsubscribe();
+        //     //         console.log('UNSUBSCRIBED');
+        //     //     }
+        //     // });
+        // }
+
+    const $_documentContainer$c = document.createElement('template');
+
+    $_documentContainer$c.innerHTML = `<custom-style>
+  <style>
+    html {
+      --lumo-size-xs: 1.625rem;
+      --lumo-size-s: 1.875rem;
+      --lumo-size-m: 2.25rem;
+      --lumo-size-l: 2.75rem;
+      --lumo-size-xl: 3.5rem;
+
+      /* Icons */
+      --lumo-icon-size-s: 1.25em;
+      --lumo-icon-size-m: 1.5em;
+      --lumo-icon-size-l: 2.25em;
+      /* For backwards compatibility */
+      --lumo-icon-size: var(--lumo-icon-size-m);
+    }
+  </style>
+</custom-style>`;
+
+    document.head.appendChild($_documentContainer$c.content);
+
+    const $_documentContainer$d = document.createElement('template');
+
+    $_documentContainer$d.innerHTML = `<custom-style>
+  <style>
+    html {
+      /* Square */
+      --lumo-space-xs: 0.25rem;
+      --lumo-space-s: 0.5rem;
+      --lumo-space-m: 1rem;
+      --lumo-space-l: 1.5rem;
+      --lumo-space-xl: 2.5rem;
+
+      /* Wide */
+      --lumo-space-wide-xs: calc(var(--lumo-space-xs) / 2) var(--lumo-space-xs);
+      --lumo-space-wide-s: calc(var(--lumo-space-s) / 2) var(--lumo-space-s);
+      --lumo-space-wide-m: calc(var(--lumo-space-m) / 2) var(--lumo-space-m);
+      --lumo-space-wide-l: calc(var(--lumo-space-l) / 2) var(--lumo-space-l);
+      --lumo-space-wide-xl: calc(var(--lumo-space-xl) / 2) var(--lumo-space-xl);
+
+      /* Tall */
+      --lumo-space-tall-xs: var(--lumo-space-xs) calc(var(--lumo-space-xs) / 2);
+      --lumo-space-tall-s: var(--lumo-space-s) calc(var(--lumo-space-s) / 2);
+      --lumo-space-tall-m: var(--lumo-space-m) calc(var(--lumo-space-m) / 2);
+      --lumo-space-tall-l: var(--lumo-space-l) calc(var(--lumo-space-l) / 2);
+      --lumo-space-tall-xl: var(--lumo-space-xl) calc(var(--lumo-space-xl) / 2);
+    }
+  </style>
+</custom-style>`;
+
+    document.head.appendChild($_documentContainer$d.content);
+
+    const $_documentContainer$e = document.createElement('template');
+
+    $_documentContainer$e.innerHTML = `<custom-style>
+  <style>
+    html {
+      /* Font families */
+      --lumo-font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+      /* Font sizes */
+      --lumo-font-size-xxs: .75rem;
+      --lumo-font-size-xs: .8125rem;
+      --lumo-font-size-s: .875rem;
+      --lumo-font-size-m: 1rem;
+      --lumo-font-size-l: 1.125rem;
+      --lumo-font-size-xl: 1.375rem;
+      --lumo-font-size-xxl: 1.75rem;
+      --lumo-font-size-xxxl: 2.5rem;
+
+      /* Line heights */
+      --lumo-line-height-xs: 1.25;
+      --lumo-line-height-s: 1.375;
+      --lumo-line-height-m: 1.625;
+    }
+
+  </style>
+</custom-style><dom-module id="lumo-typography">
+  <template>
+    <style>
+      html {
+        font-family: var(--lumo-font-family);
+        font-size: var(--lumo-font-size, var(--lumo-font-size-m));
+        line-height: var(--lumo-line-height-m);
+        -webkit-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Can’t combine with the above selector because that doesn’t work in browsers without native shadow dom */
+      :host {
+        font-family: var(--lumo-font-family);
+        font-size: var(--lumo-font-size, var(--lumo-font-size-m));
+        line-height: var(--lumo-line-height-m);
+        -webkit-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      small,
+      [theme~="font-size-s"] {
+        font-size: var(--lumo-font-size-s);
+        line-height: var(--lumo-line-height-s);
+      }
+
+      [theme~="font-size-xs"] {
+        font-size: var(--lumo-font-size-xs);
+        line-height: var(--lumo-line-height-xs);
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-weight: 600;
+        line-height: var(--lumo-line-height-xs);
+        margin-top: 1.25em;
+      }
+
+      h1 {
+        font-size: var(--lumo-font-size-xxxl);
+        margin-bottom: 0.75em;
+      }
+
+      h2 {
+        font-size: var(--lumo-font-size-xxl);
+        margin-bottom: 0.5em;
+      }
+
+      h3 {
+        font-size: var(--lumo-font-size-xl);
+        margin-bottom: 0.5em;
+      }
+
+      h4 {
+        font-size: var(--lumo-font-size-l);
+        margin-bottom: 0.5em;
+      }
+
+      h5 {
+        font-size: var(--lumo-font-size-m);
+        margin-bottom: 0.25em;
+      }
+
+      h6 {
+        font-size: var(--lumo-font-size-xs);
+        margin-bottom: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      p {
+        margin-top: 0.5em;
+        margin-bottom: 0.75em;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      hr {
+        display: block;
+        align-self: stretch;
+        height: 1px;
+        border: 0;
+        padding: 0;
+        margin: var(--lumo-space-s) calc(var(--lumo-border-radius) / 2);
+        background-color: var(--lumo-contrast-10pct);
+      }
+    </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$e.content);
+
+    const $_documentContainer$f = document.createElement('template');
+
+    $_documentContainer$f.innerHTML = `<dom-module id="lumo-button" theme-for="vaadin-button">
+  <template>
+    <style>
+      :host {
+        /* Sizing */
+        --lumo-button-size: var(--lumo-size-m);
+        min-width: calc(var(--lumo-button-size) * 2);
+        height: var(--lumo-button-size);
+        padding: 0 calc(var(--lumo-button-size) / 3 + var(--lumo-border-radius) / 2);
+        margin: var(--lumo-space-xs) 0;
+        box-sizing: border-box;
+        /* Style */
+        font-family: var(--lumo-font-family);
+        font-size: var(--lumo-font-size-m);
+        font-weight: 500;
+        color: var(--lumo-primary-text-color);
+        background-color: var(--lumo-contrast-5pct);
+        border-radius: var(--lumo-border-radius);
+        cursor: default;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Set only for the internal parts so we don’t affect the host vertical alignment */
+      [part="label"],
+      [part="prefix"],
+      [part="suffix"] {
+        line-height: var(--lumo-line-height-xs);
+      }
+
+      [part="label"] {
+        padding: calc(var(--lumo-button-size) / 6) 0;
+      }
+
+      :host([theme~="small"]) {
+        font-size: var(--lumo-font-size-s);
+        --lumo-button-size: var(--lumo-size-s);
+      }
+
+      :host([theme~="large"]) {
+        font-size: var(--lumo-font-size-l);
+        --lumo-button-size: var(--lumo-size-l);
+      }
+
+      /* This needs to be the last selector for it to take priority */
+      :host([disabled][disabled]) {
+        pointer-events: none;
+        color: var(--lumo-disabled-text-color);
+        background-color: var(--lumo-contrast-5pct);
+      }
+
+      /* For interaction states */
+      :host::before,
+      :host::after {
+        content: "";
+        /* We rely on the host always being relative */
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: currentColor;
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity 0.2s;
+        pointer-events: none;
+      }
+
+      /* Hover */
+
+      :host(:hover)::before {
+        opacity: 0.05;
+      }
+
+      /* Disable hover for touch devices */
+      @media (pointer: coarse) {
+        :host(:not([active]):hover)::before {
+          opacity: 0;
+        }
+      }
+
+      /* Active */
+
+      :host::after {
+        transition: opacity 1.4s, transform 0.1s;
+        filter: blur(8px);
+      }
+
+      :host([active])::before {
+        opacity: 0.1;
+        transition-duration: 0s;
+      }
+
+      :host([active])::after {
+        opacity: 0.1;
+        transition-duration: 0s, 0s;
+        transform: scale(0);
+      }
+
+      /* Keyboard focus */
+
+      :host([focus-ring]) {
+        box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+      }
+
+      /* Types (primary, tertiary, tertiary-inline */
+
+      :host([theme~="tertiary"]),
+      :host([theme~="tertiary-inline"]) {
+        background-color: transparent !important;
+        transition: opacity 0.2s;
+        min-width: 0;
+      }
+
+      :host([theme~="tertiary"])::before,
+      :host([theme~="tertiary-inline"])::before {
+        display: none;
+      }
+
+      :host([theme~="tertiary"]) {
+        padding: 0 calc(var(--lumo-button-size) / 6);
+      }
+
+      @media (hover: hover) {
+        :host([theme*="tertiary"]:not([active]):hover) {
+          opacity: 0.8;
+        }
+      }
+
+      :host([theme~="tertiary"][active]),
+      :host([theme~="tertiary-inline"][active]) {
+        opacity: 0.5;
+        transition-duration: 0s;
+      }
+
+      :host([theme~="tertiary-inline"]) {
+        margin: 0;
+        height: auto;
+        padding: 0;
+        line-height: inherit;
+        font-size: inherit;
+      }
+
+      :host([theme~="tertiary-inline"]) [part="label"] {
+        padding: 0;
+        line-height: inherit;
+      }
+
+      :host([theme~="primary"]) {
+        background-color: var(--lumo-primary-color);
+        color: var(--lumo-primary-contrast-color);
+        font-weight: 600;
+        min-width: calc(var(--lumo-button-size) * 2.5);
+      }
+
+      :host([theme~="primary"]:hover)::before {
+        opacity: 0.1;
+      }
+
+      :host([theme~="primary"][active])::before {
+        background-color: var(--lumo-shade-20pct);
+      }
+
+      @media (pointer: coarse) {
+        :host([theme~="primary"][active])::before {
+          background-color: var(--lumo-shade-60pct);
+        }
+
+        :host([theme~="primary"]:not([active]):hover)::before {
+          opacity: 0;
+        }
+      }
+
+      :host([theme~="primary"][active])::after {
+        opacity: 0.2;
+      }
+
+      /* Colors (success, error, contrast) */
+
+      :host([theme~="success"]) {
+        color: var(--lumo-success-text-color);
+      }
+
+      :host([theme~="success"][theme~="primary"]) {
+        background-color: var(--lumo-success-color);
+        color: var(--lumo-success-contrast-color);
+      }
+
+      :host([theme~="error"]) {
+        color: var(--lumo-error-text-color);
+      }
+
+      :host([theme~="error"][theme~="primary"]) {
+        background-color: var(--lumo-error-color);
+        color: var(--lumo-error-contrast-color);
+      }
+
+      :host([theme~="contrast"]) {
+        color: var(--lumo-contrast);
+      }
+
+      :host([theme~="contrast"][theme~="primary"]) {
+        background-color: var(--lumo-contrast);
+        color: var(--lumo-base-color);
+      }
+
+      /* Icons */
+
+      [part] ::slotted(iron-icon) {
+        display: inline-block;
+        width: var(--lumo-icon-size-m);
+        height: var(--lumo-icon-size-m);
+      }
+
+      /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
+      [part] ::slotted(iron-icon[icon^="vaadin:"]) {
+        padding: 0.25em;
+        box-sizing: border-box !important;
+      }
+
+      [part="prefix"] {
+        margin-left: -0.25em;
+        margin-right: 0.25em;
+      }
+
+      [part="suffix"] {
+        margin-left: 0.25em;
+        margin-right: -0.25em;
+      }
+
+      /* Icon-only */
+
+      :host([theme~="icon"]) {
+        min-width: var(--lumo-button-size);
+        padding-left: calc(var(--lumo-button-size) / 4);
+        padding-right: calc(var(--lumo-button-size) / 4);
+      }
+
+      :host([theme~="icon"]) [part="prefix"],
+      :host([theme~="icon"]) [part="suffix"] {
+        margin-left: 0;
+        margin-right: 0;
+      }
+    </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$f.content);
+
+    /**
+    @license
+    Copyright (c) 2017 Vaadin Ltd.
+    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+    */
+    /**
+     * `<vaadin-button>` is a Web Component providing an accessible and customizable button.
+     *
+     * ```html
+     * <vaadin-button>
+     * </vaadin-button>
+     * ```
+     *
+     * ```js
+     * document.querySelector('vaadin-button').addEventListener('click', () => alert('Hello World!'));
+     * ```
+     *
+     * ### Styling
+     *
+     * The following shadow DOM parts are exposed for styling:
+     *
+     * Part name | Description
+     * ----------------|----------------
+     * `label` | The label (text) inside the button
+     * `prefix` | A slot for e.g. an icon before the label
+     * `suffix` | A slot for e.g. an icon after the label
+     *
+     *
+     * The following attributes are exposed for styling:
+     *
+     * Attribute | Description
+     * --------- | -----------
+     * `active` | Set when the button is pressed down, either with mouse, touch or the keyboard.
+     * `disabled` | Set when the button is disabled.
+     * `focus-ring` | Set when the button is focused using the keyboard.
+     * `focused` | Set when the button is focused.
+     *
+     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+     *
+     * @memberof Vaadin
+     * @mixes Vaadin.ElementMixin
+     * @mixes Vaadin.ControlStateMixin
+     * @mixes Vaadin.ThemableMixin
+     * @mixes Polymer.GestureEventListeners
+     * @demo demo/index.html
+     */
+    class ButtonElement extends
+      ElementMixin$1(
+        ControlStateMixin(
+          ThemableMixin(
+            GestureEventListeners(PolymerElement)))) {
+      static get template() {
+        return html$1`
+    <style>
+      :host {
+        display: inline-block;
+        position: relative;
+        outline: none;
+        white-space: nowrap;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      /* Ensure the button is always aligned on the baseline */
+      .vaadin-button-container::before {
+        content: "\\2003";
+        display: inline-block;
+        width: 0;
+      }
+
+      .vaadin-button-container {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        min-height: inherit;
+        text-shadow: inherit;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      [part="prefix"],
+      [part="suffix"] {
+        flex: none;
+      }
+
+      [part="label"] {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      #button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: inherit;
+      }
+    </style>
+    <div class="vaadin-button-container">
+      <div part="prefix">
+        <slot name="prefix"></slot>
+      </div>
+      <div part="label">
+        <slot></slot>
+      </div>
+      <div part="suffix">
+        <slot name="suffix"></slot>
+      </div>
+    </div>
+    <button id="button" type="button"></button>
+`;
+      }
+
+      static get is() {
+        return 'vaadin-button';
+      }
+
+      static get version() {
+        return '2.1.0';
+      }
+
+      ready() {
+        super.ready();
+
+        // Leaving default role in the native button, makes navigation announcement
+        // being different when using focus navigation (tab) versus using normal
+        // navigation (arrows). The first way announces the label on a button
+        // since the focus is moved programmatically, and the second on a group.
+        this.setAttribute('role', 'button');
+        this.$.button.setAttribute('role', 'presentation');
+
+        this._addActiveListeners();
+      }
+
+      /**
+       * @protected
+       */
+      disconnectedCallback() {
+        super.disconnectedCallback();
+
+        // `active` state is preserved when the element is disconnected between keydown and keyup events.
+        // reproducible in `<vaadin-date-picker>` when closing on `Cancel` or `Today` click.
+        if (this.hasAttribute('active')) {
+          this.removeAttribute('active');
+        }
+      }
+
+      _addActiveListeners() {
+        addListener(this, 'down', () => !this.disabled && this.setAttribute('active', ''));
+        addListener(this, 'up', () => this.removeAttribute('active'));
+        this.addEventListener('keydown', e => !this.disabled && [13, 32].indexOf(e.keyCode) >= 0 && this.setAttribute('active', ''));
+        this.addEventListener('keyup', () => this.removeAttribute('active'));
+        this.addEventListener('blur', () => this.removeAttribute('active'));
+      }
+
+      /**
+       * @protected
+       */
+      get focusElement() {
+        return this.$.button;
+      }
+    }
+
+    customElements.define(ButtonElement.is, ButtonElement);
+
+    const $_documentContainer$g = document.createElement('template');
+
+    $_documentContainer$g.innerHTML = `<dom-module id="lumo-text-field" theme-for="vaadin-text-field">
+  <template>
+    <style>
+      :host {
+        --lumo-text-field-size: var(--lumo-size-m);
+        color: var(--lumo-body-text-color);
+        font-size: var(--lumo-font-size-m);
+        font-family: var(--lumo-font-family);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-tap-highlight-color: transparent;
+        padding: var(--lumo-space-xs) 0;
+      }
+
+      :host::before {
+        height: var(--lumo-text-field-size);
+        box-sizing: border-box;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      [part="label"] {
+        align-self: flex-start;
+        color: var(--lumo-secondary-text-color);
+        font-weight: 500;
+        font-size: var(--lumo-font-size-s);
+        margin-left: calc(var(--lumo-border-radius) / 4);
+        transition: color 0.2s;
+        line-height: 1;
+        padding-bottom: 0.5em;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        position: relative;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      :host([has-label])::before {
+        /* Label height + margin */
+        margin-top: calc(var(--lumo-font-size-s) * 1.5);
+      }
+
+      :host([has-label]) {
+        padding-top: var(--lumo-space-m);
+      }
+
+      :host([focused]:not([readonly])) [part="label"] {
+        color: var(--lumo-primary-text-color);
+      }
+
+      :host([required]) [part="label"] {
+        padding-right: 1em;
+      }
+
+      /* Used for required and invalid indicators */
+      [part="label"]::after {
+        content: var(--lumo-required-field-indicator, "•");
+        transition: opacity 0.2s;
+        opacity: 0;
+        color: var(--lumo-primary-text-color);
+        position: absolute;
+        right: 0;
+        width: 1em;
+        text-align: center;
+      }
+
+      [part="value"],
+      [part="input-field"] ::slotted([part="value"]) {
+        cursor: inherit;
+        min-height: var(--lumo-text-field-size);
+        padding: 0 0.25em;
+        --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
+        -webkit-mask-image: var(--_lumo-text-field-overflow-mask-image);
+      }
+
+      [part="value"]:focus {
+        -webkit-mask-image: none;
+        mask-image: none;
+      }
+
+      /*
+        TODO: CSS custom property in \`mask-image\` causes crash in Edge
+        see https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15415089/
+      */
+      @-moz-document url-prefix() {
+        [part="value"],
+        [part="input-field"] ::slotted([part="value"]) {
+          mask-image: var(--_lumo-text-field-overflow-mask-image);
+        }
+      }
+
+      [part="value"]::-webkit-input-placeholder {
+        color: inherit;
+        transition: opacity 0.175s 0.05s;
+        opacity: 0.5;
+      }
+
+      [part="value"]:-ms-input-placeholder {
+        color: inherit;
+        opacity: 0.5;
+      }
+
+      [part="value"]::-moz-placeholder {
+        color: inherit;
+        transition: opacity 0.175s 0.05s;
+        opacity: 0.5;
+      }
+
+      [part="value"]::placeholder {
+        color: inherit;
+        transition: opacity 0.175s 0.1s;
+        opacity: 0.5;
+      }
+
+      [part="input-field"] {
+        border-radius: var(--lumo-border-radius);
+        background-color: var(--lumo-contrast-10pct);
+        padding: 0 calc(0.375em + var(--lumo-border-radius) / 4 - 1px);
+        font-weight: 500;
+        line-height: 1;
+        position: relative;
+        cursor: text;
+        box-sizing: border-box;
+      }
+
+      /* Used for hover and activation effects */
+      [part="input-field"]::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        background-color: var(--lumo-contrast-50pct);
+        opacity: 0;
+        transition: transform 0.15s, opacity 0.2s;
+        transform-origin: 100% 0;
+      }
+
+      /* Hover */
+
+      :host(:hover:not([readonly]):not([focused])) [part="label"] {
+        color: var(--lumo-body-text-color);
+      }
+
+      :host(:hover:not([readonly]):not([focused])) [part="input-field"]::after {
+        opacity: 0.1;
+      }
+
+      /* Touch device adjustment */
+      @media (pointer: coarse) {
+        :host(:hover:not([readonly]):not([focused])) [part="label"] {
+          color: var(--lumo-secondary-text-color);
+        }
+
+        :host(:hover:not([readonly]):not([focused])) [part="input-field"]::after {
+          opacity: 0;
+        }
+
+        :host(:active:not([readonly]):not([focused])) [part="input-field"]::after {
+          opacity: 0.2;
+        }
+      }
+
+      /* Trigger when not focusing using the keyboard */
+      :host([focused]:not([focus-ring]):not([readonly])) [part="input-field"]::after {
+        transform: scaleX(0);
+        transition-duration: 0.15s, 1s;
+      }
+
+      /* Focus-ring */
+
+      :host([focus-ring]) [part="input-field"] {
+        box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+      }
+
+      /* Read-only and disabled */
+      :host([readonly]) [part="value"]::-webkit-input-placeholder,
+      :host([disabled]) [part="value"]::-webkit-input-placeholder {
+        opacity: 0;
+      }
+
+      :host([readonly]) [part="value"]:-ms-input-placeholder,
+      :host([disabled]) [part="value"]:-ms-input-placeholder {
+        opacity: 0;
+      }
+
+      :host([readonly]) [part="value"]::-moz-placeholder,
+      :host([disabled]) [part="value"]::-moz-placeholder {
+        opacity: 0;
+      }
+
+      :host([readonly]) [part="value"]::placeholder,
+      :host([disabled]) [part="value"]::placeholder {
+        opacity: 0;
+      }
+
+      /* Read-only */
+
+      :host([readonly]) [part="input-field"] {
+        color: var(--lumo-secondary-text-color);
+        background-color: transparent;
+        cursor: default;
+      }
+
+      :host([readonly]) [part="input-field"]::after {
+        background-color: transparent;
+        opacity: 1;
+        border: 1px dashed var(--lumo-contrast-30pct);
+      }
+
+      /* Disabled style */
+
+      :host([disabled]) {
+        pointer-events: none;
+      }
+
+      :host([disabled]) [part="input-field"] {
+        background-color: var(--lumo-contrast-5pct);
+      }
+
+      :host([disabled]) [part="label"],
+      :host([disabled]) [part="value"],
+      :host([disabled]) [part="input-field"] ::slotted(*) {
+        color: var(--lumo-disabled-text-color);
+        -webkit-text-fill-color: var(--lumo-disabled-text-color);
+      }
+
+      /* Required field style */
+
+      :host([required]:not([has-value])) [part="label"]::after {
+        opacity: 1;
+      }
+
+      /* Invalid style */
+
+      :host([invalid]) [part="label"]::after {
+        color: var(--lumo-error-text-color);
+      }
+
+      :host([invalid]) [part="input-field"] {
+        background-color: var(--lumo-error-color-10pct);
+      }
+
+      :host([invalid]) [part="input-field"]::after {
+        background-color: var(--lumo-error-color-50pct);
+      }
+
+      :host([invalid][focus-ring]) [part="input-field"] {
+        box-shadow: 0 0 0 2px var(--lumo-error-color-50pct);
+      }
+
+      /* Error message */
+
+      [part="error-message"] {
+        margin-left: calc(var(--lumo-border-radius) / 4);
+        font-size: var(--lumo-font-size-xs);
+        line-height: var(--lumo-line-height-xs);
+        color: var(--lumo-error-text-color);
+        will-change: max-height;
+        transition: 0.4s max-height;
+        max-height: 5em;
+      }
+
+      /* Margin that doesn’t reserve space when there’s no error message */
+      [part="error-message"]:not(:empty)::before,
+      [part="error-message"]:not(:empty)::after {
+        content: "";
+        display: block;
+        height: 0.4em;
+      }
+
+      :host(:not([invalid])) [part="error-message"] {
+        max-height: 0;
+        overflow: hidden;
+      }
+
+      /* Small theme */
+
+      :host([theme~="small"]) {
+        font-size: var(--lumo-font-size-s);
+        --lumo-text-field-size: var(--lumo-size-s);
+      }
+
+      :host([theme~="small"][has-label]) [part="label"] {
+        font-size: var(--lumo-font-size-xs);
+      }
+
+      :host([theme~="small"][has-label]) [part="error-message"] {
+        font-size: var(--lumo-font-size-xxs);
+      }
+
+      /* Text align */
+
+      :host([theme~="align-center"]) [part="value"] {
+        text-align: center;
+        --_lumo-text-field-overflow-mask-image: none;
+      }
+
+      :host([theme~="align-right"]) [part="value"] {
+        text-align: right;
+        --_lumo-text-field-overflow-mask-image: none;
+      }
+
+      @-moz-document url-prefix() {
+        /* Firefox is smart enough to align overflowing text to right */
+        :host([theme~="align-right"]) [part="value"] {
+          --_lumo-text-field-overflow-mask-image: linear-gradient(to right, transparent 0.25em, #000 1.5em);
+        }
+      }
+
+      /* Slotted content */
+
+      [part="input-field"] ::slotted(:not([part]):not(iron-icon)) {
+        color: var(--lumo-secondary-text-color);
+        font-weight: 400;
+      }
+
+      /* Slotted icons */
+
+      [part="input-field"] ::slotted(iron-icon) {
+        color: var(--lumo-contrast-60pct);
+        width: var(--lumo-icon-size-m);
+        height: var(--lumo-icon-size-m);
+      }
+
+      /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
+      [part="input-field"] ::slotted(iron-icon[icon^="vaadin:"]) {
+        padding: 0.25em;
+        box-sizing: border-box !important;
+      }
+    </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$g.content);
+
+    /**
+    @license
+    Copyright (c) 2017 Vaadin Ltd.
+    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+    */
+    const $_documentContainer$h = document.createElement('template');
+
+    $_documentContainer$h.innerHTML = `<dom-module id="vaadin-text-field-shared-styles">
+  <template>
+    <style>
+      :host {
+        display: inline-flex;
+        outline: none;
+      }
+
+      :host::before {
+        content: "\\2003";
+        width: 0;
+        display: inline-block;
+        /* Size and position this element on the same vertical position as the input-field element
+           to make vertical align for the host element work as expected */
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      .vaadin-text-field-container,
+      .vaadin-text-area-container {
+        display: flex;
+        flex-direction: column;
+        min-width: 100%;
+        max-width: 100%;
+        width: var(--vaadin-text-field-default-width, 12em);
+      }
+
+      [part="label"]:empty {
+        display: none;
+      }
+
+      [part="input-field"] {
+        display: flex;
+        align-items: center;
+        flex: auto;
+      }
+
+      /* Reset the native input styles */
+      [part="value"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        outline: none;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        min-width: 0;
+        font: inherit;
+        font-size: 1em;
+        line-height: normal;
+        color: inherit;
+        background-color: transparent;
+        /* Disable default invalid style in Firefox */
+        box-shadow: none;
+      }
+
+      [part="input-field"] ::slotted(*) {
+        flex: none;
+      }
+
+      /* Slotted by vaadin-dropdown-menu-text-field */
+      [part="value"],
+      [part="input-field"] ::slotted([part="value"]) {
+        flex: auto;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+
+      [part="value"]::-ms-clear {
+        display: none;
+      }
+    </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$h.content);
+
+    /**
+     * @polymerMixin
+     * @mixes Vaadin.ControlStateMixin
+     */
+    const TextFieldMixin = subclass => class VaadinTextFieldMixin extends ControlStateMixin(subclass) {
+      static get properties() {
+        return {
+          /**
+           * Whether the value of the control can be automatically completed by the browser.
+           * List of available options at:
+           * https://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete
+           */
+          autocomplete: {
+            type: String
+          },
+
+          /**
+           * This is a property supported by Safari that is used to control whether
+           * autocorrection should be enabled when the user is entering/editing the text.
+           * Possible values are:
+           * on: Enable autocorrection.
+           * off: Disable autocorrection.
+           */
+          autocorrect: {
+            type: String
+          },
+
+          /**
+           * This is a property supported by Safari and Chrome that is used to control whether
+           * autocapitalization should be enabled when the user is entering/editing the text.
+           * Possible values are:
+           * characters: Characters capitalization.
+           * words: Words capitalization.
+           * sentences: Sentences capitalization.
+           * none: No capitalization.
+           */
+          autocapitalize: {
+            type: String
+          },
+
+          /**
+           * Error to show when the input value is invalid.
+           */
+          errorMessage: {
+            type: String,
+            value: ''
+          },
+
+          /**
+           * String used for the label element.
+           */
+          label: {
+            type: String,
+            value: '',
+            observer: '_labelChanged'
+          },
+
+          /**
+           * Maximum number of characters (in Unicode code points) that the user can enter.
+           */
+          maxlength: {
+            type: Number
+          },
+
+          /**
+           * Minimum number of characters (in Unicode code points) that the user can enter.
+           */
+          minlength: {
+            type: Number
+          },
+
+          /**
+           * The name of the control, which is submitted with the form data.
+           */
+          name: {
+            type: String
+          },
+
+          /**
+           * A hint to the user of what can be entered in the control.
+           */
+          placeholder: {
+            type: String
+          },
+
+          /**
+           * This attribute indicates that the user cannot modify the value of the control.
+           */
+          readonly: {
+            type: Boolean,
+            reflectToAttribute: true
+          },
+
+          /**
+           * Specifies that the user must fill in a value.
+           */
+          required: {
+            type: Boolean,
+            reflectToAttribute: true
+          },
+
+
+          /**
+           * The initial value of the control.
+           * It can be used for two-way data binding.
+           */
+          value: {
+            type: String,
+            value: '',
+            observer: '_valueChanged',
+            notify: true
+          },
+
+          /**
+           * This property is set to true when the control value is invalid.
+           */
+          invalid: {
+            type: Boolean,
+            reflectToAttribute: true,
+            notify: true,
+            value: false
+          },
+
+          /**
+           * When set to true, user is prevented from typing a value that
+           * conflicts with the given `pattern`.
+           */
+          preventInvalidInput: {
+            type: Boolean
+          },
+
+          _labelId: {
+            type: String
+          },
+
+          _errorId: {
+            type: String
+          }
+        };
+      }
+
+      get focusElement() {
+        return this.root.querySelector('[part=value]');
+      }
+
+      _onInput(e) {
+        if (this.preventInvalidInput) {
+          const input = this.focusElement;
+          if (input.value.length > 0 && !this.checkValidity()) {
+            input.value = this.value || '';
+          }
+        }
+      }
+
+      _onChange(e) {
+        // In the Shadow DOM, the `change` event is not leaked into the
+        // ancestor tree, so we must do this manually.
+        const changeEvent = new CustomEvent('change', {
+          detail: {
+            sourceEvent: e
+          },
+          bubbles: e.bubbles,
+          cancelable: e.cancelable,
+        });
+        this.dispatchEvent(changeEvent);
+      }
+
+      _valueChanged(newVal, oldVal) {
+        // setting initial value to empty string, skip validation
+        if (newVal === '' && oldVal === undefined) {
+          return;
+        }
+        if (this.invalid) {
+          this.validate();
+        }
+        if (newVal !== '' && newVal != null) {
+          this.setAttribute('has-value', '');
+        } else {
+          this.removeAttribute('has-value');
+        }
+      }
+
+      _labelChanged(label) {
+        if (label !== '' && label != null) {
+          this.setAttribute('has-label', '');
+        } else {
+          this.removeAttribute('has-label');
+        }
+      }
+
+      /**
+       * Returns true if the current input value satisfies all constraints (if any)
+       * @returns {boolean}
+       */
+      checkValidity() {
+        if (this.required || this.pattern || this.maxlength || this.minlength) {
+          return this.focusElement.checkValidity();
+        } else {
+          return !this.invalid;
+        }
+      }
+
+
+      ready() {
+        super.ready();
+        if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
+          this.updateStyles();
+        }
+
+        var uniqueId = TextFieldMixin._uniqueId = 1 + TextFieldMixin._uniqueId || 0;
+        this._errorId = `${this.constructor.is}-error-${uniqueId}`;
+        this._labelId = `${this.constructor.is}-label-${uniqueId}`;
+
+        if (navigator.userAgent.match(/Trident/)) {
+          this._addIEListeners();
+        }
+      }
+
+      /**
+       * Returns true if `value` is valid.
+       * `<iron-form>` uses this to check the validity or all its elements.
+       *
+       * @return {boolean} True if the value is valid.
+       */
+      validate() {
+        return !(this.invalid = !this.checkValidity());
+      }
+
+      _addIEListeners() {
+        // IE11 dispatches `input` event in following cases:
+        // - focus or blur, when placeholder attribute is set
+        // - placeholder attribute value changed
+        // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/101220/
+        const prevent = e => {
+          e.stopImmediatePropagation();
+          this.focusElement.removeEventListener('input', prevent);
+        };
+        const shouldPreventInput = () => this.placeholder && this.focusElement.addEventListener('input', prevent);
+        this.focusElement.addEventListener('focusin', shouldPreventInput);
+        this.focusElement.addEventListener('focusout', shouldPreventInput);
+        this._createPropertyObserver('placeholder', shouldPreventInput);
+      }
+
+      _getActiveErrorId(invalid, errorMessage, errorId) {
+        return errorMessage && invalid ? errorId : undefined;
+      }
+
+      _getActiveLabelId(label, labelId) {
+        return label ? labelId : undefined;
+      }
+
+      _getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
+        return (!this._getActiveErrorId(invalid, errorMessage, errorId)).toString();
+      }
+
+      /**
+       * @protected
+       */
+      attributeChangedCallback(prop, oldVal, newVal) {
+        super.attributeChangedCallback(prop, oldVal, newVal);
+        // Needed until Edge has CSS Custom Properties (present in Edge Preview)
+        if (!(window.ShadyCSS && window.ShadyCSS.nativeCss) &&
+          /^(focused|focus-ring|invalid|disabled|placeholder|has-value)$/.test(prop)) {
+          this.updateStyles();
+        }
+
+        // Safari has an issue with repainting shadow root element styles when a host attribute changes.
+        // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        if (isSafari && this.root) {
+          const WEBKIT_PROPERTY = '-webkit-backface-visibility';
+          this.root.querySelectorAll('*').forEach(el => {
+            el.style[WEBKIT_PROPERTY] = 'visible';
+            el.style[WEBKIT_PROPERTY] = '';
+          });
+        }
+      }
+
+      /**
+       * Fired when the user commits a value change.
+       *
+       * @event change
+       */
+    };
+
+    /**
+    @license
+    Copyright (c) 2017 Vaadin Ltd.
+    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+    */
+    /**
+     * `<vaadin-text-field>` is a Web Component for text field control in forms.
+     *
+     * ```html
+     * <vaadin-text-field label="First Name">
+     * </vaadin-text-field>
+     * ```
+     *
+     * ### Prefixes and suffixes
+     *
+     * These are child elements of a `<vaadin-text-field>` that are displayed
+     * inline with the input, before or after.
+     * In order for an element to be considered as a prefix, it must have the slot
+     * attribute set to `prefix` (and similarly for `suffix`).
+     *
+     * ```html
+     * <vaadin-text-field label="Email address">
+     *   <div slot="prefix">Sent to:</div>
+     *   <div slot="suffix">@vaadin.com</div>
+     * </vaadin-text-area>
+     * ```
+     *
+     * ### Styling
+     *
+     * The following custom properties are available for styling:
+     *
+     * Custom property | Description | Default
+     * ----------------|-------------|-------------
+     * `--vaadin-text-field-default-width` | Set the default width of the input field | `12em`
+     *
+     * The following shadow DOM parts are available for styling:
+     *
+     * Part name | Description
+     * ----------------|----------------
+     * `label` | The label element
+     * `input-field` | The element that wraps prefix, value and suffix
+     * `value` | The text value element inside the `input-field` element
+     * `error-message` | The error message element
+     *
+     * The following state attributes are available for styling:
+     *
+     * Attribute    | Description | Part name
+     * -------------|-------------|------------
+     * `disabled` | Set to a disabled text field | :host
+     * `has-value` | Set when the element has a value | :host
+     * `has-label` | Set when the element has a label | :host
+     * `invalid` | Set when the element is invalid | :host
+     * `focused` | Set when the element is focused | :host
+     * `focus-ring` | Set when the element is keyboard focused | :host
+     * `readonly` | Set to a readonly text field | :host
+     *
+     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+     *
+     * @memberof Vaadin
+     * @mixes Vaadin.TextFieldMixin
+     * @mixes Vaadin.ThemableMixin
+     * @demo demo/index.html
+     */
+    class TextFieldElement extends ElementMixin$1(TextFieldMixin(ThemableMixin(PolymerElement))) {
+      static get template() {
+        return html$1`
+    <style include="vaadin-text-field-shared-styles">
+      /* polymer-cli linter breaks with empty line */
+    </style>
+
+    <div class="vaadin-text-field-container">
+
+      <label part="label" on-click="focus" id="[[_labelId]]">[[label]]</label>
+
+      <div part="input-field">
+
+        <slot name="prefix"></slot>
+
+        <input part="value" autocomplete\$="[[autocomplete]]" autocorrect\$="[[autocorrect]]" autocapitalize\$="[[autocapitalize]]" autofocus\$="[[autofocus]]" disabled\$="[[disabled]]" list="[[list]]" maxlength\$="[[maxlength]]" minlength\$="[[minlength]]" pattern="[[pattern]]" placeholder\$="[[placeholder]]" readonly\$="[[readonly]]" aria-readonly\$="[[readonly]]" required\$="[[required]]" aria-required\$="[[required]]" value="{{value::input}}" title="[[title]]" on-blur="validate" on-input="_onInput" on-change="_onChange" aria-describedby\$="[[_getActiveErrorId(invalid, errorMessage, _errorId)]]" aria-labelledby\$="[[_getActiveLabelId(label, _labelId)]]" aria-invalid\$="[[invalid]]">
+
+        <slot name="suffix"></slot>
+
+      </div>
+
+      <div part="error-message" id="[[_errorId]]" aria-live="assertive" aria-hidden\$="[[_getErrorMessageAriaHidden(invalid, errorMessage, _errorId)]]">[[errorMessage]]</div>
+
+    </div>
+`;
+      }
+
+      static get is() {
+        return 'vaadin-text-field';
+      }
+
+      static get version() {
+        return '2.1.2';
+      }
+
+      static get properties() {
+        return {
+          /**
+           * Identifies a list of pre-defined options to suggest to the user.
+           * The value must be the id of a <datalist> element in the same document.
+           */
+          list: {
+            type: String
+          },
+
+          /**
+           * A regular expression that the value is checked against.
+           * The pattern must match the entire value, not just some subset.
+           */
+          pattern: {
+            type: String
+          },
+
+          /**
+           * Message to show to the user when validation fails.
+           */
+          title: {
+            type: String
+          }
+        };
+      }
+    }
+
+    customElements.define(TextFieldElement.is, TextFieldElement);
+
+    const $_documentContainer$i = document.createElement('template');
+
+    $_documentContainer$i.innerHTML = `<custom-style>
+  <style>
+    @font-face {
+      font-family: 'lumo-icons';
+      src: url(data:application/font-woff;charset=utf-8;base64,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) format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    html {
+      --lumo-icons-angle-down: "\\ea01";
+      --lumo-icons-angle-left: "\\ea02";
+      --lumo-icons-angle-right: "\\ea03";
+      --lumo-icons-angle-up: "\\ea04";
+      --lumo-icons-arrow-down: "\\ea05";
+      --lumo-icons-arrow-left: "\\ea06";
+      --lumo-icons-arrow-right: "\\ea07";
+      --lumo-icons-arrow-up: "\\ea08";
+      --lumo-icons-bar-chart: "\\ea09";
+      --lumo-icons-bell: "\\ea0a";
+      --lumo-icons-calendar: "\\ea0b";
+      --lumo-icons-checkmark: "\\ea0c";
+      --lumo-icons-chevron-down: "\\ea0d";
+      --lumo-icons-chevron-left: "\\ea0e";
+      --lumo-icons-chevron-right: "\\ea0f";
+      --lumo-icons-chevron-up: "\\ea10";
+      --lumo-icons-clock: "\\ea11";
+      --lumo-icons-cog: "\\ea12";
+      --lumo-icons-cross: "\\ea13";
+      --lumo-icons-download: "\\ea14";
+      --lumo-icons-dropdown: "\\ea15";
+      --lumo-icons-edit: "\\ea16";
+      --lumo-icons-error: "\\ea17";
+      --lumo-icons-eye: "\\ea18";
+      --lumo-icons-eye-disabled: "\\ea19";
+      --lumo-icons-menu: "\\ea1a";
+      --lumo-icons-minus: "\\ea1b";
+      --lumo-icons-phone: "\\ea1c";
+      --lumo-icons-play: "\\ea1d";
+      --lumo-icons-plus: "\\ea1e";
+      --lumo-icons-reload: "\\ea1f";
+      --lumo-icons-search: "\\ea20";
+      --lumo-icons-upload: "\\ea21";
+      --lumo-icons-user: "\\ea22";
+    }
+  </style>
+</custom-style>`;
+
+    document.head.appendChild($_documentContainer$i.content);
+
+    const $_documentContainer$j = document.createElement('template');
+
+    $_documentContainer$j.innerHTML = `<dom-module id="lumo-field-button">
+  <template>
+    <style>
+      [part\$="button"] {
+        flex: none;
+        width: 1em;
+        height: 1em;
+        line-height: 1;
+        font-size: var(--lumo-icon-size-m);
+        text-align: center;
+        color: var(--lumo-contrast-60pct);
+        transition: 0.2s color;
+        cursor: default;
+      }
+
+      :host(:not([readonly])) [part\$="button"]:hover {
+        color: var(--lumo-contrast-90pct);
+      }
+
+      :host([disabled]) [part\$="button"],
+      :host([readonly]) [part\$="button"] {
+        color: var(--lumo-contrast-20pct);
+      }
+
+      [part\$="button"]::before {
+        font-family: "lumo-icons";
+      }
+    </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$j.content);
+
+    const $_documentContainer$k = document.createElement('template');
+
+    $_documentContainer$k.innerHTML = `<dom-module id="lumo-password-field" theme-for="vaadin-password-field">
+  <template>
+    <style include="lumo-field-button">
+      [part="reveal-button"]::before {
+        content: var(--lumo-icons-eye);
+      }
+
+      :host([password-visible]) [part="reveal-button"]::before {
+        content: var(--lumo-icons-eye-disabled);
+      }
+
+      /* Make it easy to hide the button across the whole app */
+      [part="reveal-button"] {
+        display: var(--lumo-password-field-reveal-button-display, block);
+      }
+    </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$k.content);
+
+    /**
+    @license
+    Copyright (c) 2017 Vaadin Ltd.
+    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+    */
+    const $_documentContainer$l = document.createElement('template');
+
+    $_documentContainer$l.innerHTML = `<custom-style>
+  <style>
+    @font-face {
+      font-family: 'vaadin-password-field-icons';
+      src: url(data:application/font-woff;charset=utf-8;base64,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) format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+  </style>
+</custom-style><dom-module id="vaadin-password-field-template">
+  <template>
+    <style>
+      /* Hide the native eye icon for IE/Edge */
+      ::-ms-reveal {
+        display: none;
+      }
+
+      [part="reveal-button"][hidden] {
+        display: none !important;
+      }
+    </style>
+
+    <div part="reveal-button" on-mousedown="_revealButtonMouseDown" on-touchend="_togglePasswordVisibilityTouchend" on-click="_togglePasswordVisibility" hidden\$="[[revealButtonHidden]]">
+    </div>
+  </template>
+  
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$l.content);
+    let memoizedTemplate;
+
+    /**
+     * `<vaadin-password-field>` is a Web Component for password field control in forms.
+     *
+     * ```html
+     * <vaadin-password-field label="Password">
+     * </vaadin-password-field>
+     * ```
+     *
+     * ### Styling
+     *
+     * See vaadin-text-field.html for the styling documentation
+     *
+     * In addition to vaadin-text-field parts, here's the list of vaadin-password-field specific parts
+     *
+     * Part name       | Description
+     * ----------------|----------------------------------------------------
+     * `reveal-button` | The eye icon which toggles the password visibility
+     *
+     * In addition to vaadin-text-field state attributes, here's the list of vaadin-password-field specific attributes
+     *
+     * Attribute    | Description | Part name
+     * -------------|-------------|------------
+     * `password-visible` | Set when the password is visible | :host
+     *
+     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+     *
+     * @memberof Vaadin
+     * @extends Vaadin.TextFieldElement
+     * @demo demo/index.html
+     */
+    class PasswordFieldElement extends TextFieldElement {
+      static get is() {
+        return 'vaadin-password-field';
+      }
+
+      static get version() {
+        return '2.1.2';
+      }
+
+      static get properties() {
+        return {
+          /**
+           * Set to true to hide the eye icon which toggles the password visibility.
+           */
+          revealButtonHidden: {
+            type: Boolean,
+            value: false
+          },
+
+          /**
+           * True if the password is visible ([type=text]).
+           */
+          passwordVisible: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+            observer: '_passwordVisibleChange',
+            readOnly: true
+          }
+        };
+      }
+
+      static get template() {
+        if (!memoizedTemplate) {
+          // Clone the superclass template
+          memoizedTemplate = super.template.cloneNode(true);
+
+          // Retrieve this element's dom-module template
+          const thisTemplate = DomModule.import(this.is + '-template', 'template');
+          const revealButton = thisTemplate.content.querySelector('[part="reveal-button"]');
+          const styles = thisTemplate.content.querySelector('style');
+
+          // Append reveal-button and styles to the text-field template
+          const inputField = memoizedTemplate.content.querySelector('[part="input-field"]');
+          inputField.appendChild(revealButton);
+          memoizedTemplate.content.appendChild(styles);
+        }
+
+        return memoizedTemplate;
+      }
+
+      ready() {
+        super.ready();
+        this.focusElement.type = 'password';
+        this.focusElement.autocapitalize = 'off';
+
+        this.addEventListener('blur', () => {
+          if (!this._passwordVisibilityChanging) {
+            this._setPasswordVisible(false);
+            if (this._cachedChangeEvent) {
+              this._onChange(this._cachedChangeEvent);
+            }
+          }
+        });
+      }
+
+      _onChange(e) {
+        if (this._passwordVisibilityChanging) {
+          this._cachedChangeEvent = e;
+        } else {
+          this._cachedChangeEvent = null;
+          super._onChange(e);
+        }
+      }
+
+      _revealButtonMouseDown(e) {
+        if (this.hasAttribute('focused')) {
+          e.preventDefault();
+        }
+      }
+
+      _togglePasswordVisibilityTouchend(e) {
+        // Cancel the following click event
+        e.preventDefault();
+        this._togglePasswordVisibility();
+        this.focusElement.focus();
+      }
+
+      _togglePasswordVisibility() {
+        this._passwordVisibilityChanging = true;
+        this.focusElement.blur();
+        this._setPasswordVisible(!this.passwordVisible);
+        this.focusElement.focus();
+        this._passwordVisibilityChanging = false;
+      }
+
+      _passwordVisibleChange(passwordVisible) {
+        this.focusElement.type = passwordVisible ? 'text' : 'password';
+      }
+    }
+
+    customElements.define(PasswordFieldElement.is, PasswordFieldElement);
+
+    const $_documentContainer$m = document.createElement('template');
+
+    $_documentContainer$m.innerHTML = `<dom-module id="whcg-text-field-styles" theme-for="vaadin-text-field">
+  <template>
+    <style>
+
+    :host::before {
+      font-size: var(--whcg-host-before-font-size);
+      height: var(--whcg-host-before-height);
+      box-sizing: border-box;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    :host {        
+      font-size: var(--whcg-host-font-size);
+      padding-top: var(--whcg-host-padding-top);
+      padding-bottom: var(--whcg-host-padding-bottom);
+      padding-left: var(--whcg-host-padding-left);
+      padding-right: var(--whcg-host-padding-right);
+      box-sizing: border-box;
+    }
+
+    :host([has-label]) {
+      padding-top: var(--whcg-host-haslabel-padding-top);
+      padding-bottom: var(--whcg-host-haslabel-padding-bottom);
+      padding-left: var(--whcg-host-haslabel-padding-left);
+      padding-right: var(--whcg-host-haslabel-padding-right);
+    }
+
+    [part="label"] {
+      font-weight: var(--whcg-label-font-weight);
+      font-size: var(--whcg-label-font-size);
+      font-family: var(--whcg-label-font-family);
+      line-height: 1;
+      color: var(--whcg-label-color);
+      align-self: flex-start;
+      padding-top: var(--whcg-label-padding-top);
+      padding-bottom: var(--whcg-label-padding-bottom);
+      padding-right: var(--whcg-label-padding-right);
+      padding-left: var(--whcg-label-padding-left);
+
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      position: relative;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    :host(.dark) [part="label"] {
+      color: var(--whcg-label-host__dark-color);
+    }
+
+    :host([focused]:not([readonly])) [part="label"] {
+      color: var(--whcg-label-host-focused-not-readonly-color);
+    }
+
+    :host(:hover:not([focused])) [part="label"] {
+      color: var(--whcg-label-host-hover-not-focused-color);
+    }
+
+    :host([focused]) [part="label"] {
+      color: var(--whcg-label-host-focused-color);
+    }
+
+    [part="input-field"] {
+      font-size: var(--whcg-input-field-font-size);
+      font-weight: var(--whcg-input-field-font-weight);
+      font-family: var(--whcg-input-field-font-family);
+      line-height: 1;
+      
+      background-color: var(--whcg-input-field-background-color);
+      border-radius: var(--whcg-input-field-border-radius);
+      border-style: var(--whcg-input-field-border-style);
+      border-width: var(--whcg-input-field-border-width);
+      border-color: var(--whcg-input-field-border-color);
+      padding-top: var(--whcg-input-field-padding-top);
+      padding-bottom: var(--whcg-input-field-padding-bottom);
+      padding-left: var(--whcg-input-field-padding-left);
+      padding-right: var(--whcg-input-field-padding-right);
+
+      position: relative;
+      cursor: text;
+      box-sizing: border-box;
+    }
+
+    :host(.dark) [part="input-field"] {
+      background-color: var(--whcg-input-field-host__dark-background-color);
+    }
+    :host(.shadow) [part="input-field"] {
+      box-shadow: var(--whcg-input-field-host__shadow-box-shadow);
+    }
+
+
+    [part="value"] {
+      cursor: inherit;
+      color: var(--whcg-value-color);
+      min-height: var(--whcg-value-min-height);
+      padding: 0 0.25em;
+    }
+
+    :host(.dark) [part="value"] {
+      color: var(--whcg-value-host__dark-color);
+    }
+
+
+    [part="value"]::placeholder {
+      color: var(--whcg-value-placeholder-color);;
+    }
+
+
+
+  </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$m.content);
+
+    class WhcgTextField extends PolymerElement {
+        static get template() {
+            return html$1 `
+        <style>
+        vaadin-text-field {
+                --whcg-host-before-font-size: var(--whcg-text-field-host-before-font-size);
+                --whcg-host-before-height: var(--whcg-text-field-host-before-height);
+
+                --whcg-host-padding-top: var(--whcg-text-field-host-padding-top);
+                --whcg-host-padding-bottom: var(--whcg-text-field-host-padding-bottom);
+                --whcg-host-padding-left: var(--whcg-text-field-host-padding-left);
+                --whcg-host-padding-right: var(--whcg-text-field-host-padding-right);
+                --whcg-host-haslabel-padding-top: var(--whcg-text-field-host-haslabel-padding-top);
+                --whcg-host-haslabel-padding-bottom: var(--whcg-text-field-host-haslabel-padding-bottom);
+                --whcg-host-haslabel-padding-left: var(--whcg-text-field-host-haslabel-padding-left);
+                --whcg-host-haslabel-padding-right: var(--whcg-text-field-host-haslabel-padding-right);
+
+                --whcg-label-font-size: var(--whcg-text-field-label-font-size);
+                --whcg-label-font-weight: var(--whcg-text-field-label-font-weight);
+                --whcg-label-font-family: var(--whcg-text-field-label-font-family);
+
+                --whcg-label-color: var(--whcg-text-field-label-color);
+                --whcg-label-host-focused-color: var(--whcg-text-field-label-host-focused-color);
+                --whcg-label-host-hover-not-focused-color: var(--whcg-text-field-label-host-hover-not-focused-color);
+                --whcg-label-host__dark-color: var(--whcg-text-field-label-host__dark-color);
+
+                --whcg-label-padding-top: var(--whcg-text-field-label-padding-top);
+                --whcg-label-padding-bottom: var(--whcg-text-field-label-padding-bottom);
+                --whcg-label-padding-left: var(--whcg-text-field-label-padding-left);
+                --whcg-label-padding-right: var(--whcg-text-field-label-padding-right);
+
+                --whcg-input-field-font-family: var(--whcg-text-field-input-field-font-family);
+                --whcg-input-field-font-size: var(--whcg-text-field-input-field-font-size);
+                --whcg-input-field-font-weight: var(--whcg-text-field-input-field-font-weight);
+                --whcg-input-field-background-color: var(--whcg-text-field-input-field-background-color);
+                --whcg-input-field-host__dark-background-color: var(--whcg-text-field-input-field-host__dark-background-color);
+
+                --whcg-input-field-host__shadow-box-shadow: var(--whcg-text-field-input-field-host__shadow-box-shadow);
+                
+                --whcg-input-field-border-radius: var(--whcg-text-field-input-field-border-radius);
+                --whcg-input-field-border-style: var(--whcg-text-field-input-field-border-style);
+                --whcg-input-field-border-width: var(--whcg-text-field-input-field-border-width);
+                --whcg-input-field-border-color: var(--whcg-text-field-input-field-border-color);
+                --whcg-input-field-padding-top: var(--whcg-text-field-input-field-padding-top);
+                --whcg-input-field-padding-bottom: var(--whcg-text-field-input-field-padding-bottom);
+                --whcg-input-field-padding-left: var(--whcg-text-field-input-field-padding-left);
+                --whcg-input-field-padding-right: var(--whcg-text-field-input-field-padding-right);
+              
+                --whcg-value-color: var(--whcg-text-field-value-color);
+                --whcg-value-placeholder-color: var(--whcg-text-field-value-placeholder-color);
+                --whcg-value-host__dark-color: var(--whcg-text-field-value-host__dark-color);
+                --whcg-value-min-height: var(--whcg-text-field-value-min-height);  
+
+             }
+            
+        </style>
+      
+    <vaadin-text-field value="{{value}}" label="{{label}}" placeholder="{{placeholder}}">
+    </vaadin-text-field>
+    `;
+        }
+
+        static get properties() {
+
+            return {
+
+                label: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+                },
+                value: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+                    observer: '_valueChanged'
+                },
+                placeholder: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+                },
+                suffix: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+                },
+                kind: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+                },
+                period: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+                },
+                valueoutput: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+                }
+            }
+        }
+
+        _valueChanged() {
+            // console.log('new value');
+            // console.log(this.value);
+            this.valueoutput = this.value;
+        }
+
+        connectedCallback() {
+            super.connectedCallback();
+            let event = new CustomEvent('childrenattached', {bubbles: true, composed: true});
+            // console.log('dispatchingEvent!!');
+            this.dispatchEvent(event);
+        }
+    }
+
+    window.customElements.define('whcg-text-field', WhcgTextField);
+
+    const $_documentContainer$n = document.createElement('template');
+
+    $_documentContainer$n.innerHTML = `<dom-module id="whcg-button-styles" theme-for="vaadin-button">
+  <template>
+    <style>
+    :host {
+      font-size: var(--whcg-host-font-size);
+      min-width: var(--whcg-host-min-width);
+      height: var(--whcg-host-height);
+      padding-top: var(--whcg-host-padding-top);
+      padding-bottom: var(--whcg-host-padding-bottom);
+      padding-left: var(--whcg-host-padding-left);
+      padding-right: var(--whcg-host-padding-right);
+      box-sizing: border-box;
+      background-color: var(--whcg-host-background-color);
+      border-radius: var(--whcg-host-border-radius);
+      border-style: var(--whcg-host-border-style);
+      border-width: var(--whcg-host-border-width);
+      border-color: var(--whcg-host-border-color);
+      cursor: default;
+    }
+    
+    [part="label"] {
+      font-size: var(--whcg-label-font-size);
+      font-family: var(--whcg-label-font-family);
+      font-weight: var(--whcg-label-font-weight);
+      line-height: var(--whcg-label-line-height);
+      color: var(--whcg-label-color);
+      padding-top: var(--whcg-label-padding-top);
+      padding-bottom: var(--whcg-label-padding-bottom);
+      padding-left: var(--whcg-label-padding-left);
+      padding-right: var(--whcg-label-padding-right);
+    }
+
+  </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$n.content);
+
+    class WhcgButton extends PolymerElement {
+        static get template() {
+            return html$1`
+
+        <style>
+             vaadin-button {
+                --whcg-host-font-size: var(--whcg-button-host-font-size);
+                --whcg-host-background-color: var(--whcg-button-host-background-color);
+                --whcg-host-border-radius: var(--whcg-button-host-border-radius);
+                --whcg-host-border-style: var(--whcg-button-host-border-style);
+                --whcg-host-border-width: var(--whcg-button-host-border-width);
+                --whcg-host-border-color: var(--whcg-button-host-border-color);
+                --whcg-host-height: var(--whcg-button-host-height);
+                --whcg-host-min-width: var(--whcg-button-host-min-width);
+                --whcg-host-padding-top: var(--whcg-button-host-padding-top);
+                --whcg-host-padding-bottom: var(--whcg-button-host-padding-bottom);
+                --whcg-host-padding-left: var(--whcg-button-host-padding-left);
+                --whcg-host-padding-right: var(--whcg-button-host-padding-right);
+                
+                --whcg-label-font-size: var(--whcg-button-label-font-size);
+                --whcg-label-font-weight: var(--whcg-button-label-font-weight);
+                --whcg-label-font-family: var(--whcg-button-label-font-family);
+                --whcg-label-line-height: var(--whcg-button-label-line-height); 
+                --whcg-label-padding-top: var(--whcg-button-label-padding-top);
+                --whcg-label-padding-bottom: var(--whcg-button-label-padding-bottom);
+                --whcg-label-padding-left: var(--whcg-button-label-padding-left);
+                --whcg-label-padding-right: var(--whcg-button-label-padding-right);
+                --whcg-label-color: var(--whcg-button-label-color);
+             }
+        </style>
+
+        <vaadin-button>
+            <slot></slot>
+        </vaadin-button>
+
+    `;
+        }
+
+        static get properties() {
+
+            return {
+
+            }
+        }
+
+        
+
+        
+
+    }
+
+    window.customElements.define('whcg-button', WhcgButton);
+
+    class XLogin extends usermixin(LitElement) {
+        firstUpdated() {
+            this.user.onAuthStateChanged(function(user) {
+                if (user) {      
+                    console.log('User Logged In');
+                    Router.go('/user');
+                } else {
+                    console.log('User Logged Out');
+                    Router.go('/');
+                }
+            });
+        }
+
+        render() {
+            return html`
+        <whcg-text-field id="name" placeholder="email..."></whcg-text-field>
+        <whcg-text-field id="password" placeholder="password..."></whcg-text-field>
+        <whcg-button @click=${this.onClick.bind(this)}>LOGIN</whcg-button>
+        `
+        }
+
+
+
+        onClick(e) {
+            let email = this.shadowRoot.querySelector('#name').value;
+            let password = this.shadowRoot.querySelector('#password').value;
+            this.user.signInWithEmailAndPassword(email, password).catch(function(error) {
+                console.log('Login Error');
+            });
+        }
+    }
+
+    customElements.define('x-login', XLogin);
 
     class XLogout extends LitElement {
         render() {
@@ -27084,8 +27051,7 @@ var MyModule = (function (exports) {
                                 {path: '/two', action: this.menuTwoAction.bind(this)},
                                 {path: '/three', action: this.menuThreeAction.bind(this)},
                                 {path: '/four', action: this.menuFourAction.bind(this)},
-                            ]},
-                        
+                            ]},  
                     ]},
               ]);
         }
@@ -27107,12 +27073,6 @@ var MyModule = (function (exports) {
         
         userAction(context, commands) {
             if(this.user.currentUser) {
-                // try {
-                //     customElements.define('x-loggedin', XLoggedinCreator(this.user));   
-                // } catch(error) {
-                //     console.error(error);
-                // }
-
                 const loggedinElement = commands.component('x-loggedin');
                 return loggedinElement;
             } else {
@@ -27121,30 +27081,24 @@ var MyModule = (function (exports) {
         }
 
         menuOneAction(context, commands) {
-            console.log('MENUACTION');
             const loggedinElement = commands.component('x-one');
             return loggedinElement;
         }
 
         menuTwoAction(context, commands) {
-            console.log('MENUACTION');
             const loggedinElement = commands.component('x-two');
             return loggedinElement;
         }
 
         menuThreeAction(context, commands) {
-            console.log('MENUACTION');
             const loggedinElement = commands.component('x-three');
             return loggedinElement;
         }
 
         menuFourAction(context, commands) {
-            console.log('MENUACTION');
             const loggedinElement = commands.component('x-four');
             return loggedinElement;
-        }
-
-        
+        } 
     }
 
     customElements.define('my-app', MyApp);

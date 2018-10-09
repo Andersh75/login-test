@@ -10,18 +10,14 @@ import '@whcg/whcg-general-styles/spacing.js';
 import '@whcg/whcg-general-styles/style.js';
 import '@whcg/whcg-general-styles/stylesandshapes.js';
 import '@whcg/whcg-general-styles/typography.js';
-import './x-login.js';
-import './x-user.js';
 import './x-loggedout.js';
 import './x-loggedin.js';
-// import { XLoggedinCreator } from './x-loggedin.js';
 import './x-root.js';
 import './x-one.js';
 import './x-two.js';
 import './x-three.js';
 import './x-four.js';
 import { usermixin } from './usermixin.js';
-
 
 
 export class MyApp extends usermixin(LitElement) {
@@ -42,8 +38,7 @@ export class MyApp extends usermixin(LitElement) {
                             {path: '/two', action: this.menuTwoAction.bind(this)},
                             {path: '/three', action: this.menuThreeAction.bind(this)},
                             {path: '/four', action: this.menuFourAction.bind(this)},
-                        ]},
-                    
+                        ]},  
                 ]},
           ]);
     }
@@ -65,12 +60,6 @@ export class MyApp extends usermixin(LitElement) {
     
     userAction(context, commands) {
         if(this.user.currentUser) {
-            // try {
-            //     customElements.define('x-loggedin', XLoggedinCreator(this.user));   
-            // } catch(error) {
-            //     console.error(error);
-            // }
-
             const loggedinElement = commands.component('x-loggedin');
             return loggedinElement;
         } else {
@@ -79,30 +68,24 @@ export class MyApp extends usermixin(LitElement) {
     }
 
     menuOneAction(context, commands) {
-        console.log('MENUACTION')
         const loggedinElement = commands.component('x-one');
         return loggedinElement;
     }
 
     menuTwoAction(context, commands) {
-        console.log('MENUACTION')
         const loggedinElement = commands.component('x-two');
         return loggedinElement;
     }
 
     menuThreeAction(context, commands) {
-        console.log('MENUACTION')
         const loggedinElement = commands.component('x-three');
         return loggedinElement;
     }
 
     menuFourAction(context, commands) {
-        console.log('MENUACTION')
         const loggedinElement = commands.component('x-four');
         return loggedinElement;
-    }
-
-    
+    } 
 }
 
 customElements.define('my-app', MyApp);

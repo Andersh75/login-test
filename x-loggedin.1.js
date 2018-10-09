@@ -2,12 +2,10 @@ import { LitElement, html } from '@polymer/lit-element';
 import '@vaadin/vaadin-checkbox';
 import '@vaadin/vaadin-radio-button';
 // import { connect } from 'pwa-helpers/connect-mixin.js';
-import { connect } from 'connect-mixin.js';
 import { storeCreator } from './store.js';
 import './x-radiogroup';
 import { Router } from '@vaadin/router';
 import { usermixin} from './usermixin.js';
-import { Contexts } from 'Contexts.js';
 
 
 // console.log('store');

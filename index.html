@@ -20,7 +20,6 @@
     const dbAccess = new PouchDB('dbaccess');
     var couchDBAccess = new PouchDB(`http://plex:1111111111@127.0.0.1:5984/dbaccess`);
     
-
     dbAccess
     .replicate
     .from(couchDBAccess)

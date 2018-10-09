@@ -5,7 +5,7 @@ import '@vaadin/vaadin-text-field/vaadin-password-field.js';
 import { Router } from '@vaadin/router';
 import './whcg-text-field.js';
 import '@whcg/whcg-button';
-import { usermixin, theuser } from './usermixin.js';
+import { usermixin } from './usermixin.js';
 
 export class XLogin extends usermixin(LitElement) {
     firstUpdated() {
