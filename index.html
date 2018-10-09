@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="test.css">
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+    <script src="https://unpkg.com/redux-logger@3.0.6/dist/redux-logger.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/pouchdb@7.0.0/dist/pouchdb.min.js"></script>
+    <script src="./pouchdb.authentication.js"></script>
+    <script defer src="./bundle.js"></script>
+</head>
+<body>
+
+<my-app></my-app>
+<script>
+    var config = {
+        apiKey: "AIzaSyC57QZJ_IvVp-cPAEXwdYCLnJQk6eFyvRo",
+        authDomain: "login-test-356f7.firebaseapp.com",
+        databaseURL: "https://login-test-356f7.firebaseio.com",
+        projectId: "login-test-356f7",
+        storageBucket: "login-test-356f7.appspot.com",
+        messagingSenderId: "587808136646"
+    };
+    firebase.initializeApp(config);
+</script>
+          
+</body>
+</html>
