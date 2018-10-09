@@ -17,6 +17,28 @@
 
 <my-app></my-app>
 <script>
+    const dbAccess = new PouchDB('dbaccess');
+    var couchDBAccess = new PouchDB(`http://plex:1111111111@127.0.0.1:5984/dbaccess`);
+    
+
+    dbAccess
+    .replicate
+    .from(couchDBAccess)
+    .on('complete', (info) => {   
+        dbAccess.sync(couchDBAccess, { live: true, retry: true })
+        console.log('info');
+        console.log(info); 
+    })
+    .on('error', (info) => {
+        console.log('error');
+        console.log(info);
+    })
+    .on('change', (info) => {
+        console.log('change');
+        console.log(info);
+    });
+    
+    console.log(dbAccess);
     var config = {
         apiKey: "AIzaSyC57QZJ_IvVp-cPAEXwdYCLnJQk6eFyvRo",
         authDomain: "login-test-356f7.firebaseapp.com",

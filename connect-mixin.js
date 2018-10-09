@@ -1,4 +1,4 @@
-import { storeCreator } from './store.js';
+
 
 /**
 @license
@@ -26,19 +26,53 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 */
 
+
+// this.store.subscribe(() => this._stateChanged(this.store.getState()));
+
 export const connectmixin = (element) => {
   return class ConnectMixin extends element {
   connectedCallback(user) {
-    this.store = storeCreator(user);
-    this.__storeUnsubscribe = this.store.subscribe(() => this._stateChanged(this.store.getState()));
-    this._stateChanged(this.store.getState());
-    if (super.connectedCallback) {
-      super.connectedCallback();
+    super.connectedCallback();
+    let that = this;
+    this.username;
+    if (user.currentUser.email == 'ahell@kth.se') {
+      this.username = 'ahell';
+    } else {
+        this.username = 'ohej';
     }
+    this.db = new PouchDB(this.username);
+    this.db.allDocs({
+      include_docs: true,
+      attachments: true
+    }).then(function (result) {
+      console.log('RESULT');
+      console.log(result)
+      let initState = null;
+      if (result.rows.length) {
+        initState = result.rows[0].doc.state
+      } else {
+        initState = {
+          one: 74,
+          two: 47
+        }
+      }
+
+      console.log('INIT STATE TO STORE CREATOR');
+      console.log(initState);
+      that.store = storeCreator(user, initState, that.db);
+      that.store.subscribe(() => that._stateChanged(that.store.getState()));
+      // that.__storeUnsubscribe = that.store.subscribe(() => that._stateChanged(that.store.getState()));
+      // that._stateChanged(that.store.getState());
+    }).catch(function (err) {
+      console.log(err);
+    });
+    
   }
 
   disconnectedCallback() {
-    this.__storeUnsubscribe();
+    this.db = null;
+    this.store = null;
+    // this.__storeUnsubscribe();
 
     if (super.disconnectedCallback) {
       super.disconnectedCallback();

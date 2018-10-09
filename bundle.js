@@ -23078,10 +23078,8 @@ var MyModule = (function (exports) {
     class XLogin extends usermixin(LitElement) {
         firstUpdated() {
             this.user.onAuthStateChanged(function(user) {
-                if (user) {
-                    
-                    // console.log('User Logged In');
-                    // console.log(theuser.currentUser.email);
+                if (user) {      
+                    console.log('User Logged In');
                     Router.go('/user');
                 } else {
                     console.log('User Logged Out');
@@ -23963,6 +23961,50 @@ var MyModule = (function (exports) {
     }
 
     customElements.define(RadioButtonElement.is, RadioButtonElement);
+
+    class XRadiogroup extends LitElement {
+        static get properties() {
+            return {
+              selected: {type: String, reflect: true}
+            };
+          }
+        
+        render() {
+            return html`
+            <slot @slotchange=${this.onSlotchange.bind(this)}></slot>
+        `
+        }
+
+        onCheckedChanged(e) {
+            if(e.detail.value) {
+                console.log('e');
+                console.log(e);
+                this.selected = e.path[0].attributes['name'].value;
+                console.log('selected');
+                console.log(this.selected);
+                this.dispatchEvent(new CustomEvent('selected-changed', {
+                    detail: {
+                      selected: this.selected
+                    }
+                  }));
+                let buttons = this.shadowRoot.querySelector('slot').assignedNodes().filter((node) => { return node.nodeName !== '#text'; });
+                buttons.forEach(button => {
+                    if(button !== e.path[0]) {
+                        button.removeAttribute('checked');
+                    }
+                });
+            }
+        }
+
+        onSlotchange({target}) {
+            let buttons = target.assignedNodes();
+            buttons.forEach(button => {
+                button.addEventListener('checked-changed', this.onCheckedChanged.bind(this));
+            });
+          }
+    }
+
+    customElements.define('x-radiogroup', XRadiogroup);
 
     var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -26060,47 +26102,20 @@ var MyModule = (function (exports) {
     //     return new PouchDB('dbname2');
     // }
 
-    function storeCreator(theuser) {
+    function storeCreator$1(theuser, initialState, db) {
         console.log('theuser!');
         console.log(theuser);
-        
-        const db = new PouchDB(theuser.currentUser.email);     
-        
-        var logger = reduxLogger.logger;
-        
-        const applyMiddlewares = Redux.applyMiddleware(
-            logger
-          );
-        
-        const createStoreWithMiddleware = Redux.compose(
-            applyMiddlewares,
-            persistentStore(db)
-        )(Redux.createStore);
-        
-        let initialState = {
-            one: 74,
-            two: 47
-        };
-        
-        
-        function counter(state, action) {
-            switch (action.type) {
-            case 'ONE_INCREMENT':
-                return {...state, one: state.one + 1}
-            case 'TWO_INCREMENT':
-                return {...state, two: state.two + 1}
-            default:
-                return state
-            }
-        }
-        
-        const store = createStoreWithMiddleware(persistentReducer(counter), initialState);
+        // let username;
 
-        return store;
-    }
-
-
-        // var couchDB = new PouchDB(`http://plex:1111111111@127.0.0.1:5984/redux`);
+        // if (theuser.currentUser.email == 'ahell@kth.se') {
+        //     username = 'ahell';
+        // } else {
+        //     username = 'ohej';
+        // }
+        
+        // let db = new PouchDB(username);
+        
+        // var couchDB = new PouchDB(`http://plex:1111111111@127.0.0.1:5984/${username}`);
         
         
         // db
@@ -26120,102 +26135,56 @@ var MyModule = (function (exports) {
         //     console.log(info);
         // });
 
-    /**
-    @license
-    Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
-    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-    Code distributed by Google as part of the polymer project is also
-    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
-    */
 
-    /*
-      Mixin for connecting an element to the Redux store; implements the
-      basic store-connection boilerplate.
-
-      Sample use:
-      import { connect } from '../node_modules/pwa-helpers/connect-mixin.js';
-
-      class MyElement extends connect(store)(HTMLElement) {
-        // ...
-
-        _stateChanged(state) {
-          this.count = state.data.count;
-        }
-      }
-    */
-
-    const connectmixin = (element) => {
-      return class ConnectMixin extends element {
-      connectedCallback(user) {
-        this.store = storeCreator(user);
-        this.__storeUnsubscribe = this.store.subscribe(() => this._stateChanged(this.store.getState()));
-        this._stateChanged(this.store.getState());
-        if (super.connectedCallback) {
-          super.connectedCallback();
-        }
-      }
-
-      disconnectedCallback() {
-        this.__storeUnsubscribe();
-
-        if (super.disconnectedCallback) {
-          super.disconnectedCallback();
-        }
-      }
-
-      // This is called every time something is updated in the store.
-      _stateChanged(state) {
-        throw new Error('_stateChanged() not implemented', this);
-      }
-    };
-
-    };
-
-    class XRadiogroup extends LitElement {
-        static get properties() {
-            return {
-              selected: {type: String, reflect: true}
-            };
-          }
+        // console.log(db);
+        // db.allDocs({
+        //     include_docs: true,
+        //     attachments: true
+        //   }).then(function (result) {
+        //     console.log(result);
+        //   }).catch(function (err) {
+        //     console.log(err);
+        //   });
         
-        render() {
-            return html`
-            <slot @slotchange=${this.onSlotchange.bind(this)}></slot>
-        `
-        }
+        
+        var logger = reduxLogger.logger;
+        
+        const applyMiddlewares = Redux.applyMiddleware(
+            logger
+          );
+        
+        const createStoreWithMiddleware = Redux.compose(
+            applyMiddlewares,
+            persistentStore(db)
+        )(Redux.createStore);
+        
 
-        onCheckedChanged(e) {
-            if(e.detail.value) {
-                console.log('e');
-                console.log(e);
-                this.selected = e.path[0].attributes['name'].value;
-                console.log('selected');
-                console.log(this.selected);
-                this.dispatchEvent(new CustomEvent('selected-changed', {
-                    detail: {
-                      selected: this.selected
-                    }
-                  }));
-                let buttons = this.shadowRoot.querySelector('slot').assignedNodes().filter((node) => { return node.nodeName !== '#text'; });
-                buttons.forEach(button => {
-                    if(button !== e.path[0]) {
-                        button.removeAttribute('checked');
-                    }
-                });
+        
+        // let initialState = {
+        //     one: 74,
+        //     two: 47
+        // }
+        
+        
+        function counter(state, action) {
+            switch (action.type) {
+            case 'ONE_INCREMENT':
+                return {...state, one: state.one + 1}
+            case 'TWO_INCREMENT':
+                return {...state, two: state.two + 1}
+            default:
+                return state
             }
         }
 
-        onSlotchange({target}) {
-            let buttons = target.assignedNodes();
-            buttons.forEach(button => {
-                button.addEventListener('checked-changed', this.onCheckedChanged.bind(this));
-            });
-          }
-    }
 
-    customElements.define('x-radiogroup', XRadiogroup);
+        console.log('INITIAL STATE');
+        console.log(initialState);
+        
+        const store = createStoreWithMiddleware(persistentReducer(counter, theuser), initialState);
+
+        return store;
+    }
 
     const ONE_INCREMENT = 'ONE_INCREMENT';
 
@@ -26228,12 +26197,68 @@ var MyModule = (function (exports) {
 
 
 
-    class XLoggedin extends connectmixin(usermixin(LitElement)) {
+    class XLoggedin extends LitElement {
         connectedCallback() {
-            super.connectedCallback(this.user);
-            // this.store = storeCreator(this.user);
-            this.store.subscribe(() => this._stateChanged(this.store.getState()));
+            super.connectedCallback();
+            let that = this;
+            this.username;
+            if (firebase.auth().currentUser.email == 'ahell@kth.se') {
+            this.username = 'ahell';
+            } else {
+                this.username = 'ohej';
+            }
+            this.db = new PouchDB(this.username);
+            this.db.allDocs({
+            include_docs: true,
+            attachments: true
+            }).then(function (result) {
+                console.log('RESULT');
+                console.log(result);
+                let initState = null;
+                if (result.rows.length) {
+                    initState = result.rows[0].doc.state;
+                } else {
+                    initState = {
+                    one: 74,
+                    two: 47
+                    };
+                }
+
+                console.log('INIT STATE TO STORE CREATOR');
+                console.log(initState);
+
+                that.store = storeCreator$1(that.username, initState, that.db);
+                that.__storeUnsubscribe = that.store.subscribe(() => that._stateChanged(that.store.getState()));
+                console.log(that.store);
+            // // that.store.subscribe(() => that._stateChanged(that.store.getState()));
+            // // that._stateChanged(that.store.getState());
+            // }
+            
+
+            
+            }).catch(function (err) {
+            console.log(err);
+            });
+
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {      
+                    console.log('User Logged In');
+                } else {
+                    that.__storeUnsubscribe();
+                    console.log('UNSUBSCRIBED');
+                }
+            });
         }
+
+        disconnectedCallback() {
+            this.db = null;
+            this.store = null;
+            this.__storeUnsubscribe();
+        
+            if (super.disconnectedCallback) {
+              super.disconnectedCallback();
+            }
+          }
 
         static get properties() {
             return {
@@ -26287,6 +26312,7 @@ var MyModule = (function (exports) {
                     <vaadin-radio-button name="3">3</vaadin-radio-button>
                     <vaadin-radio-button name="4">4</vaadin-radio-button>
                 </x-radiogroup>
+                <vaadin-checkbox @checked-changed=${this.onCheckboxChanged.bind(this)}>${this.counter}</vaadin-checkbox>
             </div>
             <div class="right">
                 <slot></slot>
@@ -26301,8 +26327,13 @@ var MyModule = (function (exports) {
             this.counter = state.one;
         }
 
-        onChange(e) {
-            this.store.dispatch(oneincrement());
+        onCheckboxChanged(e) {
+            try {
+                this.store.dispatch(oneincrement());
+            } catch(error) {
+
+            }
+            
         }
         onSelectedChanged(e) {
             console.log('SELECTED CHANGED');
@@ -26321,26 +26352,26 @@ var MyModule = (function (exports) {
             }
         }
 
-        onClick(e) {
-            // store.dispatch(oneincrement());
-            console.log(e);
-            console.log('this');
-            console.log(this);
+        // onClick(e) {
+        //     // store.dispatch(oneincrement());
+        //     console.log(e);
+        //     console.log('this');
+        //     console.log(this);
             
 
-        }
+        // }
 
-        _clickHandler(e) {
-            console.log('CLICKED');
-            console.log(e.detail);
+        // _clickHandler(e) {
+        //     console.log('CLICKED');
+        //     console.log(e.detail);
 
-            if(e.detail.value) {
-                this.checked = e.path[0].id;
-            }
+        //     if(e.detail.value) {
+        //         this.checked = e.path[0].id;
+        //     }
             
-            // console.log(this.shadowRoot.querySelector('#foo'));
+        //     // console.log(this.shadowRoot.querySelector('#foo'));
 
-        }
+        // }
     }
 
     customElements.define('x-loggedin', XLoggedin);   

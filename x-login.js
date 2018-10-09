@@ -10,10 +10,8 @@ import { usermixin, theuser } from './usermixin.js';
 export class XLogin extends usermixin(LitElement) {
     firstUpdated() {
         this.user.onAuthStateChanged(function(user) {
-            if (user) {
-                
-                // console.log('User Logged In');
-                // console.log(theuser.currentUser.email);
+            if (user) {      
+                console.log('User Logged In');
                 Router.go('/user');
             } else {
                 console.log('User Logged Out');

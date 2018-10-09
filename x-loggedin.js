@@ -7,6 +7,7 @@ import { connectmixin } from './connect-mixin.js';
 import './x-radiogroup';
 import { Router } from '@vaadin/router';
 import { usermixin} from './usermixin.js';
+import { storeCreator } from './store.js';
 
 
 const ONE_INCREMENT = 'ONE_INCREMENT';
@@ -20,12 +21,68 @@ const oneincrement = () => {
 
 
 
-export class XLoggedin extends connectmixin(usermixin(LitElement)) {
+export class XLoggedin extends LitElement {
     connectedCallback() {
-        super.connectedCallback(this.user);
-        // this.store = storeCreator(this.user);
-        this.store.subscribe(() => this._stateChanged(this.store.getState()));
+        super.connectedCallback();
+        let that = this;
+        this.username;
+        if (firebase.auth().currentUser.email == 'ahell@kth.se') {
+        this.username = 'ahell';
+        } else {
+            this.username = 'ohej';
+        }
+        this.db = new PouchDB(this.username);
+        this.db.allDocs({
+        include_docs: true,
+        attachments: true
+        }).then(function (result) {
+            console.log('RESULT');
+            console.log(result)
+            let initState = null;
+            if (result.rows.length) {
+                initState = result.rows[0].doc.state
+            } else {
+                initState = {
+                one: 74,
+                two: 47
+                }
+            }
+
+            console.log('INIT STATE TO STORE CREATOR');
+            console.log(initState);
+
+            that.store = storeCreator(that.username, initState, that.db);
+            that.__storeUnsubscribe = that.store.subscribe(() => that._stateChanged(that.store.getState()));
+            console.log(that.store);
+        // // that.store.subscribe(() => that._stateChanged(that.store.getState()));
+        // // that._stateChanged(that.store.getState());
+        // }
+        
+
+        
+        }).catch(function (err) {
+        console.log(err);
+        });
+
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {      
+                console.log('User Logged In');
+            } else {
+                that.__storeUnsubscribe();
+                console.log('UNSUBSCRIBED');
+            }
+        });
     }
+
+    disconnectedCallback() {
+        this.db = null;
+        this.store = null;
+        this.__storeUnsubscribe();
+    
+        if (super.disconnectedCallback) {
+          super.disconnectedCallback();
+        }
+      }
 
     static get properties() {
         return {
@@ -79,6 +136,7 @@ export class XLoggedin extends connectmixin(usermixin(LitElement)) {
                     <vaadin-radio-button name="3">3</vaadin-radio-button>
                     <vaadin-radio-button name="4">4</vaadin-radio-button>
                 </x-radiogroup>
+                <vaadin-checkbox @checked-changed=${this.onCheckboxChanged.bind(this)}>${this.counter}</vaadin-checkbox>
             </div>
             <div class="right">
                 <slot></slot>
@@ -93,8 +151,13 @@ export class XLoggedin extends connectmixin(usermixin(LitElement)) {
         this.counter = state.one;
     }
 
-    onChange(e) {
-        this.store.dispatch(oneincrement());
+    onCheckboxChanged(e) {
+        try {
+            this.store.dispatch(oneincrement());
+        } catch(error) {
+
+        }
+        
     }
     onSelectedChanged(e) {
         console.log('SELECTED CHANGED');
@@ -113,26 +176,26 @@ export class XLoggedin extends connectmixin(usermixin(LitElement)) {
         }
     }
 
-    onClick(e) {
-        // store.dispatch(oneincrement());
-        console.log(e);
-        console.log('this');
-        console.log(this);
+    // onClick(e) {
+    //     // store.dispatch(oneincrement());
+    //     console.log(e);
+    //     console.log('this');
+    //     console.log(this);
         
 
-    }
+    // }
 
-    _clickHandler(e) {
-        console.log('CLICKED');
-        console.log(e.detail);
+    // _clickHandler(e) {
+    //     console.log('CLICKED');
+    //     console.log(e.detail);
 
-        if(e.detail.value) {
-            this.checked = e.path[0].id;
-        }
+    //     if(e.detail.value) {
+    //         this.checked = e.path[0].id;
+    //     }
         
-        // console.log(this.shadowRoot.querySelector('#foo'));
+    //     // console.log(this.shadowRoot.querySelector('#foo'));
 
-    }
+    // }
 }
 
 customElements.define('x-loggedin', XLoggedin);   
