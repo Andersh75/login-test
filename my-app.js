@@ -13,7 +13,8 @@ import '@whcg/whcg-general-styles/typography.js';
 import './x-login.js';
 import './x-user.js';
 import './x-loggedout.js';
-import { XLoggedinCreator } from './x-loggedin.js';
+import './x-loggedin.js';
+// import { XLoggedinCreator } from './x-loggedin.js';
 import './x-root.js';
 import './x-one.js';
 import './x-two.js';
@@ -64,11 +65,11 @@ export class MyApp extends usermixin(LitElement) {
     
     userAction(context, commands) {
         if(this.user.currentUser) {
-            try {
-                customElements.define('x-loggedin', XLoggedinCreator(this.user));   
-            } catch(error) {
-                console.error(error);
-            }
+            // try {
+            //     customElements.define('x-loggedin', XLoggedinCreator(this.user));   
+            // } catch(error) {
+            //     console.error(error);
+            // }
 
             const loggedinElement = commands.component('x-loggedin');
             return loggedinElement;

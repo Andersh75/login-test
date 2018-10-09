@@ -23079,6 +23079,7 @@ var MyModule = (function (exports) {
         firstUpdated() {
             this.user.onAuthStateChanged(function(user) {
                 if (user) {
+                    
                     // console.log('User Logged In');
                     // console.log(theuser.currentUser.email);
                     Router.go('/user');
@@ -23962,56 +23963,6 @@ var MyModule = (function (exports) {
     }
 
     customElements.define(RadioButtonElement.is, RadioButtonElement);
-
-    /**
-    @license
-    Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
-    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-    Code distributed by Google as part of the polymer project is also
-    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
-    */
-
-    /*
-      Mixin for connecting an element to the Redux store; implements the
-      basic store-connection boilerplate.
-
-      Sample use:
-      import { connect } from '../node_modules/pwa-helpers/connect-mixin.js';
-
-      class MyElement extends connect(store)(HTMLElement) {
-        // ...
-
-        _stateChanged(state) {
-          this.count = state.data.count;
-        }
-      }
-    */
-
-    const connect = (store) => (baseElement) => class extends baseElement {
-      connectedCallback() {
-        // Connect the element to the store.
-        this.__storeUnsubscribe = store.subscribe(() => this._stateChanged(store.getState()));
-        this._stateChanged(store.getState());
-        if (super.connectedCallback) {
-          super.connectedCallback();
-        }
-      }
-
-      disconnectedCallback() {
-        this.__storeUnsubscribe();
-
-        if (super.disconnectedCallback) {
-          super.disconnectedCallback();
-        }
-      }
-
-      // This is called every time something is updated in the store.
-      _stateChanged(state) {
-        throw new Error('_stateChanged() not implemented', this);
-      }
-    };
 
     var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -26169,6 +26120,59 @@ var MyModule = (function (exports) {
         //     console.log(info);
         // });
 
+    /**
+    @license
+    Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+    */
+
+    /*
+      Mixin for connecting an element to the Redux store; implements the
+      basic store-connection boilerplate.
+
+      Sample use:
+      import { connect } from '../node_modules/pwa-helpers/connect-mixin.js';
+
+      class MyElement extends connect(store)(HTMLElement) {
+        // ...
+
+        _stateChanged(state) {
+          this.count = state.data.count;
+        }
+      }
+    */
+
+    const connectmixin = (element) => {
+      return class ConnectMixin extends element {
+      connectedCallback(user) {
+        this.store = storeCreator(user);
+        this.__storeUnsubscribe = this.store.subscribe(() => this._stateChanged(this.store.getState()));
+        this._stateChanged(this.store.getState());
+        if (super.connectedCallback) {
+          super.connectedCallback();
+        }
+      }
+
+      disconnectedCallback() {
+        this.__storeUnsubscribe();
+
+        if (super.disconnectedCallback) {
+          super.disconnectedCallback();
+        }
+      }
+
+      // This is called every time something is updated in the store.
+      _stateChanged(state) {
+        throw new Error('_stateChanged() not implemented', this);
+      }
+    };
+
+    };
+
     class XRadiogroup extends LitElement {
         static get properties() {
             return {
@@ -26213,9 +26217,6 @@ var MyModule = (function (exports) {
 
     customElements.define('x-radiogroup', XRadiogroup);
 
-    // console.log('store');
-    // console.log(store);
-
     const ONE_INCREMENT = 'ONE_INCREMENT';
 
     const oneincrement = () => {
@@ -26224,118 +26225,129 @@ var MyModule = (function (exports) {
         };
       };
 
-    function XLoggedinCreator(theuser$$1) {
-        return class XLoggedin extends connect(storeCreator(theuser$$1))(usermixin(LitElement)) {
 
-            static get properties() {
-                return {
-                    counter: {type: String},
-                    checked: {type: String}
-                };
+
+
+    class XLoggedin extends connectmixin(usermixin(LitElement)) {
+        connectedCallback() {
+            super.connectedCallback(this.user);
+            // this.store = storeCreator(this.user);
+            this.store.subscribe(() => this._stateChanged(this.store.getState()));
+        }
+
+        static get properties() {
+            return {
+                counter: {type: String},
+                checked: {type: String}
+            };
+        }
+
+        constructor() {
+            super();
+            this.checked = 1;
+        }
+
+        render() {
+            console.log('new render');
+
+
+
+            return html`
+        <style>
+            .bg {
+                background-color: green;
+                width: 100vw;
+                height: 90vh;
+                display: flex;
+                /* align-items: center;
+                justify-content: center; */
             }
-        
-            constructor() {
-                super();
-                this.checked = 1;
+            .left {
+                background-color: orange;
+                width: 80vw;
+                height: 90vh;
+                /* display: flex;
+                align-items: center;
+                justify-content: center; */
             }
-        
-            render() {
-                console.log('new render');
-        
-        
-        
-                return html`
-            <style>
-                .bg {
-                    background-color: green;
-                    width: 100vw;
-                    height: 90vh;
-                    display: flex;
-                    /* align-items: center;
-                    justify-content: center; */
-                }
-                .left {
-                    background-color: orange;
-                    width: 80vw;
-                    height: 90vh;
-                    /* display: flex;
-                    align-items: center;
-                    justify-content: center; */
-                }
-                .left {
-                    background-color: blue;
-                    width: 20vw;
-                    height: 90vh;
-                    /* display: flex;
-                    align-items: center;
-                    justify-content: center; */
-                }
-            </style>
-            <div class="bg">
-                <div class="left">
-                    <x-radiogroup @selected-changed=${this.onSelectedChanged.bind(this)}>
-                        <vaadin-radio-button name="1">1</vaadin-radio-button>
-                        <vaadin-radio-button name="2">2</vaadin-radio-button>
-                        <vaadin-radio-button name="3">3</vaadin-radio-button>
-                        <vaadin-radio-button name="4">4</vaadin-radio-button>
-                    </x-radiogroup>
-                </div>
-                <div class="right">
-                    <slot></slot>
-                </div> 
+            .left {
+                background-color: blue;
+                width: 20vw;
+                height: 90vh;
+                /* display: flex;
+                align-items: center;
+                justify-content: center; */
+            }
+        </style>
+        <div class="bg">
+            <div class="left">
+                <x-radiogroup @selected-changed=${this.onSelectedChanged.bind(this)}>
+                    <vaadin-radio-button name="1">1</vaadin-radio-button>
+                    <vaadin-radio-button name="2">2</vaadin-radio-button>
+                    <vaadin-radio-button name="3">3</vaadin-radio-button>
+                    <vaadin-radio-button name="4">4</vaadin-radio-button>
+                </x-radiogroup>
             </div>
-            `
+            <div class="right">
+                <slot></slot>
+            </div> 
+        </div>
+        `
+        }
+
+        _stateChanged(state) {
+            console.log('stateChanged');
+            console.log(state);
+            this.counter = state.one;
+        }
+
+        onChange(e) {
+            this.store.dispatch(oneincrement());
+        }
+        onSelectedChanged(e) {
+            console.log('SELECTED CHANGED');
+            console.log(e);
+            if(e.detail.selected == 1) {
+                Router.go('/user/one');
             }
-        
-            _stateChanged(state) {
-                this.counter = state.one;
+            if(e.detail.selected == 2) {
+                Router.go('/user/two');
             }
-        
-            onChange(e) {
-                store.dispatch(oneincrement());
+            if(e.detail.selected == 3) {
+                Router.go('/user/three');
             }
-            onSelectedChanged(e) {
-                console.log('SELECTED CHANGED');
-                console.log(e);
-                if(e.detail.selected == 1) {
-                    Router.go('/user/one');
-                }
-                if(e.detail.selected == 2) {
-                    Router.go('/user/two');
-                }
-                if(e.detail.selected == 3) {
-                    Router.go('/user/three');
-                }
-                if(e.detail.selected == 4) {
-                    Router.go('/user/four');
-                }
+            if(e.detail.selected == 4) {
+                Router.go('/user/four');
             }
-        
-            onClick(e) {
-                // store.dispatch(oneincrement());
-                console.log(e);
-                console.log('this');
-                console.log(this);
-                
-        
-            }
-        
-            _clickHandler(e) {
-                console.log('CLICKED');
-                console.log(e.detail);
-        
-                if(e.detail.value) {
-                    this.checked = e.path[0].id;
-                }
-                
-                // console.log(this.shadowRoot.querySelector('#foo'));
-        
-            }
-        
+        }
+
+        onClick(e) {
+            // store.dispatch(oneincrement());
+            console.log(e);
+            console.log('this');
+            console.log(this);
             
-        
+
+        }
+
+        _clickHandler(e) {
+            console.log('CLICKED');
+            console.log(e.detail);
+
+            if(e.detail.value) {
+                this.checked = e.path[0].id;
+            }
+            
+            // console.log(this.shadowRoot.querySelector('#foo'));
+
         }
     }
+
+    customElements.define('x-loggedin', XLoggedin);   
+
+    // function XLoggedinCreator(theuser) {
+        
+    // }
 
 
             // const items = [1, 2, 3];
@@ -27053,7 +27065,6 @@ var MyModule = (function (exports) {
         `
         }
 
-
         rootAction(context, commands) {
             if(this.user.currentUser) {
                 return commands.redirect('/');
@@ -27065,11 +27076,11 @@ var MyModule = (function (exports) {
         
         userAction(context, commands) {
             if(this.user.currentUser) {
-                try {
-                    customElements.define('x-loggedin', XLoggedinCreator(this.user));   
-                } catch(error) {
-                    console.error(error);
-                }
+                // try {
+                //     customElements.define('x-loggedin', XLoggedinCreator(this.user));   
+                // } catch(error) {
+                //     console.error(error);
+                // }
 
                 const loggedinElement = commands.component('x-loggedin');
                 return loggedinElement;

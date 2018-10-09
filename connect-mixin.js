@@ -1,3 +1,5 @@
+import { storeCreator } from './store.js';
+
 /**
 @license
 Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
@@ -24,11 +26,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 */
 
-export const connect = (store) => (baseElement) => class extends baseElement {
-  connectedCallback() {
-    // Connect the element to the store.
-    this.__storeUnsubscribe = store.subscribe(() => this._stateChanged(store.getState()));
-    this._stateChanged(store.getState());
+export const connectmixin = (element) => {
+  return class ConnectMixin extends element {
+  connectedCallback(user) {
+    this.store = storeCreator(user);
+    this.__storeUnsubscribe = this.store.subscribe(() => this._stateChanged(this.store.getState()));
+    this._stateChanged(this.store.getState());
     if (super.connectedCallback) {
       super.connectedCallback();
     }
@@ -47,3 +50,5 @@ export const connect = (store) => (baseElement) => class extends baseElement {
     throw new Error('_stateChanged() not implemented', this);
   }
 };
+
+}
