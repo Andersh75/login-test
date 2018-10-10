@@ -8,7 +8,7 @@ export class XTwo extends LitElement {
 
     static get properties() {
         return {
-            store: {type: Object},
+            storeHolder: {type: Object},
             first: {type: Number},
             second: {type: Number},
         };
@@ -38,11 +38,11 @@ export class XTwo extends LitElement {
     }
     
     firstChanged(e) {
-        this.store.dispatch(action.fivevalue(Number(e.target.__data.value)));
+        this.storeHolder.store.dispatch(action.fivevalue(Number(e.target.__data.value)));
     }
 
     secondChanged(e) {
-        this.store.dispatch(action.sixvalue(Number(e.target.__data.value)));
+        this.storeHolder.store.dispatch(action.sixvalue(Number(e.target.__data.value)));
     }
 
     adder(values) {

@@ -7,6 +7,7 @@ import './x-radiogroup';
 import { Router } from '@vaadin/router';
 import { connectmixin } from './connect-mixin.js';
 import { usermixin } from './usermixin.js';
+import { grid } from './grid.css.js';
 
 
 
@@ -39,34 +40,48 @@ export class XLoggedin extends connectmixin(usermixin(LitElement)) {
 
 
         return html`
+        ${grid}
         <style>
             .bg {
                 background-color: green;
                 width: 100vw;
                 height: 90vh;
                 display: flex;
+                flex-direction: column; 
                 /* align-items: center;
                 justify-content: center; */
             }
-            .left {
-                background-color: orange;
-                width: 80vw;
-                height: 90vh;
+            .menu {
+                background-color: lawngreen;
+                /* height: 5vh; */
                 /* display: flex;
                 align-items: center;
                 justify-content: center; */
             }
-            .left {
+            .main {
                 background-color: blue;
-                width: 20vw;
-                height: 90vh;
+                height: 85vh;
                 /* display: flex;
                 align-items: center;
                 justify-content: center; */
+            }
+            .headline-big {
+                font-family: var(--parmaco-font-family);
+                font-size: var(--parmaco-font-size-xxxxl);
+                font-weight: var(--parmaco-font-weight-normal);
+                color: var(--parmaco-base-color-100pct);
+                padding-bottom: 60px;
+                padding-top: 20px;
             }
         </style>
-        <div class="bg">
-            <div class="left">
+
+        <div class="grid-12">
+            <div class="col2span2"></div>
+            <div class="col4span9 headline-big">
+                KALKYLMODELL FÖR SKOLLOKALER
+            </div>
+
+            <div class="col1span12">
                 <x-radiogroup @selected-changed=${this.onSelectedChanged.bind(this)}>
                     <vaadin-radio-button name="1">1</vaadin-radio-button>
                     <vaadin-radio-button name="2">2</vaadin-radio-button>
@@ -75,10 +90,13 @@ export class XLoggedin extends connectmixin(usermixin(LitElement)) {
                 </x-radiogroup>
                 <vaadin-checkbox @checked-changed=${this.onCheckboxChanged.bind(this)}>${this.counter}</vaadin-checkbox>
             </div>
-            <div class="right">
+
+
+            <div class="col1span12">
                 <slot @slotchange=${this.onSlotchange.bind(this)}></slot>
             </div> 
         </div>
+        
         `
     }
 
@@ -86,12 +104,13 @@ export class XLoggedin extends connectmixin(usermixin(LitElement)) {
         this.slotted = target.assignedNodes()
         this.slotted.forEach(slot => {
             slot.storeHolder = this;
-        })     
+            slot._stateChanged(this.store.getState()); 
+        });
+            
     }
 
     _stateChanged(state) {
         this.counter = state.one;
-
         this.slotted.forEach(slot => slot._stateChanged(state));
     }
 

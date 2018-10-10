@@ -17,8 +17,8 @@ export class XOne extends LitElement {
         <style>
             .bg {
                 background-color: lightcoral;
-                width: 80vw;
-                height: 90vh;
+                /* width: 85vw; */
+                height: 85vh;
                 /* display: flex; */
                 /* align-items: center;
                 justify-content: center; */
@@ -30,6 +30,8 @@ export class XOne extends LitElement {
             <vaadin-text-field id="second" label="SECOND" @change=${this.secondChanged.bind(this)} value=${this.second}></vaadin-text-field>
             <vaadin-text-field id="sum" label="SUM" value=${this.adder([this.first,this.second])}></vaadin-text-field>
         </div>
+        
+
         `
     }
     
