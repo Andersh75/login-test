@@ -1,10 +1,11 @@
 import { LitElement, html } from '@polymer/lit-element';
 import '@vaadin/vaadin-checkbox';
 import '@vaadin/vaadin-radio-button';
-import { connectmixin } from './connect-mixin.js';
+
 // import { storeCreator } from './store.js';
 import './x-radiogroup';
 import { Router } from '@vaadin/router';
+import { connectmixin } from './connect-mixin.js';
 import { usermixin } from './usermixin.js';
 
 
@@ -75,16 +76,23 @@ export class XLoggedin extends connectmixin(usermixin(LitElement)) {
                 <vaadin-checkbox @checked-changed=${this.onCheckboxChanged.bind(this)}>${this.counter}</vaadin-checkbox>
             </div>
             <div class="right">
-                <slot></slot>
+                <slot @slotchange=${this.onSlotchange.bind(this)}></slot>
             </div> 
         </div>
         `
     }
 
+    onSlotchange({target}) {
+        this.slotted = target.assignedNodes()
+        this.slotted.forEach(slot => {
+            slot.storeHolder = this;
+        })     
+    }
+
     _stateChanged(state) {
-        console.log('stateChanged');
-        console.log(state);
         this.counter = state.one;
+
+        this.slotted.forEach(slot => slot._stateChanged(state));
     }
 
     onCheckboxChanged(e) {

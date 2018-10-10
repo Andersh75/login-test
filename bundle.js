@@ -21809,6 +21809,50 @@ var MyModule = (function (exports) {
 
     customElements.define(RadioButtonElement.is, RadioButtonElement);
 
+    class XRadiogroup extends LitElement {
+        static get properties() {
+            return {
+              selected: {type: String, reflect: true}
+            };
+          }
+        
+        render() {
+            return html`
+            <slot @slotchange=${this.onSlotchange.bind(this)}></slot>
+        `
+        }
+
+        onCheckedChanged(e) {
+            if(e.detail.value) {
+                console.log('e');
+                console.log(e);
+                this.selected = e.path[0].attributes['name'].value;
+                console.log('selected');
+                console.log(this.selected);
+                this.dispatchEvent(new CustomEvent('selected-changed', {
+                    detail: {
+                      selected: this.selected
+                    }
+                  }));
+                let buttons = this.shadowRoot.querySelector('slot').assignedNodes().filter((node) => { return node.nodeName !== '#text'; });
+                buttons.forEach(button => {
+                    if(button !== e.path[0]) {
+                        button.removeAttribute('checked');
+                    }
+                });
+            }
+        }
+
+        onSlotchange({target}) {
+            let buttons = target.assignedNodes();
+            buttons.forEach(button => {
+                button.addEventListener('checked-changed', this.onCheckedChanged.bind(this));
+            });
+          }
+    }
+
+    customElements.define('x-radiogroup', XRadiogroup);
+
     var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
     function createCommonjsModule(fn, module) {
@@ -23898,6 +23942,14 @@ var MyModule = (function (exports) {
             return {...state, one: state.one + 1}
         case 'TWO_INCREMENT':
             return {...state, two: state.two + 1}
+        case 'THREE_VALUE':
+            return {...state, three: action.payload}
+        case 'FOUR_VALUE':
+            return {...state, four: action.payload}
+        case 'FIVE_VALUE':
+            return {...state, five: action.payload}
+        case 'SIX_VALUE':
+            return {...state, six: action.payload}
         default:
             return state
         }
@@ -23923,7 +23975,11 @@ var MyModule = (function (exports) {
 
     const initState = {
         one: 74,
-        two: 47
+        two: 47,
+        three: 7,
+        four: 7,
+        five: 6,
+        six: 1
     };
 
     const connectmixin = (element) => {
@@ -23998,50 +24054,6 @@ var MyModule = (function (exports) {
       };
 
     };
-
-    class XRadiogroup extends LitElement {
-        static get properties() {
-            return {
-              selected: {type: String, reflect: true}
-            };
-          }
-        
-        render() {
-            return html`
-            <slot @slotchange=${this.onSlotchange.bind(this)}></slot>
-        `
-        }
-
-        onCheckedChanged(e) {
-            if(e.detail.value) {
-                console.log('e');
-                console.log(e);
-                this.selected = e.path[0].attributes['name'].value;
-                console.log('selected');
-                console.log(this.selected);
-                this.dispatchEvent(new CustomEvent('selected-changed', {
-                    detail: {
-                      selected: this.selected
-                    }
-                  }));
-                let buttons = this.shadowRoot.querySelector('slot').assignedNodes().filter((node) => { return node.nodeName !== '#text'; });
-                buttons.forEach(button => {
-                    if(button !== e.path[0]) {
-                        button.removeAttribute('checked');
-                    }
-                });
-            }
-        }
-
-        onSlotchange({target}) {
-            let buttons = target.assignedNodes();
-            buttons.forEach(button => {
-                button.addEventListener('checked-changed', this.onCheckedChanged.bind(this));
-            });
-          }
-    }
-
-    customElements.define('x-radiogroup', XRadiogroup);
 
     const usermixin = (element) => {
         return class UserMixedin extends element {
@@ -24126,16 +24138,23 @@ var MyModule = (function (exports) {
                 <vaadin-checkbox @checked-changed=${this.onCheckboxChanged.bind(this)}>${this.counter}</vaadin-checkbox>
             </div>
             <div class="right">
-                <slot></slot>
+                <slot @slotchange=${this.onSlotchange.bind(this)}></slot>
             </div> 
         </div>
         `
         }
 
+        onSlotchange({target}) {
+            this.slotted = target.assignedNodes();
+            this.slotted.forEach(slot => {
+                slot.storeHolder = this;
+            });     
+        }
+
         _stateChanged(state) {
-            console.log('stateChanged');
-            console.log(state);
             this.counter = state.one;
+
+            this.slotted.forEach(slot => slot._stateChanged(state));
         }
 
         onCheckboxChanged(e) {
@@ -26927,56 +26946,139 @@ var MyModule = (function (exports) {
 
     customElements.define('x-root', XRoot);
 
+    const THREE_VALUE = 'THREE_VALUE';
+    const FOUR_VALUE = 'FOUR_VALUE';
+    const FIVE_VALUE = 'FIVE_VALUE';
+    const SIX_VALUE = 'SIX_VALUE';
+
+    const action = {
+        threevalue: (payload) => {
+            return {
+              type: THREE_VALUE,
+              payload: payload
+            };
+          },
+          fourvalue: (payload) => {
+            return {
+              type: FOUR_VALUE,
+              payload: payload
+            };
+          },
+          fivevalue: (payload) => {
+            return {
+              type: FIVE_VALUE,
+              payload: payload
+            };
+          },
+          sixvalue: (payload) => {
+            return {
+              type: SIX_VALUE,
+              payload: payload
+            };
+          }
+    };
+
     class XOne extends LitElement {
 
+        static get properties() {
+            return {
+                storeHolder: {type: Object},
+                first: {type: Number},
+                second: {type: Number},
+            };
+        }
 
         render() {
-            console.log('new render');
-
-
-
             return html`
         <style>
             .bg {
-                background-color: black;
+                background-color: lightcoral;
                 width: 80vw;
                 height: 90vh;
-                display: flex;
+                /* display: flex; */
                 /* align-items: center;
                 justify-content: center; */
             }
            
         </style>
         <div class="bg">
+            <vaadin-text-field id="first" label="FIRST" @change=${this.firstChanged.bind(this)} value=${this.first}></vaadin-text-field>
+            <vaadin-text-field id="second" label="SECOND" @change=${this.secondChanged.bind(this)} value=${this.second}></vaadin-text-field>
+            <vaadin-text-field id="sum" label="SUM" value=${this.adder([this.first,this.second])}></vaadin-text-field>
         </div>
         `
-        }  
+        }
+        
+        firstChanged(e) {
+            this.storeHolder.store.dispatch(action.threevalue(Number(e.target.__data.value)));
+        }
 
+        secondChanged(e) {
+            this.storeHolder.store.dispatch(action.fourvalue(Number(e.target.__data.value)));
+        }
+
+        adder(values) {
+            return values.reduce((acc, value) => acc+value, 0);
+        }
+
+        _stateChanged(state) {
+            this.first = state.three;
+            this.second = state.four;
+        }
     }
 
     customElements.define('x-one', XOne);
 
     class XTwo extends LitElement {
 
+        static get properties() {
+            return {
+                store: {type: Object},
+                first: {type: Number},
+                second: {type: Number},
+            };
+        }
+
         render() {
             console.log('new render');
-
+            console.log();
             return html`
         <style>
             .bg {
-                background-color: purple;
+                background-color: lavender;
                 width: 80vw;
                 height: 90vh;
-                display: flex;
+                /* display: flex; */
                 /* align-items: center;
                 justify-content: center; */
             }
            
         </style>
         <div class="bg">
+            <vaadin-text-field id="first" label="FIRST" @change=${this.firstChanged.bind(this)} value=${this.first}></vaadin-text-field>
+            <vaadin-text-field id="second" label="SECOND" @change=${this.secondChanged.bind(this)} value=${this.second}></vaadin-text-field>
+            <vaadin-text-field id="sum" label="SUM" value=${this.adder([this.first,this.second])}></vaadin-text-field>
         </div>
         `
-        }  
+        }
+        
+        firstChanged(e) {
+            this.store.dispatch(action.fivevalue(Number(e.target.__data.value)));
+        }
+
+        secondChanged(e) {
+            this.store.dispatch(action.sixvalue(Number(e.target.__data.value)));
+        }
+
+        adder(values) {
+            return values.reduce((acc, value) => acc+value, 0);
+        }
+
+        _stateChanged(state) {
+            this.first = state.five;
+            this.second = state.six;
+        }
+
 
     }
 
