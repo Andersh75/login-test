@@ -1,0 +1,448 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-list-mixin tests</title>
+  <script src="../../../wct-browser-legacy/browser.js"></script>
+  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script src="../../../@polymer/iron-test-helpers/mock-interactions.js" type="module"></script>
+  <script type="module" src="../../../@polymer/iron-test-helpers/iron-test-helpers.js"></script>
+  <script type="module" src="../vaadin-list-mixin.js"></script>
+  <script type="module" src="../../../@polymer/test-fixture/test-fixture.js"></script>
+</head>
+
+<body>
+  <dom-module id="test-list-element">
+    <template>
+      <style>
+        :host {
+          display: block;
+        }
+
+        #scroll {
+          overflow: auto;
+          display: flex;
+        }
+
+        :host([orientation="vertical"]) #scroll {
+          height: 100%;
+          flex-direction: column;
+        }
+      </style>
+      <div id="scroll">
+        <slot></slot>
+      </div>
+    </template>
+    <script type="module">
+import '@polymer/iron-test-helpers/iron-test-helpers.js';
+import { ListMixin } from '../vaadin-list-mixin.js';
+import '@polymer/test-fixture/test-fixture.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+class TestWrapper extends ListMixin(PolymerElement) {
+  static get is() {
+    return 'test-list-element';
+  }
+
+  get _scrollerElement() {
+    return this.$.scroll;
+  }
+}
+customElements.define('test-list-element', TestWrapper);
+</script>
+  </dom-module>
+
+  <dom-module id="test-item-element">
+    <template>
+      <style>
+        :host {
+          display: block;
+          flex-shrink: 0; /* fix Safari 9 flex bug: https://github.com/philipwalton/flexbugs#flexbug-1 */
+        }
+      </style>
+      <slot></slot>
+    </template>
+    <script type="module">
+import '@polymer/iron-test-helpers/iron-test-helpers.js';
+import '../vaadin-list-mixin.js';
+import '@polymer/test-fixture/test-fixture.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+// Instead of extending Vaadin.ItemMixin, we have a simplified version of it.
+class TestElement extends PolymerElement {
+  static get is() {
+    return 'test-item-element';
+  }
+  static get properties() {
+    return {
+      _hasVaadinItemMixin: {
+        value: true
+      },
+      disabled: {
+        type: Boolean
+      },
+      selected: {
+        type: Boolean
+      }
+    };
+  }
+}
+customElements.define('test-item-element', TestElement);
+</script>
+  </dom-module>
+
+  <test-fixture id="list">
+    <template>
+      <test-list-element style="width: 400px; height: 400px;">
+        <test-item-element>Foo</test-item-element>
+        <test-item-element>Bar</test-item-element>
+        <separator></separator>
+        <test-item-element disabled>Bay</test-item-element>
+        <test-item-element><span>Baz</span></test-item-element>
+        <separator></separator>
+        <test-item-element disabled>Qux</test-item-element>
+        <test-item-element>
+          <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=">
+          <span>Xyzzy</span>
+        </test-item-element>
+      </test-list-element>
+    </template>
+  </test-fixture>
+
+  <script type="module">
+import '@polymer/iron-test-helpers/iron-test-helpers.js';
+import '../vaadin-list-mixin.js';
+import '@polymer/test-fixture/test-fixture.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+function arrowDown(target) {
+  MockInteractions.keyDownOn(target, 40, [], 'ArrowDown');
+}
+
+function arrowRight(target) {
+  MockInteractions.keyDownOn(target, 39, [], 'ArrowRight');
+}
+
+function arrowDownIE(target) {
+  MockInteractions.keyDownOn(target, 40, [], 'Down');
+}
+
+function arrowUp(target) {
+  MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
+}
+
+function arrowLeft(target) {
+  MockInteractions.keyDownOn(target, 37, [], 'ArrowLeft');
+}
+
+function home(target) {
+  MockInteractions.keyDownOn(target, 36, [], 'Home');
+}
+
+function end(target) {
+  MockInteractions.keyDownOn(target, 35, [], 'End');
+}
+
+function keyDownChar(target, letter, modifier) {
+  MockInteractions.keyDownOn(target, letter.charCodeAt(0), modifier, letter);
+}
+
+describe('vaadin-list-mixin', () => {
+  let list;
+
+  beforeEach(done => {
+    list = fixture('list');
+    afterNextRender(list, done);
+  });
+
+  it('should have a list of valid items after the DOM `_observer` has been run', () => {
+    // DOM _observer runs asynchronously, we need to flush to access items
+    list._observer.flush();
+    expect(list.items.length).to.be.equal(6);
+  });
+
+  it('`focus` should flush the `_observer` if it is called too soon', () => {
+    // focus flushes the observer in order to be run in 3rd party elements initialisation
+    list.focus();
+    expect(list.items.length).to.be.equal(6);
+  });
+
+  describe('dom', () => {
+
+    beforeEach(() => list._observer.flush());
+
+    it('should update items list when removing nodes', () => {
+      expect(list.items.length).to.be.equal(6);
+
+      list.removeChild(list.items[3]);
+      list._observer.flush();
+      expect(list.items.length).to.be.equal(5);
+    });
+
+    it('should update items list when adding nodes', () => {
+      list.appendChild(document.createElement('test-item-element'));
+      list._observer.flush();
+      expect(list.items.length).to.be.equal(7);
+    });
+
+    it('should update items list when moving nodes', () => {
+      const [e2, e4] = [list.items[2], list.items[4]];
+
+      list.insertBefore(e4, e2);
+      list._observer.flush();
+      expect(list.items[2]).to.be.equal(e4);
+      expect(list.items[3]).to.be.equal(e2);
+    });
+
+    it('should call updateStyles() on the added items', () => {
+      const item = document.createElement('test-item-element');
+      const spy = sinon.spy(item, 'updateStyles');
+      list.appendChild(item);
+      list._observer.flush();
+      expect(spy).to.be.calledOnce;
+    });
+  });
+
+  describe('selection', () => {
+    it('should not select any item by default', () => {
+      list.items.forEach(e => expect(!!list.items[0].selected).to.be.false);
+    });
+
+    it('should select an item when `selected` property is set', () => {
+      list.selected = 3;
+      expect(list.items[3].selected).to.be.true;
+    });
+
+    it('should clear selection when `selected` property is set to not numeric value', () => {
+      list.selected = 3;
+      list.selected = undefined;
+      expect(list.items[3].selected).to.be.false;
+    });
+
+    it('should be selectable with mouse click', () => {
+      list.items[3].click();
+      expect(list.selected).to.be.equal(3);
+    });
+
+    it('should be selectable with mouse click in child elements', () => {
+      list.items[3].firstElementChild.click();
+      expect(list.selected).to.be.equal(3);
+    });
+
+  });
+
+  describe('tabIndex', () => {
+    it('should set tabIndex=-1 to all items, but the first', done => {
+      afterNextRender(list, () => {
+        [0, -1, -1, -1].forEach((val, idx) => expect(list.items[idx].tabIndex).to.be.equal(val));
+        done();
+      });
+    });
+
+    it('should move tabIndex when moving focus', () => {
+      list._focus(3);
+      [-1, -1, -1, 0].forEach((val, idx) => expect(list.items[idx].tabIndex).to.be.equal(val));
+    });
+
+    it('should not set tabIndex=0 to disabled items, but the next one in the loop', () => {
+      list._focus(2);
+      [-1, -1, -1, 0].forEach((val, idx) => expect(list.items[idx].tabIndex).to.be.equal(val));
+    });
+
+    it('should have a `focus()` method focusing item with `tabIndex=0`', done => {
+      list._setFocusable(3);
+      list.items[3].focus = () => done();
+      list.focus();
+    });
+  });
+
+  describe('focus', () => {
+
+    beforeEach(() => list._focus(0));
+
+    it('should move focus to next element on "arrow-down" keydown', () => {
+      arrowDown(list);
+      expect(list.items[1].focused).to.be.true;
+    });
+
+    it('should move focus when event.key name does not include the Arrow prefix (IE)', () => {
+      arrowDownIE(list);
+      expect(list.items[1].focused).to.be.true;
+    });
+
+    it('should move focus to prev element on "arrow-up" keydown', () => {
+      arrowDown(list);
+      arrowUp(list);
+      expect(list.items[0].focused).to.be.true;
+    });
+
+    it('should move focus to next element on "arrow-right" keydown', () => {
+      list.orientation = 'horizontal';
+      arrowRight(list);
+      expect(list.items[1].focused).to.be.true;
+    });
+
+    it('should move focus to prev element on "arrow-right" keydown', () => {
+      list.orientation = 'horizontal';
+      arrowRight(list);
+      arrowLeft(list);
+      expect(list.items[0].focused).to.be.true;
+    });
+
+    it('should move focus to first element on "home" keydown', () => {
+      list._focus(3);
+      home(list);
+      expect(list.items[0].focused).to.be.true;
+    });
+
+    it('should move focus to second element if first is disabled on "home" keydown', () => {
+      list.items[0].disabled = true;
+      list._focus(3);
+      home(list);
+      expect(list.items[1].focused).to.be.true;
+    });
+
+    it('should move focus to last element on "end" keydown', () => {
+      end(list);
+      expect(list.items[5].focused).to.be.true;
+    });
+
+    it('should move focus to the most closed enabled element if last is disabled on "end" keydown', () => {
+      list.items[5].disabled = true;
+      end(list);
+      expect(list.items[3].focused).to.be.true;
+    });
+
+    it('if focus is in last element should move focus to first element on arrow-down', () => {
+      list._focus(list.items.length - 1);
+      arrowDown(list);
+      expect(list.items[0].focused).to.be.true;
+    });
+
+    it('if focus is in first element should move focus to last element on arrow-up', () => {
+      arrowUp(list);
+      expect(list.items[list.items.length - 1].focused).to.be.true;
+    });
+
+    it('focus loop should skip disabled items', () => {
+      arrowDown(list);
+      arrowDown(list);
+      expect(list.items[3].focused).to.be.true;
+    });
+
+    it('should focus the next item whose first letter matches the key pressed', () => {
+      keyDownChar(list, 'b');
+      expect(list.items[1].focused).to.be.true;
+    });
+
+    it('key search should be case insensitive', () => {
+      keyDownChar(list, 'B');
+      expect(list.items[1].focused).to.be.true;
+    });
+
+    it('key search should not happen if a modifier key is pressed', () => {
+      keyDownChar(list, 'b', 'shift');
+      expect(list.items[0].focused).to.be.true;
+    });
+
+    it('key search should skip disabled items', () => {
+      keyDownChar(list, 'b');
+      keyDownChar(list, 'b');
+      expect(list.items[3].focused).to.be.true;
+    });
+
+    it('key seacrh should accept items having non-text content before text', () => {
+      keyDownChar(list, 'x');
+      expect(list.items[5].focused).to.be.true;
+    });
+
+    it('focus should loop when search by first letter', () => {
+      list._focus(list.items.length - 1);
+      keyDownChar(list, 'b');
+      expect(list.items[1].focused).to.be.true;
+    });
+  });
+
+  describe('orientation', () => {
+    it('if not orientation set, aria-orientation attribute should set to vertical', () => {
+      expect(list.getAttribute('aria-orientation')).to.be.equal('vertical');
+    });
+
+    it('if horizontally oriented, aria-orientation attribute should be set to horizontal', () => {
+      list.orientation = 'horizontal';
+      expect(list.getAttribute('aria-orientation')).to.be.equal('horizontal');
+    });
+
+    it('if vertically oriented, aria-orientation attribute should be set to vertical', () => {
+      list.orientation = 'vertical';
+      expect(list.getAttribute('aria-orientation')).to.be.equal('vertical');
+    });
+
+    it('should not have orientation attribute on each item if orientation is not set', () => {
+      list.querySelectorAll('test-item-element').forEach(item => {
+        expect(item.hasAttribute('orientation')).to.be.false;
+      });
+    });
+
+    it('should have orientation attribute on each item', () => {
+      list.orientation = 'horizontal';
+      list.querySelectorAll('test-item-element').forEach(item => {
+        expect(item.getAttribute('orientation')).to.be.equal('horizontal');
+      });
+    });
+
+    it('should change orientation attribute on each item', () => {
+      list.orientation = 'horizontal';
+      list.orientation = 'vertical';
+      list.querySelectorAll('test-item-element').forEach(item => {
+        expect(item.getAttribute('orientation')).to.be.equal('vertical');
+      });
+    });
+
+    it('should have vertical attribute on newly added item', done => {
+      list.orientation = 'vertical';
+
+      const item = document.createElement('test-item-element');
+      item.innerText = 'foo';
+      list.appendChild(item);
+
+      setTimeout(() => {
+        expect(item.hasAttribute('orientation')).to.be.true;
+        done();
+      }, 0);
+    });
+
+    it('should have a protected boolean property to check vertical orientation', () => {
+      expect(list._vertical).to.be.true;
+      list.orientation = 'horizontal';
+      expect(list._vertical).to.be.false;
+    });
+  });
+
+
+  describe('Scroll', () => {
+    beforeEach(() => {
+      list.style.width = list.style.height = '50px';
+    });
+
+    it(`when orientation is horizontal should move scroll horizontally`, () => {
+      list.orientation = 'horizontal';
+      expect(list._scrollerElement.scrollLeft).to.be.equal(0);
+      list._scrollToItem(1);
+      expect(list._scrollerElement.scrollLeft).to.be.greaterThan(0);
+    });
+
+    it(`when orientation is vertical should move scroll vertically`, () => {
+      list.orientation = 'vertical';
+      expect(list._scrollerElement.scrollTop).to.be.equal(0);
+
+      // iOS 10 needs change the display to work
+      list.style.display = 'flex';
+
+      // FIXME: using _scroll because _scrollToItem does not work in IE11 in vertical mode.
+      // list._scrollToItem(1);
+      list._scroll(1);
+
+      expect(list._scrollerElement.scrollTop).to.be.greaterThan(0);
+    });
+  });
+});
+</script>
+</body>

@@ -1,6 +1,9 @@
-import reslove from 'rollup-plugin-node-resolve';
+import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
-import builtins from 'rollup-plugin-node-builtins';
+// import browsersync from 'rollup-plugin-browsersync'
+// import serve from 'rollup-plugin-serve'
+// import livereload from 'rollup-plugin-livereload'
+// import builtins from 'rollup-plugin-node-builtins';
 // import globals from 'rollup-plugin-node-globals';
 
 export default {
@@ -11,8 +14,11 @@ export default {
     },
     name: 'MyModule',
     plugins: [
-        builtins(),
-        reslove(),
-        commonjs()
+        // builtins(),
+        resolve(),
+        commonjs(),
+        // browsersync({server: 'output'})
+        // serve(),
+        // livereload()
     ]
 };

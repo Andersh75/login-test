@@ -373,6 +373,10 @@ var MyModule = (function (exports) {
      * http://polymer.github.io/PATENTS.txt
      */
     const directives = new WeakMap();
+    const directive = (f) => {
+        directives.set(f, true);
+        return f;
+    };
     const isDirective = (o) => typeof o === 'function' && directives.has(o);
 
     /**
@@ -13741,6 +13745,69 @@ var MyModule = (function (exports) {
     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
     */
 
+    let scheduled = false;
+    let beforeRenderQueue = [];
+    let afterRenderQueue = [];
+
+    function schedule() {
+      scheduled = true;
+      // before next render
+      requestAnimationFrame(function() {
+        scheduled = false;
+        flushQueue(beforeRenderQueue);
+        // after the render
+        setTimeout(function() {
+          runQueue(afterRenderQueue);
+        });
+      });
+    }
+
+    function flushQueue(queue) {
+      while (queue.length) {
+        callMethod(queue.shift());
+      }
+    }
+
+    function runQueue(queue) {
+      for (let i=0, l=queue.length; i < l; i++) {
+        callMethod(queue.shift());
+      }
+    }
+
+    function callMethod(info) {
+      const context = info[0];
+      const callback = info[1];
+      const args = info[2];
+      try {
+        callback.apply(context, args);
+      } catch(e) {
+        setTimeout(() => {
+          throw e;
+        });
+      }
+    }
+
+    /**
+     * Enqueues a callback which will be run after the next render, equivalent
+     * to one task (`setTimeout`) after the next `requestAnimationFrame`.
+     *
+     * This method is useful for tuning the first-render performance of an
+     * element or application by deferring non-critical work until after the
+     * first paint.  Typical non-render-critical work may include adding UI
+     * event listeners and aria attributes.
+     *
+     * @param {*} context Context object the callback function will be bound to
+     * @param {function(...*):void} callback Callback function
+     * @param {!Array=} args An array of arguments to call the callback function with
+     * @return {void}
+     */
+    function afterNextRender(context, callback, args) {
+      if (!scheduled) {
+        schedule();
+      }
+      afterRenderQueue.push([context, callback, args]);
+    }
+
     /**
     @license
     Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
@@ -21081,7 +21148,7 @@ var MyModule = (function (exports) {
         </style>
         <div class="grid-12">
             <div class="col4span8 headline-big">
-                LOGGA IN!
+                LOGGA IN!!!!!!!
             </div>
         </div>
         `
@@ -25165,6 +25232,22 @@ var MyModule = (function (exports) {
             return {...state, five: action.payload}
         case 'SIX_VALUE':
             return {...state, six: action.payload}
+        case 'DISCOUNTRATE_VALUE':
+            return {...state, discountrate: action.payload}
+        case 'INFLATIONRATE_VALUE':
+            return {...state, inflationrate: action.payload}
+        case 'STARTYEAR_VALUE':
+            return {...state, startyear: action.payload}
+        case 'NUMBEROFYEARS_VALUE':
+            return {...state, numberofyears: action.payload}
+        case 'INITIALSQM_VALUE':
+            return {...state, initialsqm: action.payload}
+        case 'INITIALESTABLISHCOSTPERSQMOWN_VALUE':
+            return {...state, initialEstablishCostPerSqmOwn: action.payload}
+        case 'KWHOWN_VALUE':
+            return {...state, kwhOwn: action.payload}
+        case 'KRPERKWHOWN_VALUE':
+            return {...state, krPerKwhOwn: action.payload}
         default:
             return state
         }
@@ -25194,7 +25277,15 @@ var MyModule = (function (exports) {
         three: 7,
         four: 7,
         five: 6,
-        six: 1
+        six: 1,
+        discountrate: '0,07',
+        inflationrate: '0,04',
+        startyear: 2018,
+        numberofyears: 10,
+        initialsqm: 3000,
+        initialEstablishCostPerSqmOwn: 70,
+        kwhOwn: 14,
+        krPerKwhOwn: 10
     };
 
     const connectmixin = (element) => {
@@ -27785,6 +27876,14 @@ var MyModule = (function (exports) {
     const FOUR_VALUE = 'FOUR_VALUE';
     const FIVE_VALUE = 'FIVE_VALUE';
     const SIX_VALUE = 'SIX_VALUE';
+    const DISCOUNTRATE_VALUE = 'DISCOUNTRATE_VALUE';
+    const INFLATIONRATE_VALUE = 'INFLATIONRATE_VALUE';
+    const STARTYEAR_VALUE = 'STARTYEAR_VALUE';
+    const NUMBEROFYEARS_VALUE = 'NUMBEROFYEARS_VALUE';
+    const INITIALSQM_VALUE = 'INITIALSQM_VALUE';
+    const INITIALESTABLISHCOSTPERSQMOWN_VALUE = 'INITIALESTABLISHCOSTPERSQMOWN_VALUE';
+    const KWHOWN_VALUE = 'KWHOWN_VALUE';
+    const KRPERKWHOWN_VALUE = 'KRPERKWHOWN_VALUE';
 
     const action = {
         threevalue: (payload) => {
@@ -27810,48 +27909,4004 @@ var MyModule = (function (exports) {
               type: SIX_VALUE,
               payload: payload
             };
+          },
+          discountratevalue: (payload) => {
+            return {
+              type: DISCOUNTRATE_VALUE,
+              payload: payload
+            };
+          },
+          inflationratevalue: (payload) => {
+            return {
+              type: INFLATIONRATE_VALUE,
+              payload: payload
+            };
+          },
+          startyearvalue: (payload) => {
+            return {
+              type: STARTYEAR_VALUE,
+              payload: payload
+            };
+          },
+          numberofyearsvalue: (payload) => {
+            return {
+              type: NUMBEROFYEARS_VALUE,
+              payload: payload
+            };
+          },
+          initialsqmvalue: (payload) => {
+            return {
+              type: INITIALSQM_VALUE,
+              payload: payload
+            };
+          },
+          initialEstablishCostPerSqmOwnValue: (payload) => {
+            return {
+              type: INITIALESTABLISHCOSTPERSQMOWN_VALUE,
+              payload: payload
+            };
+          },
+          kwhOwnValue: (payload) => {
+            return {
+              type: KWHOWN_VALUE,
+              payload: payload
+            };
+          },
+          krPerKwhOwnValue: (payload) => {
+            return {
+              type: KRPERKWHOWN_VALUE,
+              payload: payload
+            };
           }
     };
+
+    const styleElementGrid$1 = document.createElement('dom-module');
+
+    styleElementGrid$1.innerHTML = `
+  <template><style>
+      .col1span1 {
+        grid-column: col-start 1 / span 1;
+      }
+
+      .col1span2 {
+        grid-column: col-start 1 / span 2;
+      }
+
+      .col1span3 {
+        grid-column: col-start 1 / span 3;
+      }
+
+      .col1span4 {
+        grid-column: col-start 1 / span 4;
+      }
+
+      .col1span5 {
+        grid-column: col-start 1 / span 5;
+      }
+
+      .col1span6 {
+        grid-column: col-start 1 / span 6;
+      }
+
+      .col1span7 {
+        grid-column: col-start 1 / span 7;
+      }
+
+
+      .col1span8 {
+        grid-column: col-start 1 / span 8;
+      }
+
+      .col1span9 {
+          grid-column: col-start 1 / span 9;
+      }
+
+      .col1span10 {
+        grid-column: col-start 1 / span 10;
+      }
+
+
+      .col1span11 {
+        grid-column: col-start 1 / span 11;
+      }
+
+      .col1span12 {
+          grid-column: col-start 1 / span 12;
+      }
+
+      
+      .col2span1 {
+        grid-column: col-start 2 / span 1;
+      }
+
+
+      .col2span2 {
+        grid-column: col-start 2 / span 2;
+      }
+
+      .col2span3 {
+        grid-column: col-start 2 / span 3;
+      }
+
+      .col2span4 {
+        grid-column: col-start 2 / span 4;
+      }
+
+
+      .col2span5 {
+        grid-column: col-start 2 / span 5;
+      }
+
+      .col2span6 {
+        grid-column: col-start 2 / span 6;
+      }
+
+      .col2span7 {
+        grid-column: col-start 2 / span 7;
+      }
+
+
+      .col2span8 {
+        grid-column: col-start 2 / span 8;
+      }
+
+      .col2span9 {
+        grid-column: col-start 2 / span 9;
+      }
+
+      .col2span10 {
+        grid-column: col-start 2 / span 10;
+      }
+
+
+      .col2span11 {
+        grid-column: col-start 2 / span 11;
+      }
+
+
+      .col3span1 {
+        grid-column: col-start 3 / span 1;
+      }
+
+
+      .col3span2 {
+        grid-column: col-start 3 / span 2;
+      }
+
+      .col3span3 {
+        grid-column: col-start 3 / span 3;
+      }
+
+      .col3span4 {
+        grid-column: col-start 3 / span 4;
+      }
+
+
+      .col3span5 {
+        grid-column: col-start 3 / span 5;
+      }
+
+      .col3span6 {
+        grid-column: col-start 3 / span 6;
+      }
+
+      .col3span7 {
+        grid-column: col-start 3 / span 7;
+      }
+
+
+      .col3span8 {
+        grid-column: col-start 3 / span 8;
+      }
+
+      .col3span9 {
+        grid-column: col-start 3 / span 9;
+      }
+
+      .col3span10 {
+        grid-column: col-start 3 / span 10;
+      }
+
+      .col4span1 {
+        grid-column: col-start 4 / span 1;
+      }
+
+      .col4span2 {
+        grid-column: col-start 4 / span 2;
+      }
+
+      .col4span3 {
+        grid-column: col-start 4 / span 3;
+      }
+
+      .col4span4 {
+        grid-column: col-start 4 / span 4;
+      }
+
+
+      .col4span5 {
+        grid-column: col-start 4 / span 5;
+      }
+
+      .col4span6 {
+        grid-column: col-start 4 / span 6;
+      }
+
+      .col4span7 {
+        grid-column: col-start 4 / span 7;
+      }
+
+
+      .col4span8 {
+        grid-column: col-start 4 / span 8;
+      }
+
+      .col4span9 {
+        grid-column: col-start 4 / span 9;
+      }
+
+      
+      .col5span1 {
+        grid-column: col-start 5 / span 1;
+      }
+
+      .col5span2 {
+        grid-column: col-start 5 / span 2;
+      }
+
+      .col5span3 {
+        grid-column: col-start 5 / span 3;
+      }
+
+      .col5span4 {
+        grid-column: col-start 5 / span 4;
+      }
+
+
+      .col5span5 {
+        grid-column: col-start 5 / span 5;
+      }
+
+      .col5span6 {
+        grid-column: col-start 5 / span 6;
+      }
+
+      .col5span7 {
+        grid-column: col-start 5 / span 7;
+      }
+
+
+      .col5span8 {
+        grid-column: col-start 5 / span 8;
+      }
+
+      .col6span1 {
+        grid-column: col-start 6 / span 1;
+      }
+
+      .col6span2 {
+        grid-column: col-start 6 / span 2;
+      }
+
+      .col6span3 {
+        grid-column: col-start 6 / span 3;
+      }
+
+      .col6span4 {
+        grid-column: col-start 6 / span 4;
+      }
+
+
+      .col6span5 {
+        grid-column: col-start 6 / span 5;
+      }
+
+      .col6span6 {
+        grid-column: col-start 6 / span 6;
+      }
+
+      .col6span7 {
+        grid-column: col-start 6 / span 7;
+      }
+
+
+      .col7span1 {
+        grid-column: col-start 7 / span 1;
+      }
+
+      .col7span2 {
+        grid-column: col-start 7 / span 2;
+      }
+
+      .col7span3 {
+        grid-column: col-start 7 / span 3;
+      }
+
+      .col7span4 {
+        grid-column: col-start 7 / span 4;
+      }
+
+
+      .col7span5 {
+        grid-column: col-start 7 / span 5;
+      }
+
+      .col7span6 {
+        grid-column: col-start 7 / span 6;
+      }
+
+      .col8span1 {
+        grid-column: col-start 8 / span 1;
+      }
+
+      .col8span2 {
+        grid-column: col-start 8 / span 2;
+      }
+
+      .col8span3 {
+        grid-column: col-start 8 / span 3;
+      }
+
+      .col8span4 {
+        grid-column: col-start 8 / span 4;
+      }
+
+
+      .col8span5 {
+        grid-column: col-start 8 / span 5;
+      }
+
+      .col9span1 {
+        grid-column: col-start 9 / span 1;
+      }
+
+      .col9span2 {
+        grid-column: col-start 9 / span 2;
+      }
+
+      .col9span3 {
+        grid-column: col-start 9 / span 3;
+      }
+
+      .col9span4 {
+        grid-column: col-start 9 / span 4;
+      }
+
+
+      .col10span1 {
+        grid-column: col-start 10 / span 1;
+      }
+
+      .col10span2 {
+        grid-column: col-start 10 / span 2;
+      }
+
+      .col10span3 {
+        grid-column: col-start 10 / span 3;
+      }
+
+
+      .col11span1 {
+        grid-column: col-start 11 / span 1;
+      }
+
+      .col11span2 {
+        grid-column: col-start 11 / span 2;
+      }
+
+      .col12span1 {
+        grid-column: col-start 12 / span 1;
+      }
+
+      .grid-1 {
+        display: grid;
+        grid-template-columns: repeat(1, [col-start] 1fr);
+        grid-gap: 20px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, [col-start] 1fr);
+        grid-gap: 20px;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, [col-start] 1fr);
+        grid-gap: 20px;
+      }
+
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, [col-start] 1fr);
+        grid-gap: 20px;
+      }
+
+      .grid-5 {
+        display: grid;
+        grid-template-columns: repeat(5, [col-start] 1fr);
+        grid-gap: 20px;
+      }
+
+      .grid-6 {
+        display: grid;
+        grid-template-columns: repeat(6, [col-start] 1fr);
+        grid-gap: 20px;
+      }
+
+      .grid-7 {
+        display: grid;
+        grid-template-columns: repeat(7, [col-start] 1fr);
+        grid-gap: 20px;
+      }
+
+      .grid-8 {
+        display: grid;
+        grid-template-columns: repeat(8, [col-start] 1fr);
+        grid-gap: 20px;
+      }
+
+      .grid-9 {
+        display: grid;
+        grid-template-columns: repeat(9, [col-start] 1fr);
+        grid-gap: 20px;
+      }
+
+      .grid-10 {
+        display: grid;
+        grid-template-columns: repeat(10, [col-start] 1fr);
+        grid-gap: 20px;
+      }
+
+      .grid-11 {
+        display: grid;
+        grid-template-columns: repeat(11, [col-start] 1fr);
+        grid-gap: 20px;
+      }
+
+      .grid-12 {
+        display: grid;
+        grid-template-columns: repeat(12, [col-start] 1fr);
+        grid-gap: 20px;
+      }
+
+
+
+
+
+
+
+
+  </style></template>`;
+
+    styleElementGrid$1.register('style-element-grid');
+
+    class WhcgSectionTextInput extends PolymerElement {
+
+      static get template() {
+        return html$1`
+    <style include = "style-element-grid">
+      
+        .section {
+            padding-top: 130px;
+        }
+
+        .headline {
+            padding-top: 32px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-xl);
+            color: var(--parmaco-base-color-100pct);  
+        }
+
+        .content-text {
+            padding-top: 33px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-s);
+            font-weight: var(--parmaco-font-weight-normal);
+            color: var(--parmaco-base-color-100pct);
+        }
+
+        .content-inputbox {
+            justify-self: end;
+        }
+
+    </style>
+
+    <div class="grid-12 section">
+        <div class="col2span2 headline">
+            <slot name="title"></slot>
+        </div>
+        <div class="col4span8 grid-8">
+            <div class="col1span5 content-text">
+              <slot name="text"></slot>
+            </div>
+            <div class="col6span3 content-inputbox">
+                <slot name="input"></slot>
+            </div>
+        </div>
+    </div>
+  `;
+      }
+
+     
+    }
+
+    window.customElements.define('whcg-section-text-input', WhcgSectionTextInput);
+
+    /**
+    @license
+    Copyright (c) 2017 Vaadin Ltd.
+    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+    */
+
+    /**
+     * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
+     *
+     * @polymerMixin
+     */
+    const ListMixin = superClass => class VaadinListMixin extends superClass {
+      static get properties() {
+        return {
+          /**
+           * Used for mixin detection because `instanceof` does not work with mixins.
+           */
+          _hasVaadinListMixin: {
+            value: true
+          },
+
+          /**
+           * The index of the item selected in the items array
+           */
+          selected: {
+            type: Number,
+            reflectToAttribute: true,
+            notify: true
+          },
+
+          /**
+           * Define how items are disposed in the dom.
+           * Possible values are: `horizontal|vertical`.
+           * It also changes navigation keys from left/right to up/down.
+           */
+          orientation: {
+            type: String,
+            reflectToAttribute: true,
+            value: ''
+          },
+
+          /**
+           * The list of items from which a selection can be made.
+           * It is populated from the elements passed to the light DOM,
+           * and updated dynamically when adding or removing items.
+           *
+           * The item elements must implement `Vaadin.ItemMixin`.
+           *
+           * Note: unlike `<vaadin-combo-box>`, this property is read-only,
+           * so if you want to provide items by iterating array of data,
+           * you have to use `dom-repeat` and place it to the light DOM.
+           */
+          items: {
+            type: Array,
+            readOnly: true,
+            notify: true
+          }
+        };
+      }
+
+      static get observers() {
+        return ['_enhanceItems(items, orientation, selected)'];
+      }
+
+      ready() {
+        super.ready();
+        this.addEventListener('keydown', e => this._onKeydown(e));
+        this.addEventListener('click', e => this._onClick(e));
+
+        this._observer = new FlattenedNodesObserver(this, info => {
+          this._setItems(this._filterItems(Array.from(this.children)));
+        });
+      }
+
+      _enhanceItems(items, orientation, selected) {
+        if (items) {
+          this.setAttribute('aria-orientation', orientation || 'vertical');
+          this.items.forEach(item => {
+            orientation ? item.setAttribute('orientation', orientation) : item.removeAttribute('orientation');
+            item.updateStyles();
+          });
+
+          this._setFocusable(selected);
+
+          const itemToSelect = items[selected];
+          items.forEach(item => item.selected = item === itemToSelect);
+          if (itemToSelect && !itemToSelect.disabled) {
+            this._scrollToItem(selected);
+          }
+        }
+      }
+
+      get focused() {
+        return this.getRootNode().activeElement;
+      }
+
+      _filterItems(array) {
+        return array.filter(e => e._hasVaadinItemMixin);
+      }
+
+      _onClick(event) {
+        if (event.metaKey || event.shiftKey || event.ctrlKey) {
+          return;
+        }
+
+        const item = this._filterItems(event.composedPath())[0];
+        let idx;
+        if (item && !item.disabled && ((idx = this.items.indexOf(item)) >= 0)) {
+          this.selected = idx;
+        }
+      }
+
+      _onKeydown(event) {
+        if (event.metaKey || event.shiftKey || event.ctrlKey) {
+          return;
+        }
+
+        // IE names for arrows do not include the Arrow prefix
+        const key = event.key.replace(/^Arrow/, '');
+
+        const currentIdx = this.items.indexOf(this.focused);
+        let condition = item => !item.disabled;
+        let idx, increment;
+
+        if (this._vertical && key === 'Up' || !this._vertical && key === 'Left') {
+          increment = -1;
+          idx = currentIdx - 1;
+        } else if (this._vertical && key === 'Down' || !this._vertical && key === 'Right') {
+          increment = 1;
+          idx = currentIdx + 1;
+        } else if (key === 'Home') {
+          increment = 1;
+          idx = 0;
+        } else if (key === 'End') {
+          increment = -1;
+          idx = this.items.length - 1;
+        } else if (key.length == 1) {
+          increment = 1;
+          idx = currentIdx + 1;
+          condition = item => !item.disabled &&
+            item.textContent.trim().toLowerCase().indexOf(key.toLowerCase()) === 0;
+        }
+
+        idx = this._getAvailableIndex(idx, increment, condition);
+        if (idx >= 0) {
+          this._focus(idx);
+          event.preventDefault();
+        }
+      }
+
+      _getAvailableIndex(idx, increment, condition) {
+        const totalItems = this.items.length;
+        for (let i = 0; typeof idx == 'number' && i < totalItems; i++, idx += (increment || 1)) {
+          if (idx < 0) {
+            idx = totalItems - 1;
+          } else if (idx >= totalItems) {
+            idx = 0;
+          }
+
+          const item = this.items[idx];
+          if (condition(item)) {
+            return idx;
+          }
+        }
+        return -1;
+      }
+
+      _setFocusable(idx) {
+        idx = this._getAvailableIndex(idx, 1, item => !item.disabled);
+        const item = this.items[idx] || this.items[0];
+        this.items.forEach(e => e.tabIndex = e === item ? 0 : -1);
+      }
+
+      _focus(idx) {
+        const item = this.items[idx];
+        this.items.forEach(e => e.focused = e === item);
+        this._setFocusable(idx);
+        this._scrollToItem(idx);
+        item.focus();
+      }
+
+      focus() {
+        // In initialisation (e.g vaadin-dropdown-menu) observer might not been run yet.
+        this._observer.flush();
+        (this.querySelector('[tabindex="0"]') || this.items[0]).focus();
+      }
+
+      /* @protected */
+      get _scrollerElement() {
+        // Returning scroller element of the component
+      }
+
+      // Scroll the container to have the next item by the edge of the viewport
+      _scrollToItem(idx) {
+        const item = this.items[idx];
+        if (!item) {
+          return;
+        }
+
+        const props = this._vertical ? ['top', 'bottom'] : ['left', 'right'];
+        const scrollerRect = this._scrollerElement.getBoundingClientRect();
+        const nextItemRect = (this.items[idx + 1] || item).getBoundingClientRect();
+        const prevItemRect = (this.items[idx - 1] || item).getBoundingClientRect();
+
+        let scrollDistance = 0;
+        if (nextItemRect[props[1]] >= scrollerRect[props[1]]) {
+          scrollDistance = nextItemRect[props[1]] - scrollerRect[props[1]];
+        } else if (prevItemRect[props[0]] <= scrollerRect[props[0]]) {
+          scrollDistance = prevItemRect[props[0]] - scrollerRect[props[0]];
+        }
+
+        this._scroll(scrollDistance);
+      }
+
+      /* @protected */
+      get _vertical() {
+        return this.orientation !== 'horizontal';
+      }
+
+      _scroll(pixels) {
+        this._scrollerElement['scroll' + (this._vertical ? 'Top' : 'Left')] += pixels;
+      }
+    };
+
+    /**
+    @license
+    Copyright (c) 2017 Vaadin Ltd.
+    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+    */
+    /**
+     * `<vaadin-list-box>` is a Web Component for creating menus.
+     *
+     * ```
+     *   <vaadin-list-box selected="2">
+     *     <vaadin-item>Item 1</vaadin-item>
+     *     <vaadin-item>Item 2</vaadin-item>
+     *     <vaadin-item>Item 3</vaadin-item>
+     *     <vaadin-item>Item 4</vaadin-item>
+     *   </vaadin-list-box>
+     * ```
+     *
+     * ### Styling
+     *
+     * The following shadow DOM parts are available for styling:
+     *
+     * Part name         | Description
+     * ------------------|------------------------
+     * `items`           | The items container
+     *
+     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+     *
+     * @memberof Vaadin
+     * @mixes Vaadin.ListMixin
+     * @mixes Vaadin.ThemableMixin
+     * @demo demo/index.html
+     */
+    class ListBoxElement extends ElementMixin$1(ListMixin(ThemableMixin(PolymerElement))) {
+      static get template() {
+        return html$1`
+    <style>
+      :host {
+        display: flex;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      [part="items"] {
+        height: 100%;
+        width: 100%;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
+    <div part="items">
+      <slot></slot>
+    </div>
+`;
+      }
+
+      static get is() {
+        return 'vaadin-list-box';
+      }
+
+      static get version() {
+        return '1.1.0';
+      }
+
+      static get properties() {
+        return {
+          // We don't need to define this property since super default is vertical,
+          // but we don't want it to be modified, or be shown in the API docs.
+          /** @private */
+          orientation: {
+            readOnly: true
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+        this.setAttribute('role', 'list');
+      }
+
+      get _scrollerElement() {
+        return this.shadowRoot.querySelector('[part="items"]');
+      }
+    }
+
+    customElements.define(ListBoxElement.is, ListBoxElement);
+
+    /**
+    @license
+    Copyright (c) 2017 Vaadin Ltd.
+    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+    */
+    /**
+     * A mixin providing `focused`, `focus-ring`, `active`, `disabled` and `selected`.
+     *
+     * `focused`, `active` and `focus-ring` are set as only as attributes.
+     * @polymerMixin
+     */
+    const ItemMixin = superClass => class VaadinItemMixin extends superClass {
+      static get properties() {
+        return {
+
+          /**
+           * Used for mixin detection because `instanceof` does not work with mixins.
+           * e.g. in VaadinListMixin it filters items by using the
+           * `element._hasVaadinItemMixin` condition.
+           */
+          _hasVaadinItemMixin: {
+            value: true
+          },
+
+          /**
+           * If true, the user cannot interact with this element.
+           */
+          disabled: {
+            type: Boolean,
+            value: false,
+            observer: '_disabledChanged',
+            reflectToAttribute: true
+          },
+
+          /**
+           * If true, the item is in selected state.
+           */
+          selected: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+            observer: '_selectedChanged'
+          },
+
+          _value: String
+        };
+      }
+
+      constructor() {
+        super();
+
+        /**
+         * Submittable string value. The default value is the trimmed text content of the element.
+         * @type {string}
+         */
+        this.value;
+      }
+
+      get value() {
+        return this._value !== undefined ? this._value : this.textContent.trim();
+      }
+
+      set value(value) {
+        this._value = value;
+      }
+
+      ready() {
+        super.ready();
+
+        const attrValue = this.getAttribute('value');
+        if (attrValue !== null) {
+          this.value = attrValue;
+        }
+
+        this.addEventListener('focus', e => this._setFocused(true), true);
+        this.addEventListener('blur', e => this._setFocused(false), true);
+        this.addEventListener('mousedown', e => {
+          this._setActive(this._mousedown = true);
+          const mouseUpListener = () => {
+            this._setActive(this._mousedown = false);
+            document.removeEventListener('mouseup', mouseUpListener);
+          };
+          document.addEventListener('mouseup', mouseUpListener);
+        });
+        this.addEventListener('keydown', e => this._onKeydown(e));
+        this.addEventListener('keyup', e => this._onKeyup(e));
+      }
+
+      /**
+       * @protected
+       */
+      disconnectedCallback() {
+        super.disconnectedCallback();
+
+        // in Firefox and Safari, blur does not fire on the element when it is removed,
+        // especially between keydown and keyup events, being active at the same time.
+        // reproducible in `<vaadin-dropdown-menu>` when closing overlay on select.
+        if (this.hasAttribute('active')) {
+          this._setFocused(false);
+        }
+      }
+
+      _selectedChanged(selected) {
+        this.setAttribute('aria-selected', selected);
+      }
+
+      _disabledChanged(disabled) {
+        if (disabled) {
+          this.selected = false;
+          this.setAttribute('aria-disabled', 'true');
+          this.blur();
+        } else {
+          this.removeAttribute('aria-disabled');
+        }
+      }
+
+      _setFocused(focused) {
+        if (focused) {
+          this.setAttribute('focused', '');
+          if (!this._mousedown) {
+            this.setAttribute('focus-ring', '');
+          }
+        } else {
+          this.removeAttribute('focused');
+          this.removeAttribute('focus-ring');
+          this._setActive(false);
+        }
+      }
+
+      _setActive(active) {
+        if (active) {
+          this.setAttribute('active', '');
+        } else {
+          this.removeAttribute('active');
+        }
+      }
+
+      _onKeydown(event) {
+        if (/^( |SpaceBar|Enter)$/.test(event.key) && !event.defaultPrevented) {
+          event.preventDefault();
+          this._setActive(true);
+        }
+      }
+
+      _onKeyup(event) {
+        if (this.hasAttribute('active')) {
+          this._setActive(false);
+          this.click();
+        }
+      }
+    };
+
+    /**
+    @license
+    Copyright (c) 2017 Vaadin Ltd.
+    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+    */
+    /**
+     * `<vaadin-item>` is a Web Component providing layout for items in tabs and menus.
+     *
+     * ```
+     *   <vaadin-item>
+     *     Item content
+     *   </vaadin-item>
+     * ```
+     *
+     * ### Selectable
+     *
+     * `<vaadin-item>` has the `selected` property and the corresponding state attribute.
+     * Currently, the component sets the `selected` to false, when `disabled` property is set to true.
+     * But other than that, the `<vaadin-item>` does not switch selection by itself.
+     * In general, it is the wrapper component, like `<vaadin-list-box>`, which should update
+     * the `selected` property on the items, e. g. on mousedown or when Enter / Spacebar is pressed.
+     *
+     * ### Styling
+     *
+     * The following shadow DOM parts are available for styling:
+     *
+     * Part name | Description
+     * ---|---
+     * `content` | The element that wraps the slot
+     *
+     * The following state attributes are available for styling:
+     *
+     * Attribute  | Description | Part name
+     * -----------|-------------|------------
+     * `disabled` | Set to a disabled item | :host
+     * `focused` | Set when the element is focused | :host
+     * `focus-ring` | Set when the element is keyboard focused | :host
+     * `selected` | Set when the item is selected | :host
+     * `active` | Set when mousedown or enter/spacebar pressed | :host
+     *
+     * @memberof Vaadin
+     * @mixes Vaadin.ItemMixin
+     * @mixes Vaadin.ThemableMixin
+     */
+    class ItemElement extends ItemMixin(ThemableMixin(PolymerElement)) {
+      static get template() {
+        return html$1`
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+    </style>
+    <div part="content">
+      <slot></slot>
+    </div>
+`;
+      }
+
+      static get is() {
+        return 'vaadin-item';
+      }
+
+      static get version() {
+        return '2.1.0';
+      }
+    }
+
+    customElements.define(ItemElement.is, ItemElement);
+
+    /**
+     * @polymerMixin
+     */
+    const ThemePropertyMixin = superClass => class VaadinThemePropertyMixin extends superClass {
+      static get properties() {
+        return {
+          /**
+           * Helper property with theme attribute value facilitating propagation
+           * in shadow DOM. Allows using `theme$="[[theme]]"` in the template.
+           *
+           * @protected
+           */
+          theme: {
+            type: String,
+            readOnly: true
+          }
+        };
+      }
+
+      /** @protected */
+      attributeChangedCallback(name, oldValue, newValue) {
+        super.attributeChangedCallback(name, oldValue, newValue);
+
+        if (name === 'theme') {
+          this._setTheme(newValue);
+        }
+      }
+    };
+
+    /**
+    @license
+    Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at
+    http://polymer.github.io/LICENSE.txt The complete set of authors may be found at
+    http://polymer.github.io/AUTHORS.txt The complete set of contributors may be
+    found at http://polymer.github.io/CONTRIBUTORS.txt Code distributed by Google as
+    part of the polymer project is also subject to an additional IP rights grant
+    found at http://polymer.github.io/PATENTS.txt
+    */
+
+    // Contains all connected resizables that do not have a parent.
+    var ORPHANS = new Set();
+
+    /**
+     * `IronResizableBehavior` is a behavior that can be used in Polymer elements to
+     * coordinate the flow of resize events between "resizers" (elements that
+     *control the size or hidden state of their children) and "resizables" (elements
+     *that need to be notified when they are resized or un-hidden by their parents
+     *in order to take action on their new measurements).
+     *
+     * Elements that perform measurement should add the `IronResizableBehavior`
+     *behavior to their element definition and listen for the `iron-resize` event on
+     *themselves. This event will be fired when they become showing after having
+     *been hidden, when they are resized explicitly by another resizable, or when
+     *the window has been resized.
+     *
+     * Note, the `iron-resize` event is non-bubbling.
+     *
+     * @polymerBehavior
+     * @demo demo/index.html
+     **/
+    const IronResizableBehavior = {
+      properties: {
+        /**
+         * The closest ancestor element that implements `IronResizableBehavior`.
+         */
+        _parentResizable: {
+          type: Object,
+          observer: '_parentResizableChanged',
+        },
+
+        /**
+         * True if this element is currently notifying its descendant elements of
+         * resize.
+         */
+        _notifyingDescendant: {
+          type: Boolean,
+          value: false,
+        }
+      },
+
+      listeners: {
+        'iron-request-resize-notifications': '_onIronRequestResizeNotifications'
+      },
+
+      created: function() {
+        // We don't really need property effects on these, and also we want them
+        // to be created before the `_parentResizable` observer fires:
+        this._interestedResizables = [];
+        this._boundNotifyResize = this.notifyResize.bind(this);
+        this._boundOnDescendantIronResize = this._onDescendantIronResize.bind(this);
+      },
+
+      attached: function() {
+        this._requestResizeNotifications();
+      },
+
+      detached: function() {
+        if (this._parentResizable) {
+          this._parentResizable.stopResizeNotificationsFor(this);
+        } else {
+          ORPHANS.delete(this);
+          window.removeEventListener('resize', this._boundNotifyResize);
+        }
+
+        this._parentResizable = null;
+      },
+
+      /**
+       * Can be called to manually notify a resizable and its descendant
+       * resizables of a resize change.
+       */
+      notifyResize: function() {
+        if (!this.isAttached) {
+          return;
+        }
+
+        this._interestedResizables.forEach(function(resizable) {
+          if (this.resizerShouldNotify(resizable)) {
+            this._notifyDescendant(resizable);
+          }
+        }, this);
+
+        this._fireResize();
+      },
+
+      /**
+       * Used to assign the closest resizable ancestor to this resizable
+       * if the ancestor detects a request for notifications.
+       */
+      assignParentResizable: function(parentResizable) {
+        if (this._parentResizable) {
+          this._parentResizable.stopResizeNotificationsFor(this);
+        }
+
+        this._parentResizable = parentResizable;
+
+        if (parentResizable &&
+            parentResizable._interestedResizables.indexOf(this) === -1) {
+          parentResizable._interestedResizables.push(this);
+          parentResizable._subscribeIronResize(this);
+        }
+      },
+
+      /**
+       * Used to remove a resizable descendant from the list of descendants
+       * that should be notified of a resize change.
+       */
+      stopResizeNotificationsFor: function(target) {
+        var index = this._interestedResizables.indexOf(target);
+
+        if (index > -1) {
+          this._interestedResizables.splice(index, 1);
+          this._unsubscribeIronResize(target);
+        }
+      },
+
+      /**
+       * Subscribe this element to listen to iron-resize events on the given target.
+       *
+       * Preferred over target.listen because the property renamer does not
+       * understand to rename when the target is not specifically "this"
+       *
+       * @param {!HTMLElement} target Element to listen to for iron-resize events.
+       */
+      _subscribeIronResize: function(target) {
+        target.addEventListener('iron-resize', this._boundOnDescendantIronResize);
+      },
+
+      /**
+       * Unsubscribe this element from listening to to iron-resize events on the
+       * given target.
+       *
+       * Preferred over target.unlisten because the property renamer does not
+       * understand to rename when the target is not specifically "this"
+       *
+       * @param {!HTMLElement} target Element to listen to for iron-resize events.
+       */
+      _unsubscribeIronResize: function(target) {
+        target.removeEventListener(
+            'iron-resize', this._boundOnDescendantIronResize);
+      },
+
+      /**
+       * This method can be overridden to filter nested elements that should or
+       * should not be notified by the current element. Return true if an element
+       * should be notified, or false if it should not be notified.
+       *
+       * @param {HTMLElement} element A candidate descendant element that
+       * implements `IronResizableBehavior`.
+       * @return {boolean} True if the `element` should be notified of resize.
+       */
+      resizerShouldNotify: function(element) {
+        return true;
+      },
+
+      _onDescendantIronResize: function(event) {
+        if (this._notifyingDescendant) {
+          event.stopPropagation();
+          return;
+        }
+
+        // no need to use this during shadow dom because of event retargeting
+        if (!useShadow) {
+          this._fireResize();
+        }
+      },
+
+      _fireResize: function() {
+        this.fire('iron-resize', null, {node: this, bubbles: false});
+      },
+
+      _onIronRequestResizeNotifications: function(event) {
+        var target = /** @type {!EventTarget} */ (dom(event).rootTarget);
+        if (target === this) {
+          return;
+        }
+
+        target.assignParentResizable(this);
+        this._notifyDescendant(target);
+
+        event.stopPropagation();
+      },
+
+      _parentResizableChanged: function(parentResizable) {
+        if (parentResizable) {
+          window.removeEventListener('resize', this._boundNotifyResize);
+        }
+      },
+
+      _notifyDescendant: function(descendant) {
+        // NOTE(cdata): In IE10, attached is fired on children first, so it's
+        // important not to notify them if the parent is not attached yet (or
+        // else they will get redundantly notified when the parent attaches).
+        if (!this.isAttached) {
+          return;
+        }
+
+        this._notifyingDescendant = true;
+        descendant.notifyResize();
+        this._notifyingDescendant = false;
+      },
+
+      _requestResizeNotifications: function() {
+        if (!this.isAttached) {
+          return;
+        }
+
+        if (document.readyState === 'loading') {
+          var _requestResizeNotifications =
+              this._requestResizeNotifications.bind(this);
+          document.addEventListener(
+              'readystatechange', function readystatechanged() {
+                document.removeEventListener('readystatechange', readystatechanged);
+                _requestResizeNotifications();
+              });
+        } else {
+          this._findParent();
+
+          if (!this._parentResizable) {
+            // If this resizable is an orphan, tell other orphans to try to find
+            // their parent again, in case it's this resizable.
+            ORPHANS.forEach(function(orphan) {
+              if (orphan !== this) {
+                orphan._findParent();
+              }
+            }, this);
+
+            window.addEventListener('resize', this._boundNotifyResize);
+            this.notifyResize();
+          } else {
+            // If this resizable has a parent, tell other child resizables of
+            // that parent to try finding their parent again, in case it's this
+            // resizable.
+            this._parentResizable._interestedResizables
+                .forEach(function(resizable) {
+                  if (resizable !== this) {
+                    resizable._findParent();
+                  }
+                }, this);
+          }
+        }
+      },
+
+      _findParent: function() {
+        this.assignParentResizable(null);
+        this.fire(
+            'iron-request-resize-notifications',
+            null,
+            {node: this, bubbles: true, cancelable: true});
+
+        if (!this._parentResizable) {
+          ORPHANS.add(this);
+        } else {
+          ORPHANS.delete(this);
+        }
+      }
+    };
+
+    /**
+    @license
+    Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at
+    http://polymer.github.io/LICENSE.txt The complete set of authors may be found at
+    http://polymer.github.io/AUTHORS.txt The complete set of contributors may be
+    found at http://polymer.github.io/CONTRIBUTORS.txt Code distributed by Google as
+    part of the polymer project is also subject to an additional IP rights grant
+    found at http://polymer.github.io/PATENTS.txt
+    */
+
+    /**
+    `iron-media-query` can be used to data bind to a CSS media query.
+    The `query` property is a bare CSS media query.
+    The `query-matches` property is a boolean representing whether the page matches
+    that media query.
+
+    Example:
+
+    ```html
+    <iron-media-query query="(min-width: 600px)" query-matches="{{queryMatches}}">
+    </iron-media-query>
+    ```
+
+    @group Iron Elements
+    @demo demo/index.html
+    @hero hero.svg
+    @element iron-media-query
+    */
+    Polymer({
+
+      is: 'iron-media-query',
+
+      properties: {
+
+        /**
+         * The Boolean return value of the media query.
+         */
+        queryMatches: {type: Boolean, value: false, readOnly: true, notify: true},
+
+        /**
+         * The CSS media query to evaluate.
+         */
+        query: {type: String, observer: 'queryChanged'},
+
+        /**
+         * If true, the query attribute is assumed to be a complete media query
+         * string rather than a single media feature.
+         */
+        full: {type: Boolean, value: false},
+
+        /**
+         * @type {function(MediaQueryList)}
+         */
+        _boundMQHandler: {
+          value: function() {
+            return this.queryHandler.bind(this);
+          }
+        },
+
+        /**
+         * @type {MediaQueryList}
+         */
+        _mq: {value: null}
+      },
+
+      attached: function() {
+        this.style.display = 'none';
+        this.queryChanged();
+      },
+
+      detached: function() {
+        this._remove();
+      },
+
+      _add: function() {
+        if (this._mq) {
+          this._mq.addListener(this._boundMQHandler);
+        }
+      },
+
+      _remove: function() {
+        if (this._mq) {
+          this._mq.removeListener(this._boundMQHandler);
+        }
+        this._mq = null;
+      },
+
+      queryChanged: function() {
+        this._remove();
+        var query = this.query;
+        if (!query) {
+          return;
+        }
+        if (!this.full && query[0] !== '(') {
+          query = '(' + query + ')';
+        }
+        this._mq = window.matchMedia(query);
+        this._add();
+        this.queryHandler(this._mq);
+      },
+
+      queryHandler: function(mq) {
+        this._setQueryMatches(mq.matches);
+      }
+
+    });
+
+    const p$1 = Element.prototype;
+    const matches$1 = p$1.matches || p$1.matchesSelector || p$1.mozMatchesSelector ||
+      p$1.msMatchesSelector || p$1.oMatchesSelector || p$1.webkitMatchesSelector;
+
+    /**
+     * `Polymer.IronFocusablesHelper` relies on some Polymer-specific legacy API,
+     * especially the `root` property which does not exist for native shadow DOM.
+     * That's why we have this helper here.
+     * See https://github.com/PolymerElements/iron-overlay-behavior/issues/282
+     */
+    const FocusablesHelper = {
+
+      /**
+       * Returns a sorted array of tabbable nodes, including the root node.
+       * It searches the tabbable nodes in the light and shadow dom of the children,
+       * sorting the result by tabindex.
+       * @param {!Node} node
+       * @return {!Array<!HTMLElement>}
+       */
+      getTabbableNodes: function(node) {
+        const result = [];
+        // If there is at least one element with tabindex > 0, we need to sort
+        // the final array by tabindex.
+        const needsSortByTabIndex = this._collectTabbableNodes(node, result);
+        if (needsSortByTabIndex) {
+          return this._sortByTabIndex(result);
+        }
+        return result;
+      },
+
+      /**
+       * Returns if a element is focusable.
+       * @param {!HTMLElement} element
+       * @return {boolean}
+       */
+      isFocusable: function(element) {
+        // From http://stackoverflow.com/a/1600194/4228703:
+        // There isn't a definite list, it's up to the browser. The only
+        // standard we have is DOM Level 2 HTML
+        // https://www.w3.org/TR/DOM-Level-2-HTML/html.html, according to which the
+        // only elements that have a focus() method are HTMLInputElement,
+        // HTMLSelectElement, HTMLTextAreaElement and HTMLAnchorElement. This
+        // notably omits HTMLButtonElement and HTMLAreaElement. Referring to these
+        // tests with tabbables in different browsers
+        // http://allyjs.io/data-tables/focusable.html
+
+        // Elements that cannot be focused if they have [disabled] attribute.
+        if (matches$1.call(element, 'input, select, textarea, button, object')) {
+          return matches$1.call(element, ':not([disabled])');
+        }
+        // Elements that can be focused even if they have [disabled] attribute.
+        return matches$1.call(element, 'a[href], area[href], iframe, [tabindex], [contentEditable]');
+      },
+
+      /**
+       * Returns if a element is tabbable. To be tabbable, a element must be
+       * focusable, visible, and with a tabindex !== -1.
+       * @param {!HTMLElement} element
+       * @return {boolean}
+       */
+      isTabbable: function(element) {
+        return this.isFocusable(element) &&
+            matches$1.call(element, ':not([tabindex="-1"])') &&
+            this._isVisible(element);
+      },
+
+      /**
+       * Returns the normalized element tabindex. If not focusable, returns -1.
+       * It checks for the attribute "tabindex" instead of the element property
+       * `tabIndex` since browsers assign different values to it.
+       * e.g. in Firefox `<div contenteditable>` has `tabIndex = -1`
+       * @param {!HTMLElement} element
+       * @return {!number}
+       * @private
+       */
+      _normalizedTabIndex: function(element) {
+        if (this.isFocusable(element)) {
+          const tabIndex = element.getAttribute('tabindex') || 0;
+          return Number(tabIndex);
+        }
+        return -1;
+      },
+
+      /**
+       * Searches for nodes that are tabbable and adds them to the `result` array.
+       * Returns if the `result` array needs to be sorted by tabindex.
+       * @param {!Node} node The starting point for the search; added to `result` if tabbable.
+       * @param {!Array<!HTMLElement>} result
+       * @return {boolean}
+       * @private
+       */
+      _collectTabbableNodes: function(node, result) {
+        // If not an element or not visible, no need to explore children.
+        if (node.nodeType !== Node.ELEMENT_NODE || !this._isVisible(node)) {
+          return false;
+        }
+        const element = /** @type {!HTMLElement} */ (node);
+        const tabIndex = this._normalizedTabIndex(element);
+        let needsSort = tabIndex > 0;
+        if (tabIndex >= 0) {
+          result.push(element);
+        }
+
+        // In ShadowDOM v1, tab order is affected by the order of distribution.
+        // E.g. getTabbableNodes(#root) in ShadowDOM v1 should return [#A, #B];
+        // in ShadowDOM v0 tab order is not affected by the distribution order,
+        // in fact getTabbableNodes(#root) returns [#B, #A].
+        //  <div id="root">
+        //   <!-- shadow -->
+        //     <slot name="a">
+        //     <slot name="b">
+        //   <!-- /shadow -->
+        //   <input id="A" slot="a">
+        //   <input id="B" slot="b" tabindex="1">
+        //  </div>
+        let children;
+        if (element.localName === 'slot') {
+          children = element.assignedNodes({flatten: true});
+        } else {
+          // Use shadow root if possible, will check for distributed nodes.
+          children = (element.shadowRoot || element).children;
+        }
+        for (let i = 0; i < children.length; i++) {
+          // Ensure method is always invoked to collect tabbable children.
+          needsSort = this._collectTabbableNodes(children[i], result) || needsSort;
+        }
+        return needsSort;
+      },
+
+      /**
+       * Returns false if the element has `visibility: hidden` or `display: none`
+       * @param {!HTMLElement} element
+       * @return {boolean}
+       * @private
+       */
+      _isVisible: function(element) {
+        // Check inline style first to save a re-flow. If looks good, check also
+        // computed style.
+        let style = element.style;
+        if (style.visibility !== 'hidden' && style.display !== 'none') {
+          style = window.getComputedStyle(element);
+          return (style.visibility !== 'hidden' && style.display !== 'none');
+        }
+        return false;
+      },
+
+      /**
+       * Sorts an array of tabbable elements by tabindex. Returns a new array.
+       * @param {!Array<!HTMLElement>} tabbables
+       * @return {!Array<!HTMLElement>}
+       * @private
+       */
+      _sortByTabIndex: function(tabbables) {
+        // Implement a merge sort as Array.prototype.sort does a non-stable sort
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+        const len = tabbables.length;
+        if (len < 2) {
+          return tabbables;
+        }
+        const pivot = Math.ceil(len / 2);
+        const left = this._sortByTabIndex(tabbables.slice(0, pivot));
+        const right = this._sortByTabIndex(tabbables.slice(pivot));
+        return this._mergeSortByTabIndex(left, right);
+      },
+
+      /**
+       * Merge sort iterator, merges the two arrays into one, sorted by tab index.
+       * @param {!Array<!HTMLElement>} left
+       * @param {!Array<!HTMLElement>} right
+       * @return {!Array<!HTMLElement>}
+       * @private
+       */
+      _mergeSortByTabIndex: function(left, right) {
+        const result = [];
+        while ((left.length > 0) && (right.length > 0)) {
+          if (this._hasLowerTabOrder(left[0], right[0])) {
+            result.push(right.shift());
+          } else {
+            result.push(left.shift());
+          }
+        }
+
+        return result.concat(left, right);
+      },
+
+      /**
+       * Returns if element `a` has lower tab order compared to element `b`
+       * (both elements are assumed to be focusable and tabbable).
+       * Elements with tabindex = 0 have lower tab order compared to elements
+       * with tabindex > 0.
+       * If both have same tabindex, it returns false.
+       * @param {!HTMLElement} a
+       * @param {!HTMLElement} b
+       * @return {boolean}
+       * @private
+       */
+      _hasLowerTabOrder: function(a, b) {
+        // Normalize tabIndexes
+        // e.g. in Firefox `<div contenteditable>` has `tabIndex = -1`
+        const ati = Math.max(a.tabIndex, 0);
+        const bti = Math.max(b.tabIndex, 0);
+        return (ati === 0 || bti === 0) ? bti > ati : ati > bti;
+      }
+    };
+
+    /**
+    @license
+    Copyright (c) 2017 Vaadin Ltd.
+    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+    */
+    let overlayContentCounter = 0;
+
+    const createOverlayContent = (cssText) => {
+      overlayContentCounter++;
+      const is = `vaadin-overlay-content-${overlayContentCounter}`;
+
+      const styledTemplate = document.createElement('template');
+      const style = document.createElement('style');
+      style.textContent = ':host { display: block; }' + cssText;
+      styledTemplate.content.appendChild(style);
+
+      if (window.ShadyCSS) {
+        window.ShadyCSS.prepareTemplate(styledTemplate, is);
+      }
+
+      // NOTE(platosha): Have to use an awkward IIFE returning class here
+      // to prevent this class from showing up in analysis.json & API docs.
+      /** @private */
+      const klass = (() => class extends HTMLElement {
+        static get is() {
+          return is;
+        }
+
+        connectedCallback() {
+          if (window.ShadyCSS) {
+            window.ShadyCSS.styleElement(this);
+          }
+
+          if (!this.shadowRoot) {
+            this.attachShadow({mode: 'open'});
+            this.shadowRoot.appendChild(document.importNode(styledTemplate.content, true));
+          }
+        }
+      })();
+
+      customElements.define(klass.is, klass);
+
+      return document.createElement(is);
+    };
+
+    /**
+     *
+     * `<vaadin-overlay>` is a Web Component for creating overlays. The content of the overlay
+     * can be populated in two ways: imperatively by using renderer callback function and
+     * declaratively by using Polymer's Templates.
+     *
+     * ### Rendering
+     *
+     * By default, the overlay uses the content provided by using the renderer callback function.
+     *
+     * The renderer function provides `root`, `owner`, `model` arguments when applicable.
+     * Generate DOM content by using `model` object properties if needed, append it to the `root`
+     * element and control the state of the host element by accessing `owner`. Before generating new
+     * content, users are able to check if there is already content in `root` for reusing it.
+     *
+     * ```html
+     * <vaadin-overlay id="overlay"></vaadin-overlay>
+     * ```
+     * ```js
+     * const overlay = document.querySelector('#overlay');
+     * overlay.renderer = function(root) {
+     *  root.textContent = "Overlay content";
+     * };
+     * ```
+     *
+     * Renderer is called on the opening of the overlay and each time the related model is updated.
+     * DOM generated during the renderer call can be reused
+     * in the next renderer call and will be provided with the `root` argument.
+     * On first call it will be empty.
+     *
+     * **NOTE:** when the renderer property is defined, the `<template>` content is not used.
+     *
+     * ### Templating
+     *
+     * Alternatively, the content can be provided with Polymer Template.
+     * Overlay finds the first child template and uses that in case renderer callback function
+     * is not provided. You can also set a custom template using the `template` property.
+     *
+     * After the content from the template is stamped, the `content` property
+     * points to the content container.
+     *
+     * The overlay provides `forwardHostProp` when calling
+     * `Polymer.Templatize.templatize` for the template, so that the bindings
+     * from the parent scope propagate to the content.  You can also pass
+     * custom `instanceProps` object using the `instanceProps` property.
+     *
+     * ```html
+     * <vaadin-overlay>
+     *   <template>Overlay content</template>
+     * </vaadin-overlay>
+     * ```
+     *
+     * **NOTE:** when using `instanceProps`: because of the Polymer limitation,
+     * every template can only be templatized once, so it is important
+     * to set `instanceProps` before the `template` is assigned to the overlay.
+     *
+     * ### Styling
+     *
+     * To style the overlay content, use styles in the parent scope:
+     *
+     * - If the overlay is used in a component, then the component styles
+     *   apply the overlay content.
+     * - If the overlay is used in the global DOM scope, then global styles
+     *   apply to the overlay content.
+     *
+     * See examples for styling the overlay content in the live demos.
+     *
+     * The following Shadow DOM parts are available for styling the overlay component itself:
+     *
+     * Part name  | Description
+     * -----------|---------------------------------------------------------|
+     * `backdrop` | Backdrop of the overlay
+     * `overlay`  | Container for position/sizing/alignment of the content
+     * `content`  | Content of the overlay
+     *
+     * The following state attributes are available for styling:
+     *
+     * Attribute | Description | Part
+     * ---|---|---
+     * `opening` | Applied just after the overlay is attached to the DOM. You can apply a CSS @keyframe animation for this state. | `:host`
+     * `closing` | Applied just before the overlay is detached from the DOM. You can apply a CSS @keyframe animation for this state. | `:host`
+     *
+     * The following custom CSS properties are available for styling:
+     *
+     * Custom CSS property | Description | Default value
+     * ---|---|---
+     * `--vaadin-overlay-viewport-bottom` | Bottom offset of the visible viewport area | `0` or detected offset
+     *
+     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+     *
+     * @memberof Vaadin
+     * @mixes Vaadin.ThemableMixin
+     * @demo demo/index.html
+     */
+    class OverlayElement extends ThemableMixin(PolymerElement) {
+      static get template() {
+        return html$1`
+    <style>
+      :host {
+        z-index: 200;
+        position: fixed;
+
+        /*
+          Despite of what the names say, <vaadin-overlay> is just a container
+          for position/sizing/alignment. The actual overlay is the overlay part.
+        */
+
+        /*
+          Default position constraints: the entire viewport. Note: themes can
+          override this to introduce gaps between the overlay and the viewport.
+        */
+        top: 0;
+        right: 0;
+        bottom: var(--vaadin-overlay-viewport-bottom);
+        left: 0;
+
+        /* Use flexbox alignment for the overlay part. */
+        display: flex;
+        flex-direction: column; /* makes dropdowns sizing easier */
+        /* Align to center by default. */
+        align-items: center;
+        justify-content: center;
+
+        /* Allow centering when max-width/max-height applies. */
+        margin: auto;
+
+        /* The host is not clickable, only the overlay part is. */
+        pointer-events: none;
+
+        /* Remove tap highlight on touch devices. */
+        -webkit-tap-highlight-color: transparent;
+
+        /* CSS API for host */
+        --vaadin-overlay-viewport-bottom: 0;
+      }
+
+      :host([hidden]),
+      :host(:not([opened]):not([closing])) {
+        display: none !important;
+      }
+
+      [part="overlay"] {
+        -webkit-overflow-scrolling: touch;
+        overflow: auto;
+        pointer-events: auto;
+
+        /* Prevent overflowing the host in MSIE 11 */
+        max-width: 100%;
+        box-sizing: border-box;
+
+        -webkit-tap-highlight-color: initial; /* reenable tap highlight inside */
+      }
+
+      [part="backdrop"] {
+        z-index: -1;
+        content: "";
+        background: rgba(0, 0, 0, 0.5);
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        pointer-events: auto;
+      }
+    </style>
+
+    <div id="backdrop" part="backdrop" hidden\$="{{!withBackdrop}}"></div>
+    <div part="overlay" id="overlay" tabindex="0">
+      <div part="content" id="content">
+        <slot></slot>
+      </div>
+    </div>
+`;
+      }
+
+      static get is() {
+        return 'vaadin-overlay';
+      }
+
+      static get properties() {
+        return {
+          opened: {
+            type: Boolean,
+            notify: true,
+            reflectToAttribute: true
+          },
+
+          /**
+           * Owner element passed with renderer function
+           */
+          owner: Element,
+
+          /**
+           * Custom function for rendering the content of the overlay.
+           * Receives three arguments:
+           *
+           * - `root` The root container DOM element. Append your content to it.
+           * - `owner` The host element of the renderer function.
+           * - `model` The object with the properties related with rendering.
+           */
+          renderer: Function,
+
+          /**
+           * The template of the overlay content.
+           */
+          template: {
+            type: Object,
+            notify: true
+          },
+
+          /**
+           * Optional argument for `Polymer.Templatize.templatize`.
+           */
+          instanceProps: {
+            type: Object
+          },
+
+          /**
+           * References the content container after the template is stamped.
+           */
+          content: {
+            type: Object,
+            notify: true
+          },
+
+          withBackdrop: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+
+          /**
+           * Object with properties that is passed to `renderer` function
+           */
+          model: Object,
+
+          /**
+           * When true the overlay won't disable the main content, showing
+           * it doesn’t change the functionality of the user interface.
+           */
+          modeless: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+            observer: '_modelessChanged'
+          },
+
+          /**
+           * When true move focus to the first focusable element in the overlay,
+           * or to the overlay if there are no focusable elements.
+           */
+          focusTrap: {
+            type: Boolean,
+            value: false
+          },
+
+          _mouseDownInside: {
+            type: Boolean
+          },
+
+          _mouseUpInside: {
+            type: Boolean
+          },
+
+          _instance: {
+            type: Object
+          },
+
+          _boundIronOverlayCanceledListener: {
+            type: Object
+          },
+
+          _originalContentPart: Object,
+
+          _contentNodes: Array,
+
+          _oldOwner: Element,
+
+          _oldModel: Object,
+
+          _oldTemplate: Object,
+
+          _oldInstanceProps: Object,
+
+          _oldRenderer: Object,
+
+          _oldOpened: Boolean
+        };
+      }
+
+      static get observers() {
+        return [
+          '_openedChanged(opened)',
+          '_templateOrRendererChanged(template, renderer, owner, model, instanceProps, opened)'
+        ];
+      }
+
+      constructor() {
+        super();
+        this._boundMouseDownListener = this._mouseDownListener.bind(this);
+        this._boundMouseUpListener = this._mouseUpListener.bind(this);
+        this._boundOutsideClickListener = this._outsideClickListener.bind(this);
+        this._boundKeydownListener = this._keydownListener.bind(this);
+
+        this._observer = new FlattenedNodesObserver(this, info => {
+          this._setTemplateFromNodes(info.addedNodes);
+        });
+
+        // Listener for preventing closing of the paper-dialog and all components extending `iron-overlay-behavior`.
+        this._boundIronOverlayCanceledListener = e => {
+          e.preventDefault();
+          window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
+        };
+
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+          this._boundIosResizeListener = () => this._detectIosNavbar();
+        }
+      }
+
+      ready() {
+        super.ready();
+
+        this._observer.flush();
+
+        // Need to add dummy click listeners to this and the backdrop or else
+        // the document click event listener (_outsideClickListener) may never
+        // get invoked on iOS Safari (reproducible in <vaadin-dialog>
+        // and <vaadin-context-menu>).
+        this.addEventListener('click', () => {});
+        this.$.backdrop.addEventListener('click', () => {});
+      }
+
+      _detectIosNavbar() {
+        if (!this.opened) {
+          return;
+        }
+
+        const innerHeight = window.innerHeight;
+        const innerWidth = window.innerWidth;
+
+        const landscape = innerWidth > innerHeight;
+
+        const clientHeight = document.documentElement.clientHeight;
+
+        if (landscape && clientHeight > innerHeight) {
+          this.style.setProperty('--vaadin-overlay-viewport-bottom', clientHeight - innerHeight + 'px');
+        } else {
+          this.style.setProperty('--vaadin-overlay-viewport-bottom', '0');
+        }
+      }
+
+      _setTemplateFromNodes(nodes) {
+        this.template = nodes.filter(node => node.localName && node.localName === 'template')[0] || this.template;
+      }
+
+      /**
+       * @event vaadin-overlay-close
+       * fired before the `vaadin-overlay` will be closed. If canceled the closing of the overlay is canceled as well.
+       */
+      close(sourceEvent) {
+        var evt = new CustomEvent('vaadin-overlay-close', {bubbles: true, cancelable: true, detail: {sourceEvent: sourceEvent}});
+        this.dispatchEvent(evt);
+        if (!evt.defaultPrevented) {
+          this.opened = false;
+        }
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+
+        if (this.parentNode === document.body) {
+          window.addEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
+        }
+
+        if (this._boundIosResizeListener) {
+          this._detectIosNavbar();
+          window.addEventListener('resize', this._boundIosResizeListener);
+        }
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+
+        // Removing the event listener in case `iron-overlay-canceled` was not fired.
+        // In Shady DOM the overlay can be reattached asynchronously so we need to check that the overlay is not currently attached to body.
+        if (window.ShadyDOM && window.ShadyDOM.inUse) {
+          if (this.parentNode !== document.body) {
+            window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
+          }
+        } else {
+          if (!this.parentNode) {
+            window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
+          }
+        }
+
+        this._boundIosResizeListener && window.removeEventListener('resize', this._boundIosResizeListener);
+      }
+
+      _mouseDownListener(event) {
+        this._mouseDownInside = event.composedPath().indexOf(this.$.overlay) >= 0;
+      }
+
+      _mouseUpListener(event) {
+        this._mouseUpInside = event.composedPath().indexOf(this.$.overlay) >= 0;
+      }
+
+      /**
+       * We need to listen on 'click' / 'tap' event and capture it and close the overlay before
+       * propagating the event to the listener in the button. Otherwise, if the clicked button would call
+       * open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
+       *
+       * @event vaadin-overlay-outside-click
+       * fired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.
+       */
+      _outsideClickListener(event) {
+        if (event.composedPath().indexOf(this.$.overlay) !== -1 ||
+            this._mouseDownInside || this._mouseUpInside) {
+          this._mouseDownInside = false;
+          this._mouseUpInside = false;
+          return;
+        }
+        if (!this._last) {
+          return;
+        }
+
+        const evt = new CustomEvent('vaadin-overlay-outside-click', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
+        this.dispatchEvent(evt);
+
+        if (this.opened && !evt.defaultPrevented) {
+          this.close(event);
+        }
+      }
+
+      /**
+       * @event vaadin-overlay-escape-press
+       * fired before the `vaadin-overlay` will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
+       */
+      _keydownListener(event) {
+        if (!this._last) {
+          return;
+        }
+
+        // TAB
+        if (event.key === 'Tab' && this.focusTrap) {
+          // if only tab key is pressed, cycle forward, else cycle backwards.
+          this._cycleTab(event.shiftKey ? -1 : 1);
+
+          event.preventDefault();
+
+        // ESC
+        } else if (event.key === 'Escape' || event.key === 'Esc') {
+          const evt = new CustomEvent('vaadin-overlay-escape-press', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
+          this.dispatchEvent(evt);
+
+          if (this.opened && !evt.defaultPrevented) {
+            this.close(event);
+          }
+        }
+      }
+
+      _ensureTemplatized() {
+        this._setTemplateFromNodes(Array.from(this.children));
+      }
+
+      /**
+       * @event vaadin-overlay-open
+       * fired after the `vaadin-overlay` is opened.
+       */
+      _openedChanged(opened) {
+        if (!this._instance) {
+          this._ensureTemplatized();
+        }
+
+        if (opened) {
+          this._animatedOpening();
+
+          afterNextRender(this, () => {
+            if (this.focusTrap && !this.contains(document._activeElement || document.activeElement)) {
+              this._cycleTab(0, 0);
+            }
+
+            const evt = new CustomEvent('vaadin-overlay-open', {bubbles: true});
+            this.dispatchEvent(evt);
+          });
+
+          if (!this.modeless) {
+            this._enterModalState();
+          }
+        } else {
+          this._animatedClosing();
+          this._exitModalState();
+        }
+      }
+
+      _shouldAnimate() {
+        const name = getComputedStyle(this).getPropertyValue('animation-name');
+        return name && name != 'none';
+      }
+
+      _enqueueAnimation(type, callback) {
+        const handler = `__${type}Handler`;
+        const listener = () => {
+          callback();
+          this.removeEventListener('animationend', listener);
+          delete this[handler];
+        };
+        this[handler] = listener;
+        this.addEventListener('animationend', listener);
+      }
+
+      _flushAnimation(type) {
+        const handler = `__${type}Handler`;
+        if (typeof this[handler] === 'function') {
+          this[handler]();
+        }
+      }
+
+      _animatedOpening() {
+        if (this.parentNode === document.body && this.hasAttribute('closing')) {
+          this._flushAnimation('closing');
+        }
+        this._attachOverlay();
+        this.setAttribute('opening', '');
+
+        const finishOpening = () => {
+          this.removeAttribute('opening');
+        };
+
+        if (this._shouldAnimate()) {
+          this._enqueueAnimation('opening', finishOpening);
+        } else {
+          finishOpening();
+        }
+      }
+
+      _attachOverlay() {
+        this._placeholder = document.createComment('vaadin-overlay-placeholder');
+        this.parentNode.insertBefore(this._placeholder, this);
+        document.body.appendChild(this);
+      }
+
+      _animatedClosing() {
+        if (this.hasAttribute('opening')) {
+          this._flushAnimation('opening');
+        }
+        if (this._placeholder) {
+          this.setAttribute('closing', '');
+
+          const finishClosing = () => {
+            this._detachOverlay();
+            this.removeAttribute('closing');
+          };
+
+          if (this._shouldAnimate()) {
+            this._enqueueAnimation('closing', finishClosing);
+          } else {
+            finishClosing();
+          }
+        }
+      }
+
+      _detachOverlay() {
+        // The detaching overlay is happening after closing animation is finished.
+        // If in the meantime of closing animation user quickly clicked
+        // the element to show the same ovelay, `opened` will be true
+        // and no need to detach the overlay
+        if (this.opened || !this._placeholder.parentNode) {
+          return;
+        }
+        this._placeholder.parentNode.insertBefore(this, this._placeholder);
+        this._placeholder.parentNode.removeChild(this._placeholder);
+      }
+
+      /**
+       * Returns all attached overlays.
+       */
+      static get __attachedInstances() {
+        return Array.from(document.body.children).filter(el => el instanceof OverlayElement);
+      }
+
+      /**
+       * returns true if this is the last one in the opened overlays stack
+       */
+      get _last() {
+        return this === OverlayElement.__attachedInstances.pop();
+      }
+
+      _modelessChanged(modeless) {
+        if (!modeless) {
+          if (this.opened) {
+            this._enterModalState();
+          }
+        } else {
+          this._exitModalState();
+        }
+      }
+
+      _enterModalState() {
+        document.addEventListener('mousedown', this._boundMouseDownListener);
+        document.addEventListener('mouseup', this._boundMouseUpListener);
+        document.addEventListener('click', this._boundOutsideClickListener, true);
+        document.addEventListener('keydown', this._boundKeydownListener);
+
+        if (document.body.style.pointerEvents !== 'none') {
+          // Set body pointer-events to 'none' to disable mouse interactions with
+          // other document nodes.
+          this._previousDocumentPointerEvents = document.body.style.pointerEvents;
+          document.body.style.pointerEvents = 'none';
+        }
+
+        // Disable pointer events in other attached overlays
+        OverlayElement.__attachedInstances.forEach(el => {
+          if (el !== this) {
+            el.shadowRoot.querySelector('[part="overlay"]').style.pointerEvents = 'none';
+          }
+        });
+      }
+
+      _exitModalState() {
+        document.removeEventListener('mousedown', this._boundMouseDownListener);
+        document.removeEventListener('mouseup', this._boundMouseUpListener);
+        document.removeEventListener('click', this._boundOutsideClickListener, true);
+        document.removeEventListener('keydown', this._boundKeydownListener);
+
+        if (this._previousDocumentPointerEvents !== undefined) {
+          // Restore body pointer-events
+          document.body.style.pointerEvents = this._previousDocumentPointerEvents;
+          delete this._previousDocumentPointerEvents;
+        }
+
+        // Restore pointer events in the previous overlay(s) in reverse order
+        const instances = OverlayElement.__attachedInstances.reverse();
+        let el;
+        while (el = instances.pop()) {
+          if (el === this) {
+            // Skip the current instance
+            continue;
+          }
+          el.shadowRoot.querySelector('[part="overlay"]').style.removeProperty('pointer-events');
+          if (!el.modeless) {
+            // Stop after the last modal
+            break;
+          }
+        }
+      }
+
+      _removeOldContent() {
+        if (!this.content || !this._contentNodes) {
+          return;
+        }
+
+        this._observer.disconnect();
+
+        this._contentNodes.forEach(node => {
+          if (node.parentNode === this.content) {
+            this.content.removeChild(node);
+          }
+        });
+
+        if (this._originalContentPart) {
+          // Restore the original <div part="content">
+          this.$.content.parentNode.replaceChild(this._originalContentPart, this.$.content);
+          this.$.content = this._originalContentPart;
+          this._originalContentPart = undefined;
+        }
+
+        this._observer.connect();
+
+        this._contentNodes = undefined;
+        this.content = undefined;
+      }
+
+      _stampOverlayTemplate(template, instanceProps) {
+        this._removeOldContent();
+
+        if (!template._Templatizer) {
+          template._Templatizer = templatize(template, this, {
+            instanceProps: instanceProps,
+            forwardHostProp: function(prop, value) {
+              if (this._instance) {
+                this._instance.forwardHostProp(prop, value);
+              }
+            }
+          });
+        }
+
+        this._instance = new template._Templatizer({});
+        this._contentNodes = Array.from(this._instance.root.childNodes);
+
+        const templateRoot = template._templateRoot || (template._templateRoot = template.getRootNode());
+        const _isScoped = templateRoot !== document;
+
+        if (_isScoped) {
+          if (!this.$.content.shadowRoot) {
+            this.$.content.attachShadow({mode: 'open'});
+          }
+
+          let scopeCssText = Array.from(templateRoot.querySelectorAll('style'))
+            .reduce((result, style) => result + style.textContent, '');
+
+          if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
+            // NOTE(platosha): ShadyCSS removes <style>’s from templates, so
+            // we have to use these protected APIs to get their contents back
+            const styleInfo = window.ShadyCSS.ScopingShim
+              ._styleInfoForNode(templateRoot.host);
+            if (styleInfo) {
+              scopeCssText += styleInfo._getStyleRules().parsedCssText;
+              scopeCssText += '}';
+            }
+          }
+
+          // The overlay root’s :host styles should not apply inside the overlay
+          scopeCssText = scopeCssText.replace(/:host/g, ':host-nomatch');
+
+          if (scopeCssText) {
+            if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
+              // ShadyDOM: replace the <div part="content"> with a generated
+              // styled custom element
+              const contentPart = createOverlayContent(scopeCssText);
+              contentPart.id = 'content';
+              contentPart.setAttribute('part', 'content');
+              this.$.content.parentNode.replaceChild(contentPart, this.$.content);
+              // NOTE(platosha): carry the style scope of the content part
+              contentPart.className = this.$.content.className;
+              this._originalContentPart = this.$.content;
+              this.$.content = contentPart;
+            } else {
+              // Shadow DOM: append a style to the content shadowRoot
+              const style = document.createElement('style');
+              style.textContent = scopeCssText;
+              this.$.content.shadowRoot.appendChild(style);
+              this._contentNodes.unshift(style);
+            }
+          }
+
+          this.$.content.shadowRoot.appendChild(this._instance.root);
+          this.content = this.$.content.shadowRoot;
+        } else {
+          this.appendChild(this._instance.root);
+          this.content = this;
+        }
+      }
+
+      _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
+        if (template !== oldTemplate) {
+          this.template = undefined;
+        } else if (renderer !== oldRenderer) {
+          this.renderer = undefined;
+        }
+      }
+
+      /**
+       * Manually invoke existing renderer.
+       */
+      render() {
+        if (this.renderer) {
+          this.renderer.call(this.owner, this.content, this.owner, this.model);
+        }
+      }
+
+      _templateOrRendererChanged(template, renderer, owner, model, instanceProps, opened) {
+        if (template && renderer) {
+          this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
+          throw new Error('You should only use either a renderer or a template for overlay content');
+        }
+
+        const ownerOrModelChanged = (this._oldOwner !== owner || this._oldModel !== model);
+        this._oldModel = model;
+        this._oldOwner = owner;
+
+        const templateOrInstancePropsChanged = (this._oldInstanceProps !== instanceProps || this._oldTemplate !== template);
+        this._oldInstanceProps = instanceProps;
+        this._oldTemplate = template;
+
+        const rendererChanged = this._oldRenderer !== renderer;
+        this._oldRenderer = renderer;
+
+        const openedChanged = this._oldOpened !== opened;
+        this._oldOpened = opened;
+
+        if (template && templateOrInstancePropsChanged) {
+          this._stampOverlayTemplate(template, instanceProps);
+        } else if (renderer && (rendererChanged || openedChanged || ownerOrModelChanged)) {
+          this.content = this;
+
+          if (rendererChanged) {
+            while (this.content.firstChild) {
+              this.content.removeChild(this.content.firstChild);
+            }
+          }
+
+          if (opened) {
+            this.render();
+          }
+        }
+      }
+
+      _isFocused(element) {
+        return element && element.getRootNode().activeElement === element;
+      }
+
+      _focusedIndex(elements) {
+        elements = elements || this._getFocusableElements();
+        return elements.indexOf(elements.filter(this._isFocused).pop());
+      }
+
+      _cycleTab(increment, index) {
+        const focusableElements = this._getFocusableElements();
+
+        if (index === undefined) {
+          index = this._focusedIndex(focusableElements);
+        }
+
+        index += increment;
+
+        // rollover to first item
+        if (index >= focusableElements.length) {
+          index = 0;
+        // go to last item
+        } else if (index < 0) {
+          index = focusableElements.length - 1;
+        }
+
+        focusableElements[index].focus();
+      }
+
+      _getFocusableElements() {
+        // collect all focusable elements
+        return FocusablesHelper.getTabbableNodes(this.$.overlay);
+      }
+    }
+
+    customElements.define(OverlayElement.is, OverlayElement);
+
+    /**
+    @license
+    Copyright (c) 2017 Vaadin Ltd.
+    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+    */
+    const $_documentContainer$o = document.createElement('template');
+
+    $_documentContainer$o.innerHTML = `<dom-module id="vaadin-dropdown-menu-overlay-styles" theme-for="vaadin-dropdown-menu-overlay">
+  <template>
+    <style>
+      :host {
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+    </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$o.content);
+    /**
+      * The overlay element.
+      *
+      * ### Styling
+      *
+      * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
+      * for `<vaadin-dropdown-menu-overlay>` parts.
+      *
+      * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+      *
+      * @memberof Vaadin
+      * @extends Vaadin.OverlayElement
+      */
+    class DropdownMenuOverlayElement extends OverlayElement {
+      static get is() {
+        return 'vaadin-dropdown-menu-overlay';
+      }
+    }
+    customElements.define(DropdownMenuOverlayElement.is, DropdownMenuOverlayElement);
+
+    /**
+    @license
+    Copyright (c) 2017 Vaadin Ltd.
+    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+    */
+
+    let memoizedTemplate$1;
+    /**
+      * The text-field element.
+      *
+      * ### Styling
+      *
+      * See [`<vaadin-text-field>` documentation](https://github.com/vaadin/vaadin-text-field/blob/master/src/vaadin-text-field.html)
+      * for `<vaadin-dropdown-menu-text-field>` parts and available slots (prefix, suffix etc.)
+      *
+      * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+      *
+      * @memberof Vaadin
+      * @extends Vaadin.TextFieldElement
+      */
+    class DropdownMenuTextFieldElement extends TextFieldElement {
+      static get is() {
+        return 'vaadin-dropdown-menu-text-field';
+      }
+
+      static get template() {
+        if (!memoizedTemplate$1) {
+          // Clone the superclass template
+          memoizedTemplate$1 = super.template.cloneNode(true);
+
+          // Create a slot for the value element
+          const slot = document.createElement('slot');
+          slot.setAttribute('name', 'value');
+
+          // Insert the slot before the text-field
+          const input = memoizedTemplate$1.content.querySelector('input');
+
+          input.parentElement.replaceChild(slot, input);
+          slot.appendChild(input);
+        }
+        return memoizedTemplate$1;
+      }
+
+      get focusElement() {
+        return this.shadowRoot.querySelector('[part=input-field]');
+      }
+    }
+
+    customElements.define(DropdownMenuTextFieldElement.is, DropdownMenuTextFieldElement);
+
+    /**
+    @license
+    Copyright (c) 2017 Vaadin Ltd.
+    This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+    */
+    const $_documentContainer$p = document.createElement('template');
+
+    $_documentContainer$p.innerHTML = `<custom-style>
+  <style>
+    @font-face {
+      font-family: "vaadin-dropdown-menu-icons";
+      src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAASEAAsAAAAABDgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDxIGKmNtYXAAAAFoAAAAVAAAAFQXVtKHZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAAAHwAAAB8CohkJ2hlYWQAAAJAAAAANgAAADYOavgEaGhlYQAAAngAAAAkAAAAJAarA8ZobXR4AAACnAAAABQAAAAUCAABP2xvY2EAAAKwAAAADAAAAAwAKABSbWF4cAAAArwAAAAgAAAAIAAHABduYW1lAAAC3AAAAYYAAAGGmUoJ+3Bvc3QAAARkAAAAIAAAACAAAwAAAAMEAAGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA6QADwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAIOkA//3//wAAAAAAIOkA//3//wAB/+MXBAADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQE/AUAC6QIVABQAAAEwFx4BFxYxMDc+ATc2MTAjKgEjIgE/ISJPIiEhIk8iIUNCoEJDAhUhIk8iISEiTyIhAAEAAAABAABvL5bdXw889QALBAAAAAAA1jHaeQAAAADWMdp5AAAAAALpAhUAAAAIAAIAAAAAAAAAAQAAA8D/wAAABAAAAAAAAukAAQAAAAAAAAAAAAAAAAAAAAUEAAAAAAAAAAAAAAAAAAAABAABPwAAAAAACgAUAB4APgABAAAABQAVAAEAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAADgCuAAEAAAAAAAEABwAAAAEAAAAAAAIABwBgAAEAAAAAAAMABwA2AAEAAAAAAAQABwB1AAEAAAAAAAUACwAVAAEAAAAAAAYABwBLAAEAAAAAAAoAGgCKAAMAAQQJAAEADgAHAAMAAQQJAAIADgBnAAMAAQQJAAMADgA9AAMAAQQJAAQADgB8AAMAAQQJAAUAFgAgAAMAAQQJAAYADgBSAAMAAQQJAAoANACkaWNvbW9vbgBpAGMAbwBtAG8AbwBuVmVyc2lvbiAxLjAAVgBlAHIAcwBpAG8AbgAgADEALgAwaWNvbW9vbgBpAGMAbwBtAG8AbwBuaWNvbW9vbgBpAGMAbwBtAG8AbwBuUmVndWxhcgBSAGUAZwB1AGwAYQByaWNvbW9vbgBpAGMAbwBtAG8AbwBuRm9udCBnZW5lcmF0ZWQgYnkgSWNvTW9vbi4ARgBvAG4AdAAgAGcAZQBuAGUAcgBhAHQAZQBkACAAYgB5ACAASQBjAG8ATQBvAG8AbgAuAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==) format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+  </style>
+</custom-style>`;
+
+    document.head.appendChild($_documentContainer$p.content);
+    /**
+     *
+     * `<vaadin-dropdown-menu>` is a Web Component for selecting values from a list of items. The content of the
+     * the dropdown menu can be populated in two ways: imperatively by using renderer callback function and
+     * declaratively by using Polymer's Templates.
+     *
+     * ### Rendering
+     *
+     * By default, the dropdown menu uses the content provided by using the renderer callback function.
+     *
+     * The renderer function provides `root`, `dropdownMenu` arguments.
+     * Generate DOM content, append it to the `root` element and control the state
+     * of the host element by accessing `dropdownMenu`.
+     *
+     * ```html
+     * <vaadin-dropdown-menu id="dropdown-menu"></vaadin-dropdown-menu>
+     * ```
+     * ```js
+     * const dropdownMenu = document.querySelector('#dropdown-menu');
+     * dropdownMenu.renderer = function(root, dropdownMenu) {
+     *   const listBox = document.createElement('vaadin-list-box');
+     *   // append 3 <vaadin-item> elements
+     *   ['Jose', 'Manolo', 'Pedro'].forEach(function(name) {
+     *     const item = document.createElement('vaadin-item');
+     *     item.textContent = name;
+     *     listBox.appendChild(item);
+     *   });
+     *
+     *   // update the content
+     *   root.appendChild(listBox);
+     * };
+     * ```
+     *
+     * Renderer is called on initialization of new menu and on the opening of the dropdown menu.
+     * DOM generated during the renderer call can be reused
+     * in the next renderer call and will be provided with the `root` argument.
+     * On first call it will be empty.
+     *
+     * ### Polymer Templates
+     *
+     * Alternatively, the content can be provided with Polymer's Template.
+     * Dropdown menu finds the first child template and uses that in case renderer callback function
+     * is not provided. You can also set a custom template using the `template` property.
+     *
+     * ```
+     * <vaadin-dropdown-menu>
+     *   <template>
+     *     <vaadin-list-box>
+     *       <vaadin-item label="foo">Foo</vaadin-item>
+     *       <vaadin-item>Bar</vaadin-item>
+     *       <vaadin-item>Baz</vaadin-item>
+     *     </vaadin-list-box>
+     *   </template>
+     * </vaadin-dropdown-menu>
+     * ```
+     *
+     * Hint: By setting the `label` property of inner vaadin-items you will
+     * be able to change the visual representation of the selected value in the input part.
+     *
+     * ### Styling
+     *
+     * The following shadow DOM parts are available for styling:
+     *
+     * Part name | Description
+     * ----------------|----------------
+     * `toggle-button` | The toggle button
+     *
+     * The following state attributes are available for styling:
+     *
+     * Attribute    | Description | Part name
+     * -------------|-------------|------------
+     * `opened` | Set when the dropdown menu is open | :host
+     * `invalid` | Set when the element is invalid | :host
+     * `focused` | Set when the element is focused | :host
+     * `focus-ring` | Set when the element is keyboard focused | :host
+     * `readonly` | Set when the dropdown menu is read only | :host
+     *
+     * `<vaadin-dropdown-menu>` element sets these custom CSS properties:
+     *
+     * Property name | Description | Theme for element
+     * --- | --- | ---
+     * `--vaadin-dropdown-menu-text-field-width` | Width of the menu text field | `vaadin-dropdown-menu-overlay`
+     *
+     * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+     *
+     * In addition to `<vaadin-dropdown-menu>` itself, the following internal
+     * components are themable:
+     *
+     * - `<vaadin-dropdown-menu-text-field>`
+     * - `<vaadin-dropdown-menu-overlay>`
+     *
+     * Note: the `theme` attribute value set on `<vaadin-dropdown-menu>` is
+     * propagated to the internal themable components listed above.
+     *
+     * @memberof Vaadin
+     * @mixes Vaadin.ElementMixin
+     * @mixes Vaadin.ControlStateMixin
+     * @mixes Vaadin.ThemableMixin
+     * @mixes Vaadin.ThemePropertyMixin
+     * @demo demo/index.html
+     */
+    class DropdownMenuElement extends
+      ElementMixin$1(
+        ControlStateMixin(
+          ThemableMixin(
+            ThemePropertyMixin(
+              mixinBehaviors(IronResizableBehavior, PolymerElement))))) {
+      static get template() {
+        return html$1`
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      vaadin-dropdown-menu-text-field {
+        width: 100%;
+        min-width: 0;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      [part="toggle-button"] {
+        font-family: "vaadin-dropdown-menu-icons";
+      }
+
+      [part="toggle-button"]::before {
+        content: "\\e900";
+      }
+    </style>
+
+    <vaadin-dropdown-menu-text-field placeholder="[[placeholder]]" label="[[label]]" required="[[required]]" invalid="[[invalid]]" error-message="[[errorMessage]]" readonly\$="[[readonly]]" theme\$="[[theme]]">
+      <slot name="prefix" slot="prefix"></slot>
+      <div part="value"></div>
+      <div part="toggle-button" slot="suffix" role="button" aria-label="Toggle"></div>
+    </vaadin-dropdown-menu-text-field>
+    <vaadin-dropdown-menu-overlay opened="{{opened}}" with-backdrop="[[_phone]]" phone\$="[[_phone]]" theme\$="[[theme]]"></vaadin-dropdown-menu-overlay>
+
+    <iron-media-query query="[[_phoneMediaQuery]]" query-matches="{{_phone}}"></iron-media-query>
+`;
+      }
+
+      static get is() {
+        return 'vaadin-dropdown-menu';
+      }
+
+      static get version() {
+        return '1.2.0-beta1';
+      }
+
+      static get properties() {
+        return {
+          /**
+           * Set when the dropdown menu is open
+           */
+          opened: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true,
+            observer: '_openedChanged'
+          },
+
+          /**
+           * Custom function for rendering the content of the `<vaadin-dropdown-menu>`.
+           * Receives two arguments:
+           *
+           * - `root` The `<vaadin-dropdown-menu-overlay>` internal container
+           *   DOM element. Append your content to it.
+           * - `dropdownMenu` The reference to the `<vaadin-dropdown-menu>` element.
+           */
+          renderer: Function,
+
+          /**
+           * The error message to display when the dropdown menu value is invalid
+           */
+          errorMessage: {
+            type: String,
+            value: ''
+          },
+
+          /**
+           * String used for the label element.
+           */
+          label: {
+            type: String
+          },
+
+          /**
+           * It stores the the `value` property of the selected item, providing the
+           * value for iron-form.
+           * When there’s an item selected, it's the value of that item, otherwise
+           * it's an empty string.
+           * On change or initialization, the component finds the item which matches the
+           * value and displays it.
+           * If no value is provided to the component, it selects the first item without
+           * value or empty value.
+           * Hint: If you do not want to select any item by default, you can either set all
+           * the values of inner vaadin-items, or set the vaadin-dropdown-menu value to
+           * an inexistent value in the items list.
+           */
+          value: {
+            type: String,
+            value: '',
+            notify: true,
+            observer: '_valueChanged'
+          },
+
+          /**
+           * The current required state of the dropdown menu. True if required.
+           */
+          required: {
+            type: Boolean,
+            reflectToAttribute: true,
+            observer: '_requiredChanged'
+          },
+
+          /**
+           * Set to true if the value is invalid.
+           */
+          invalid: {
+            type: Boolean,
+            reflectToAttribute: true,
+            notify: true,
+            value: false
+          },
+
+          /**
+           * The name of this element.
+           */
+          name: {
+            type: String,
+            reflectToAttribute: true
+          },
+
+          /**
+           * A hint to the user of what can be entered in the control.
+           * The placeholder will be displayed in the case that there
+           * is no item selected, or the selected item has an empty
+           * string label, or the selected item has no label and it's
+           * DOM content is empty.
+           */
+          placeholder: {
+            type: String
+          },
+
+          /**
+           * When present, it specifies that the element is read-only.
+           */
+          readonly: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+
+          _phone: Boolean,
+
+          _phoneMediaQuery: {
+            value: '(max-width: 420px), (max-height: 420px)'
+          },
+
+          _overlayElement: Object,
+
+          _inputElement: Object,
+
+          _toggleElement: Object,
+
+          _items: Object,
+
+          _contentTemplate: Object,
+
+          _oldTemplate: Object,
+
+          _oldRenderer: Object
+        };
+      }
+
+      static get observers() {
+        return [
+          '_updateSelectedItem(value, _items)',
+          '_updateAriaExpanded(opened, _toggleElement)',
+          '_templateOrRendererChanged(_contentTemplate, renderer, _overlayElement)'
+        ];
+      }
+
+      /** @private */
+      constructor() {
+        super();
+        this._boundSetPosition = this._setPosition.bind(this);
+      }
+
+      /** @private */
+      connectedCallback() {
+        super.connectedCallback();
+        this.addEventListener('iron-resize', this._boundSetPosition);
+      }
+
+      ready() {
+        super.ready();
+
+        this._overlayElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-overlay');
+        this._valueElement = this.shadowRoot.querySelector('[part="value"]');
+        this._toggleElement = this.shadowRoot.querySelector('[part="toggle-button"]');
+        this._nativeInput = this.focusElement.shadowRoot.querySelector('input');
+        this._nativeInput.setAttribute('aria-hidden', true);
+        this._nativeInput.setAttribute('tabindex', -1);
+        this._nativeInput.style.pointerEvents = 'none';
+
+        this.focusElement.addEventListener('click', e => this.opened = !this.readonly);
+        this.focusElement.addEventListener('keydown', e => this._onKeyDown(e));
+
+        this._observer = new FlattenedNodesObserver(this, info => this._setTemplateFromNodes(info.addedNodes));
+        this._observer.flush();
+      }
+
+      _setTemplateFromNodes(nodes) {
+        const template = Array.from(nodes).filter(node => node.localName && node.localName === 'template')[0] || this._contentTemplate;
+        this._overlayElement.template = this._contentTemplate = template;
+        this._setForwardHostProps();
+      }
+
+      _setForwardHostProps() {
+        if (this._overlayElement.content) {
+          const origForwardHostProp = this._overlayElement._instance && this._overlayElement._instance.forwardHostProp;
+
+          if (this._overlayElement._instance) {
+            this._overlayElement._instance.forwardHostProp = (...args) => {
+              origForwardHostProp.apply(this._overlayElement._instance, args);
+              setTimeout(() => {
+                this._updateValueSlot();
+              });
+            };
+
+            this._assignMenuElement();
+          }
+        }
+      }
+
+      /**
+       * Manually invoke existing renderer.
+       */
+      render() {
+        this._overlayElement.render();
+      }
+
+      _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
+        if (template !== oldTemplate) {
+          this._contentTemplate = undefined;
+        } else if (renderer !== oldRenderer) {
+          this.renderer = undefined;
+        }
+      }
+
+      _templateOrRendererChanged(template, renderer, overlay) {
+        if (!overlay) {
+          return;
+        }
+
+        if (template && renderer) {
+          this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
+          throw new Error('You should only use either a renderer or a template for dropdown-menu content');
+        }
+
+        this._oldTemplate = template;
+        this._oldRenderer = renderer;
+
+        if (renderer) {
+          overlay.setProperties({owner: this, renderer: renderer});
+          this.render();
+
+          if (overlay.content.firstChild) {
+            this._assignMenuElement();
+          }
+        }
+      }
+
+      _assignMenuElement() {
+        this._menuElement = Array.from(this._overlayElement.content.children).filter(element => element.localName !== 'style')[0];
+
+        if (this._menuElement) {
+          this._menuElement.addEventListener('items-changed', e => {
+            this._items = this._menuElement.items;
+          });
+          this._menuElement.addEventListener('selected-changed', e => this._updateValueSlot());
+          this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
+          this._menuElement.addEventListener('click', e => this.opened = false);
+        }
+      }
+
+      /** @protected */
+      get focusElement() {
+        return this._inputElement ||
+          (this._inputElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-text-field'));
+      }
+
+      /** @private */
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        this.removeEventListener('iron-resize', this._boundSetPosition);
+        // Making sure the dropdown is closed and removed from DOM after detaching the dropdown.
+        this.opened = false;
+      }
+
+      /** @private */
+      notifyResize() {
+        super.notifyResize();
+        if (this.positionTarget && this.opened) {
+          this._setPosition();
+          // Schedule another position update (to cover virtual keyboard opening for example)
+          requestAnimationFrame(this._setPosition.bind(this));
+        }
+      }
+
+      _requiredChanged(required) {
+        this.setAttribute('aria-required', required);
+      }
+
+      _valueChanged(value, oldValue) {
+        if (value === '') {
+          this.focusElement.removeAttribute('has-value');
+        } else {
+          this.focusElement.setAttribute('has-value', '');
+        }
+
+        // Skip validation for the initial empty string value
+        if (value === '' && oldValue === undefined) {
+          return;
+        }
+        this.validate();
+      }
+
+      _onKeyDown(e) {
+        if (!this.readonly && !this.opened && /^(ArrowDown|Down|ArrowUp|Up|Enter|SpaceBar| )$/.test(e.key)) {
+          e.preventDefault();
+          this.opened = true;
+        }
+      }
+
+      _onKeyDownInside(e) {
+        if (/^(Tab)$/.test(e.key)) {
+          this.opened = false;
+        }
+      }
+
+      _openedChanged(opened, wasOpened) {
+        if (opened) {
+          if (
+            !this._overlayElement ||
+            !this._menuElement ||
+            !this._toggleElement ||
+            !this.focusElement ||
+            this.disabled ||
+            this.readonly
+          ) {
+            this.opened = false;
+            return;
+          }
+
+          this._openedWithFocusRing = this.hasAttribute('focus-ring') || this.focusElement.hasAttribute('focus-ring');
+          this._menuElement.focus();
+          this._setPosition();
+          window.addEventListener('scroll', this._boundSetPosition, true);
+        } else if (wasOpened) {
+          if (this._phone) {
+            this._setFocused(false);
+          } else {
+            this.focusElement.focus();
+            if (this._openedWithFocusRing) {
+              this.focusElement.setAttribute('focus-ring', '');
+            }
+          }
+          this.validate();
+          window.removeEventListener('scroll', this._boundSetPosition, true);
+        }
+      }
+
+      _hasContent(selected) {
+        if (!selected) {
+          return false;
+        }
+        return Boolean(
+          selected.hasAttribute('label') ?
+            selected.getAttribute('label') :
+            selected.textContent.trim() || selected.children.length
+        );
+      }
+
+      _attachSelectedItem(selected) {
+        if (!selected) {
+          return;
+        }
+        let labelItem;
+        if (selected.hasAttribute('label')) {
+          labelItem = document.createElement('vaadin-item');
+          labelItem.textContent = selected.getAttribute('label');
+        } else {
+          labelItem = selected.cloneNode(true);
+        }
+
+        // store reference to the original item
+        labelItem._sourceItem = selected;
+
+        labelItem.removeAttribute('tabindex');
+
+        this._valueElement.appendChild(labelItem);
+
+        labelItem.selected = true;
+      }
+
+      _updateAriaExpanded(opened, toggleElement) {
+        toggleElement && toggleElement.setAttribute('aria-expanded', opened);
+      }
+
+      _updateValueSlot() {
+        this.opened = false;
+        this._valueElement.innerHTML = '';
+
+        const selected = this._items[this._menuElement.selected];
+
+        const hasContent = this._hasContent(selected);
+
+        // Toggle visibility of _valueElement vs fallback input with placeholder
+        this._valueElement.slot = hasContent ? 'value' : '';
+
+        // Ensure the slot distribution to apply correct style scope for cloned item
+        if (hasContent && window.ShadyDOM) {
+          window.ShadyDOM.flush();
+        }
+
+        this._attachSelectedItem(selected);
+
+        if (!this._valueChanging && selected) {
+          this._selectedChanging = true;
+          this.value = selected.value || '';
+          delete this._selectedChanging;
+        }
+      }
+
+      _updateSelectedItem(value, items) {
+        if (items) {
+          this._menuElement.selected = items.reduce((prev, item, idx) => {
+            return prev === undefined && item.value === value ? idx : prev;
+          }, undefined);
+          if (!this._selectedChanging) {
+            this._valueChanging = true;
+            this._updateValueSlot();
+            delete this._valueChanging;
+          }
+        }
+      }
+
+      /** @override */
+      _setFocused(focused) {
+        // Keep `focused` state when opening the overlay for styling purpose.
+        super._setFocused(this.opened || focused);
+        this.focusElement._setFocused(this.hasAttribute('focused'));
+        !this.hasAttribute('focused') && this.validate();
+      }
+
+      _setPosition() {
+        const inputRect = this._inputElement.shadowRoot.querySelector('[part~="input-field"]').getBoundingClientRect();
+        const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
+        const bottomAlign = inputRect.top > (viewportHeight - inputRect.height) / 2;
+
+        this._overlayElement.style.left = inputRect.left + 'px';
+        if (bottomAlign) {
+          this._overlayElement.setAttribute('bottom-aligned', '');
+          this._overlayElement.style.removeProperty('top');
+          this._overlayElement.style.bottom = (viewportHeight - inputRect.bottom) + 'px';
+        } else {
+          this._overlayElement.removeAttribute('bottom-aligned');
+          this._overlayElement.style.removeProperty('bottom');
+          this._overlayElement.style.top = inputRect.top + 'px';
+        }
+
+        this._overlayElement.updateStyles({'--vaadin-dropdown-menu-text-field-width': inputRect.width + 'px'});
+      }
+
+      /**
+       * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
+       *
+       * @return {boolean} True if the value is valid and sets the `invalid` flag appropriately
+       */
+      validate() {
+        return !(this.invalid = !(this.disabled || !this.required || this.value));
+      }
+    }
+
+    customElements.define(DropdownMenuElement.is, DropdownMenuElement);
+
+    const $_documentContainer$q = document.createElement('template');
+
+    $_documentContainer$q.innerHTML = `<dom-module id="whcg-lit-item-styles" theme-for="vaadin-item">
+<template>
+    <style>
+      :host {
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        font-size: var(--whcg-host-font-size);
+        
+        padding: 0.5em 1em;
+        min-height: var(--whcg-host-min-height);
+      }
+
+      :host([disabled]) {
+        cursor: default;
+        pointer-events: none;
+      }
+
+
+      :host::before {
+        display: block;
+        content: var(--whcg-host-before-content);
+        font-family: var(--whcg-host-before-font-family);
+        font-size: var(--whcg-host-before-font-size);
+        line-height: 1;
+        font-weight: normal;
+        width: 1em;
+        height: 1em;
+        margin-top: var(--whcg-host-before-margin-top);
+        margin-bottom: var(--whcg-host-before-margin-bottom);
+        margin-left: var(--whcg-host-before-margin-left);
+        margin-right: var(--whcg-host-before-margin-right);
+        color: var(--whcg-host-before-color);
+        flex: none;
+        opacity: 0;
+      }
+
+      :host([selected])::before {
+        opacity: 1;
+      }
+
+
+      [part="content"] {
+        font-family: var(--whcg-content-font-family);
+        font-size: var(--whcg-content-font-size);
+        line-height: var(--whcg-content-line-height);
+        flex: auto;
+        color: var(--whcg-content-color);
+      }
+
+      :host([selected]) [part="content"] {
+        color: var(--whcg-content-host-selected-color);
+      }
+
+      :host([disabled]) [part="content"] {
+        flex: auto;
+        color: var(--whcg-content-host-disabled-color);
+      }
+    </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$q.content);
+
+    const $_documentContainer$1$1 = document.createElement('template');
+
+    $_documentContainer$1$1.innerHTML = `<dom-module id="whcg-lit-list-box-styles" theme-for="vaadin-list-box">
+<template>
+    <style>
+
+      [part="items"] ::slotted(*) {
+        flex: none;
+      }
+
+      [part="items"] ::slotted(vaadin-item) {
+        cursor: default;
+        outline: none;
+        border-radius: var(--whcg-items-slotted-vaadinitem-border-radius);
+        padding-left: var(--whcg-items-slotted-vaadinitem-padding-left);
+        padding-right: var(--whcg-items-slotted-vaadinitem-padding-right);
+        background-color: var(--whcg-items-slotted-vaadinitem-background-color);
+      }
+
+      [part="items"] ::slotted(vaadin-item:hover:not([disabled])) {
+        background-color: var(--whcg-items-slotted-vaadinitem-hover-not-disabled-background-color);
+      }
+
+
+    </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$1$1.content);
+
+    const $_documentContainer$2$1 = document.createElement('template');
+
+    $_documentContainer$2$1.innerHTML = `<dom-module id="whcg-lit-dropdown-styles" theme-for="vaadin-dropdown-menu">
+<template>
+    <style>
+    [part\$="button"] {
+      flex: none;
+      width: 1em;
+      height: 1em;
+      line-height: 1;
+      font-size: 
+      text-align: center;
+      color: var(--whcg-dropdown-button-color);
+      cursor: default;
+    }
+
+    [part\$="button"]:hover {
+      color: var(--whcg-dropdown-button-hover-color);
+    }
+
+      [part="toggle-button"]::before {
+        content: var(--lumo-icons-dropdown);
+        font-family: "lumo-icons";
+      }
+
+    </style>
+  </template>
+</dom-module><dom-module id="whcg-lit-dropdown-menu-text-field" theme-for="vaadin-dropdown-menu-text-field">
+  <template>
+    <style>
+      [part="input-field"] {
+        cursor: default;
+        outline: none;
+        color: var(--whcg-dropdown-input-field-color);
+      }
+    </style>
+  </template>
+</dom-module><dom-module id="whcg-lit-dropdown-menu-overlay" theme-for="vaadin-dropdown-menu-overlay">
+  <template>
+    <style>
+
+
+
+    [part="overlay"] {
+      background-color: var(--whcg-dropdown-overlay-background-color);
+      background-image: var(--whcg-dropdown-overlay-background-image);
+      border-radius: var(--whcg-dropdown-overlay-border-radius);
+      box-shadow: var(--whcg-dropdown-overlay-box-shadow);
+      color: var(--whcg-dropdown-overlay-color);
+    }
+
+    [part="content"] {
+      padding: var(--whcg-dropdown-content-padding);
+    }
+
+    [part="backdrop"] {
+      background-color: var(--whcg-dropdown-backdrop-background-color);
+      will-change: opacity;
+    }
+
+
+
+      [part~="overlay"] {
+        min-width: var(--vaadin-dropdown-menu-text-field-width);
+      }
+
+
+    </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$2$1.content);
+
+    /*
+     * `WhcgNumberField`
+     * 
+     * @customElement
+     * @polymer
+     
+     */
+    class WhcgSelect extends PolymerElement {
+        static get template() {
+            return html$1 `
+      <style>
+             vaadin-dropdown-menu {
+                --whcg-host-before-font-size: var(--whcg-text-field-host-before-font-size);
+                --whcg-host-before-height: var(--whcg-text-field-host-before-height);
+
+                --whcg-host-padding-top: var(--whcg-text-field-host-padding-top);
+                --whcg-host-padding-bottom: var(--whcg-text-field-host-padding-bottom);
+                --whcg-host-padding-left: var(--whcg-text-field-host-padding-left);
+                --whcg-host-padding-right: var(--whcg-text-field-host-padding-right);
+                --whcg-host-haslabel-padding-top: var(--whcg-text-field-host-haslabel-padding-top);
+                --whcg-host-haslabel-padding-bottom: var(--whcg-text-field-host-haslabel-padding-bottom);
+                --whcg-host-haslabel-padding-left: var(--whcg-text-field-host-haslabel-padding-left);
+                --whcg-host-haslabel-padding-right: var(--whcg-text-field-host-haslabel-padding-right);
+
+                --whcg-label-font-size: var(--whcg-text-field-label-font-size);
+                --whcg-label-font-weight: var(--whcg-text-field-label-font-weight);
+                --whcg-label-font-family: var(--whcg-text-field-label-font-family);
+
+                --whcg-label-color: var(--whcg-text-field-label-color);
+                --whcg-label-host-focused-color: var(--whcg-text-field-label-host-focused-color);
+                --whcg-label-host-hover-not-focused-color: var(--whcg-text-field-label-host-hover-not-focused-color);
+                --whcg-label-host__dark-color: var(--whcg-text-field-label-host__dark-color);
+
+                --whcg-label-padding-top: var(--whcg-text-field-label-padding-top);
+                --whcg-label-padding-bottom: var(--whcg-text-field-label-padding-bottom);
+                --whcg-label-padding-left: var(--whcg-text-field-label-padding-left);
+                --whcg-label-padding-right: var(--whcg-text-field-label-padding-right);
+
+                --whcg-input-field-font-family: var(--whcg-text-field-input-field-font-family);
+                --whcg-input-field-font-size: var(--whcg-text-field-input-field-font-size);
+                --whcg-input-field-font-weight: var(--whcg-text-field-input-field-font-weight);
+                --whcg-input-field-background-color: var(--whcg-text-field-input-field-background-color);
+                --whcg-input-field-host__dark-background-color: var(--whcg-text-field-input-field-host__dark-background-color);
+
+                --whcg-input-field-host__shadow-box-shadow: var(--whcg-text-field-input-field-host__shadow-box-shadow);
+                
+                --whcg-input-field-border-radius: var(--whcg-text-field-input-field-border-radius);
+                --whcg-input-field-border-style: var(--whcg-text-field-input-field-border-style);
+                --whcg-input-field-border-width: var(--whcg-text-field-input-field-border-width);
+                --whcg-input-field-border-color: var(--whcg-text-field-input-field-border-color);
+                --whcg-input-field-padding-top: var(--whcg-text-field-input-field-padding-top);
+                --whcg-input-field-padding-bottom: var(--whcg-text-field-input-field-padding-bottom);
+                --whcg-input-field-padding-left: var(--whcg-text-field-input-field-padding-left);
+                --whcg-input-field-padding-right: var(--whcg-text-field-input-field-padding-right);
+              
+                --whcg-value-color: var(--whcg-text-field-value-color);
+                --whcg-value-placeholder-color: var(--whcg-text-field-value-placeholder-color);
+                --whcg-value-host__dark-color: var(--whcg-text-field-value-host__dark-color);
+                --whcg-value-min-height: var(--whcg-text-field-value-min-height);
+                --whcg-overlay-background-color: red;
+
+                --whcg-dropdown-button-color: var(--parmaco-base-color-100pct);
+                --whcg-dropdown-button-hover-color: var(--parmaco-base-color-100pct);
+                --whcg-dropdown-input-field-color: var(--parmaco-base-color-100pct);
+
+                
+                
+             }
+
+
+            vaadin-list-box {
+                --whcg-items-slotted-vaadinitem-hover-not-disabled-background-color: var(--whcg-list-box-items-slotted-vaadinitem-hover-not-disabled-background-color);
+                --whcg-items-slotted-vaadinitem-border-radius: var(--whcg-list-box-items-slotted-vaadinitem-border-radius);
+                --whcg-items-slotted-vaadinitem-padding-right: var(--whcg-list-box-items-slotted-vaadinitem-padding-right);
+                --whcg-items-slotted-vaadinitem-padding-left: var(--whcg-list-box-items-slotted-vaadinitem-padding-left);
+                --whcg-items-slotted-vaadinitem-background-color: var(--whcg-list-box-items-slotted-vaadinitem-background-color);
+             }
+
+            vaadin-item {
+                --whcg-host-font-size: var(--whcg-item-host-font-size);
+                --whcg-host-min-height: var(--whcg-item-host-min-height);
+                --whcg-host-before-content: var(--whcg-item-host-before-content);
+                --whcg-host-before-font-family: var(--whcg-item-host-before-font-family);
+                --whcg-host-before-font-size: var(--whcg-item-host-before-font-size);
+                --whcg-host-before-color: var(--whcg-item-host-before-color);
+                --whcg-host-before-margin-top: var(--whcg-item-host-before-margin-top);
+                --whcg-host-before-margin-bottom: var(--whcg-item-host-before-margin-bottom);
+                --whcg-host-before-margin-left: var(--whcg-item-host-before-margin-left);
+                --whcg-host-before-margin-right: var(--whcg-item-host-before-margin-right);
+                --whcg-content-font-family: var(--whcg-item-content-font-family);
+                --whcg-content-font-size: var(--whcg-item-content-font-size);
+                --whcg-content-line-height: var(--whcg-item-content-line-height);
+                --whcg-content-color: var(--whcg-item-content-color);
+                --whcg-content-host-selected-color: var(--whcg-item-content-host-selected-color);
+                --whcg-content-host-disabled-font-family: var(--whcg-item-content-host-disabled-font-family);
+                --whcg-content-host-disabled-font-size: var(--whcg-item-content-host-disabled-font-size);
+                --whcg-content-host-disabled-color: var(--whcg-item-content-host-disabled-color);
+                
+            }
+
+            
+
+        </style>
+	<vaadin-dropdown-menu id="vdm" on-value-changed="valueChanged" value="{{value}}" id="vaadinlistbox" placeholder="{{placeholder}}" label="{{label}}">
+		<template>
+			<vaadin-list-box>
+				<template is="dom-repeat" items="{{objinput}}">
+					<vaadin-item value$="[[item.value]]">[[item.caption]]<span> {{suffix}}</span></vaadin-item>
+				</template>
+			</vaadin-list-box>
+		</template>
+	</vaadin-dropdown-menu>
+
+    `;
+        }
+
+        static get properties() {
+
+            return {
+
+                label: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+                },
+                value: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+                    //observer: '_valueChanged'
+                },
+                placeholder: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+                },
+                suffix: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+                },
+                kind: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+                },
+                period: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+                },
+                valueoutput: {
+                    type: String,
+                    notify: true,
+                    readOnly: false,
+    			},
+    			jsoninput: {
+                    type: String,
+                    notify: true,
+    				readOnly: false,
+    				observer: '_jsoninputChanged'
+    			},
+    			objinput: {
+                    type: Object,
+                    notify: true,
+    				readOnly: false,
+                }
+            }
+    	}
+    	
+    	valueChanged() {
+        let newValue = this.$.vdm.__data.value;
+        this.dispatchEvent(new CustomEvent('valueChanged', { bubbles: true, composed: true, detail: { value: newValue } }));
+      }
+
+
+    	
+    	_jsoninputChanged() {
+    		this.objinput = JSON.parse(this.jsoninput);
+    		// console.log('objInput');
+    		// console.log(this.objinput);
+    	}
+
+        connectedCallback() {
+    		super.connectedCallback();
+    		//this.valueoutput = this.$.vdm.__data.value;
+    		this.valueoutput = this.value;
+
+            let event = new CustomEvent('childrenattached', {bubbles: true, composed: true});
+            // console.log('dispatchingEvent!!');
+    		this.dispatchEvent(event);
+    		// console.log('this.$.vaadinlistbox');
+    		// console.log(this.$.vaadinlistbox.shadowRoot);
+    		
+    		// this.$.vaadinlistbox.addEventListener('changed', console.log);
+        }
+
+    }
+
+    window.customElements.define('whcg-select', WhcgSelect);
+
+    const flex = html`<style>
+    .flex {
+      display: flex;
+    }
+
+    .flex-row {  
+      flex-direction: row;
+    }
+
+    .flex-column {  
+      flex-direction: column;
+    }
+
+    ::slotted(.flex) {
+      display: flex;
+    }
+
+    ::slotted(.flex-row) {  
+      flex-direction: row;
+    }
+
+    ::slotted(.flex-column) {  
+      flex-direction: column;
+    }
+
+    :host(.flex) {
+      display: flex;
+    }
+
+    :host(.flex-row) {  
+      flex-direction: row;
+    }
+
+    :host(.flex-column) {  
+      flex-direction: column;
+    }
+  </style>`;
+
+    /**
+     * @license
+     * Copyright (c) 2018 The Polymer Project Authors. All rights reserved.
+     * This code may only be used under the BSD style license found at
+     * http://polymer.github.io/LICENSE.txt
+     * The complete set of authors may be found at
+     * http://polymer.github.io/AUTHORS.txt
+     * The complete set of contributors may be found at
+     * http://polymer.github.io/CONTRIBUTORS.txt
+     * Code distributed by Google as part of the polymer project is also
+     * subject to an additional IP rights grant found at
+     * http://polymer.github.io/PATENTS.txt
+     */
+    // On IE11, classList.toggle doesn't accept a second argument.
+    // Since this is so minor, we just polyfill it.
+    if (window.navigator.userAgent.match('Trident')) {
+        DOMTokenList.prototype.toggle = function (token, force) {
+            if (force === undefined || force) {
+                this.add(token);
+            }
+            else {
+                this.remove(token);
+            }
+            return force === undefined ? true : force;
+        };
+    }
+    /**
+     * Stores the ClassInfo object applied to a given AttributePart.
+     * Used to unset existing values when a new ClassInfo object is applied.
+     */
+    const classMapCache = new WeakMap();
+    /**
+     * Stores AttributeParts that have had static classes applied (e.g. `foo` in
+     * class="foo ${classMap()}"). Static classes are applied only the first time
+     * the directive is run on a part.
+     */
+    // Note, could be a WeakSet, but prefer not requiring this polyfill.
+    const classMapStatics = new WeakMap();
+    /**
+     * A directive that applies CSS classes. This must be used in the `class`
+     * attribute and must be the only part used in the attribute. It takes each
+     * property in the `classInfo` argument and adds the property name to the
+     * element's `classList` if the property value is truthy; if the property value
+     * is falsey, the property name is removed from the element's `classList`. For
+     * example
+     * `{foo: bar}` applies the class `foo` if the value of `bar` is truthy.
+     * @param classInfo {ClassInfo}
+     */
+    const classMap = (classInfo) => directive((part) => {
+        if (!(part instanceof AttributePart) || (part instanceof PropertyPart) ||
+            part.committer.name !== 'class' || part.committer.parts.length > 1) {
+            throw new Error('The `classMap` directive must be used in the `class` attribute ' +
+                'and must be the only part in the attribute.');
+        }
+        // handle static classes
+        if (!classMapStatics.has(part)) {
+            part.committer.element.className = part.committer.strings.join(' ');
+            classMapStatics.set(part, true);
+        }
+        // remove old classes that no longer apply
+        const oldInfo = classMapCache.get(part);
+        for (const name in oldInfo) {
+            if (!(name in classInfo)) {
+                part.committer.element.classList.remove(name);
+            }
+        }
+        // add new classes
+        for (const name in classInfo) {
+            if (!oldInfo || (oldInfo[name] !== classInfo[name])) {
+                // We explicitly want a loose truthy check here because
+                // it seems more convenient that '' and 0 are skipped.
+                part.committer.element.classList.toggle(name, Boolean(classInfo[name]));
+            }
+        }
+        classMapCache.set(part, classInfo);
+    });
+
+    class WhcgNumberFieldBox extends LitElement {
+        
+        render() {
+            return html`
+        ${flex}
+        <div id="flexbox" class="flex ${classMap({'flex-column': this.column, 'flex-row': !this.column})}">
+            <slot></slot>
+        </div>  
+    `
+        };
+
+        static get properties() {
+
+            return {
+                column: {
+                    type: Boolean,
+                    reflect: true,
+                },
+                name: {
+                    type: String,
+                    reflect: true,
+                }
+            }
+        };
+
+
+
+    // //TODO: ADD MULTIPLY ATTRIBUTE
+
+    //     onSlotchange({target}) {
+    //         let assignednodes = target.assignedNodes();
+            
+    //         let whcgNumberFieldArray = assignednodes.filter(element => {
+    //             return element.nodeName === "WHCG-NUMBER-FIELD";
+    //         });
+            
+    //         let allElementHasData = true;
+
+    //         whcgNumberFieldArray.forEach(whcgNumberField => {
+    //             if (whcgNumberField.__data === undefined) {
+    //                 allElementHasData = false;
+    //             }
+    //         }); 
+
+    //         if (allElementHasData) {
+    //             let elementDataArray = whcgNumberFieldArray.map(element => element.__data);
+    //             let multipliedValue = this.arrayMultiplier(elementDataArray);
+    //             this.dispatchEvent(new CustomEvent('valueChanged', { bubbles: true, composed: true, detail: { value: multipliedValue } }))
+    //             // this.jsonBuilder(elementDataArray);
+    //         }        
+    //     };
+
+        
+
+    //     //Multiplies all values in array
+    //     arrayMultiplier(arr) {
+    //         return arr.reduce((acc, cur) => {
+    //             return acc * Number(cur.value);
+    //         }, 1);
+    //     };
+
+    }
+
+    window.customElements.define('whcg-number-field-box', WhcgNumberFieldBox);
+
+
+
+
+
+
+
+
+
+    // _valuearrayChanged() {
+    //     let valuearrayobj = JSON.parse(this.valuearray);
+
+    //     let product = valuearrayobj.reduce((acc, item) => {
+    //         return acc * Number(item);
+    //     }, 1);
+
+    //     this.value = product;
+    // }
+
+        // jsonBuilderSingleYear(childrenArr) {
+        //     let whcgObj = {};
+        //     whcgObj.result = [];
+
+        //     function dataFactory(period) {
+        //         let dataobj = {};
+
+        //         let dataset = {};
+
+        //         // console.log(period);
+
+        //         for (let i = 0; i < period; i++) {
+        //             dataset[i] = 0;
+        //         }
+        //         dataset[this.key] = Number(this.value);
+               
+        //         Object.assign(dataobj, {
+        //             [this.datapackage]: {
+        //                 label: this.label,
+        //                 dataset: dataset
+        //             }
+        //         });
+
+        //         return dataobj;
+        //     }
+
+        //     function resultElementObjFactory() {
+        //         return {
+        //             object: this.name,
+        //             data: dataFactory.call(this, Number(this.period))
+        //         }
+        //     }
+
+        //     whcgObj.result.push(resultElementObjFactory.call(this));
+
+        //     this.whcgjsonoutput = JSON.stringify(whcgObj);
+        // };
+
+
+
+
+
+
+
+
+        //TODO: Takes alot time
+
+        // connectedCallback() {
+        //     super.connectedCallback();
+
+        //     if (this.mode !== 'none') {
+        //         this._collectChildren();
+        //         this.addEventListener('childrenattached', e => {
+        //         this._collectChildren();
+        //         e.stopPropagation();
+        //         });
+        //     }
+
+        // };
+
+
+
+    //     disconnectedCallback() {
+    // //TODO: remove events
+    //     }
+
+
+
+    // if (this.mode === 'singlefield') {
+    //     this.jsonBuilderSingleYear(childrenArr);
+    // } else {
+       
+    // }
+
+
+
+    // jsonBuilder(childrenArr) {
+    //     let whcgObj = {};
+    //     whcgObj.result = [];
+
+    //     function dataFactory(item) {
+    //         let dataobj = {};
+    //         for (let i = 0; i < Number(item); i++) {
+    //             Object.assign(dataobj, {
+    //                 [childrenArr[i].kind]: {
+    //                     label: childrenArr[i].label,
+    //                     dataset: {
+    //                         [childrenArr[i].period]: Number(childrenArr[i].value)
+    //                     }
+    //                 }
+    //             });
+    //         }
+
+    //         Object.assign(dataobj, {
+    //             [this.datapackage]: {
+    //                 label: this.datapackage,
+    //                 dataset: {
+    //                     [this.period]: Number(this.outputValue)
+    //                 }
+    //             }
+    //         });
+
+    //         return dataobj;
+    //     }
+
+    //     function resultElementObjFactory() {
+    //         return {
+    //             object: this.name,
+    //             data: dataFactory.call(this, childrenArr.length)
+    //         }
+    //     }
+
+    //     whcgObj.result.push(resultElementObjFactory.call(this));
+    //     this.whcgjsonoutput = JSON.stringify(whcgObj);
+    // };
 
     class XOne extends LitElement {
 
         static get properties() {
             return {
                 storeHolder: {type: Object},
-                first: {type: Number},
-                second: {type: Number},
+                discountrate: {type: String},
+                inflationrate: {type: String},
+                startyear: {type: String},
+                numberofyears: {type: String}
             };
         }
 
         render() {
             return html`
+        ${grid}
         <style>
-            .bg {
-                background-color: lightcoral;
-                /* width: 85vw; */
-                height: 85vh;
-                /* display: flex; */
-                /* align-items: center;
-                justify-content: center; */
-            }
-           
         </style>
-        <div class="bg">
-            <vaadin-text-field id="first" label="FIRST" @change=${this.firstChanged.bind(this)} value=${this.first}></vaadin-text-field>
-            <vaadin-text-field id="second" label="SECOND" @change=${this.secondChanged.bind(this)} value=${this.second}></vaadin-text-field>
-            <vaadin-text-field id="sum" label="SUM" value=${this.adder([this.first,this.second])}></vaadin-text-field>
-        </div>
-        
+        <div class="grid-12">
+            <whcg-section-text-input class="col1span12">
+                <span slot="title">KALKYLLÄNGD</span>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-number-field-box slot="input" column name="">
+                    <whcg-select label="Kalkyllängd" suffix="år" @valueChanged=${this.numberofyearsChanged.bind(this)} value=${this.numberofyears} placeholder="...antal år" valueoutput="{{period}}" jsoninput='[{"value": 1, "caption": "1"}, {"value": 2, "caption": "2"}, {"value": 3, "caption": "2"}, {"value": 4, "caption": "4"}, {"value": 5, "caption": "5"}, {"value": 6, "caption": "6"}, {"value": 7, "caption": "7"}, {"value": 8, "caption": "8"}, {"value": 9, "caption": "9"}, {"value": 10, "caption": "10"}]'></whcg-select>
+                    <whcg-select label="Startår" value=${this.startyear} placeholder="...år" @valueChanged=${this.startyearChanged.bind(this)} jsoninput='[{"value": 2018, "caption": "2018"}, {"value": 2019, "caption": "2019"}, {"value": 2020, "caption": "2020"}, {"value": 2021, "caption": "2021"}, {"value": 2022, "caption": "2022"}, {"value": 2023, "caption": "2023"}, {"value": 2024, "caption": "2024"}, {"value": 2025, "caption": "2025"}, {"value": 2026, "caption": "2026"}, {"value": 2027, "caption": "2027"}]'></whcg-select>
+                </whcg-number-field-box>
+            </whcg-section-text-input>
 
-        `
-        }
-        
-        firstChanged(e) {
-            this.storeHolder.store.dispatch(action.threevalue(Number(e.target.__data.value)));
+            <whcg-section-text-input class="col1span12">
+                <span slot="title">INFLATION</span>
+                <whcg-number-field-box slot="input" name="Inflation">
+                    <whcg-select label="Inflation" suffix="%" @valueChanged=${this.inflationrateChanged.bind(this)} value=${this.inflationrate} placeholder="...antal procent" jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
+                </whcg-number-field-box>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+            </whcg-section-text-input>
+
+
+            <whcg-section-text-input class="col1span12">
+                <span slot="title">KALKYLRÄNTA</span>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-number-field-box slot="input" name="Kalkylränta">
+                    <whcg-select label="Kalkylränta" suffix="%" @valueChanged=${this.discountrateChanged.bind(this)} value=${this.discountrate} placeholder="...antal procent" jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
+                </whcg-number-field-box>
+            </whcg-section-text-input>
+        </div>  `
         }
 
-        secondChanged(e) {
-            this.storeHolder.store.dispatch(action.fourvalue(Number(e.target.__data.value)));
+        discountrateChanged(e) {
+            this.storeHolder.store.dispatch(action.discountratevalue(e.detail.value));
+        }
+
+        inflationrateChanged(e) {
+            this.storeHolder.store.dispatch(action.inflationratevalue(e.detail.value));
+        }
+
+        numberofyearsChanged(e) {
+            this.storeHolder.store.dispatch(action.numberofyearsvalue(e.detail.value));
+        }
+
+        startyearChanged(e) {
+            this.storeHolder.store.dispatch(action.startyearvalue(e.detail.value));
         }
 
         adder(values) {
@@ -27859,64 +31914,816 @@ var MyModule = (function (exports) {
         }
 
         _stateChanged(state) {
-            this.first = state.three;
-            this.second = state.four;
+            this.discountrate = state.discountrate;
+            this.inflationrate = state.inflationrate;
+            this.startyear = state.startyear;
+            this.numberofyears = state.numberofyears;
         }
     }
 
     customElements.define('x-one', XOne);
+
+    class WhcgSectionTextlongInputChart extends PolymerElement {
+      static get template() {
+        return html$1`
+    <style include = "style-element-grid">
+
+        .section {
+            padding-top: 130px;
+        }
+
+        .headline {
+            padding-top: 32px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-xl);
+            color: var(--parmaco-base-color-100pct);   
+        }
+       
+        .content {
+            grid-template-rows: auto 350px;
+        }
+
+        .content-text{
+            padding-top: 33px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-s);
+            font-weight: var(--parmaco-font-weight-normal);
+            color: var(--parmaco-base-color-100pct);
+        }
+
+        .content-inputbox {
+        }
+
+        .content-chart {
+            padding-top: 33px;
+        }
+
+    </style>
+
+    <div class="grid-12 section">
+        <div class="col2span2 headline">
+            <slot name="title"></slot>
+        </div>
+
+        <div class="col4span8 grid-8 content">
+            <div class="col1span8 content-text">
+                <slot name="text"></slot>
+            </div>
+            <div class="col1span3 content-inputbox">
+                <slot name="input"></slot>
+            </div>
+            <div class="col4span5 content-chart">
+                <slot name="chart"></slot>
+            </div>
+        </div>
+    </div>
+  `;
+      }
+    }
+
+    window.customElements.define('whcg-section-textlong-input-chart', WhcgSectionTextlongInputChart);
+
+    class WhcgSectionChartTextInputlong extends PolymerElement {
+      static get template() {
+        return html$1`
+    <style include = "style-element-grid">
+      
+        .section {
+            padding-top: 130px;
+        }
+
+        .headline {
+            padding-top: 32px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-xl);
+            color: var(--parmaco-base-color-100pct); 
+        }
+
+        .content {
+            grid-template-rows: 350px auto;
+        }
+
+        .content-chart {
+            padding-top: 33px;
+        }
+
+        .content-text{
+            padding-top: 33px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-s);
+            font-weight: var(--parmaco-font-weight-normal);
+            color: var(--parmaco-base-color-100pct);
+        }
+
+        .content-inputbox {
+            padding-top: 33px;
+        }
+
+    </style>
+
+
+
+    <div class="col1span12 grid-12 section">
+        <div class="col2span2 headline">
+            <slot name="title"></slot>
+        </div>
+        <div class="col4span8 grid-8 content">
+            <div class="col1span5 content-chart">
+                <slot name="chart"></slot>
+            </div>
+            <div class="col6span3 content-text">
+                <slot name="text"></slot>
+            </div>
+            <div class="col1span8 content-inputbox">
+                <slot name="input"></slot>
+            </div>
+        </div>
+    </div>
+  `;
+      }
+    }
+
+    window.customElements.define('whcg-section-chart-text-inputlong', WhcgSectionChartTextInputlong);
+
+    class WhcgBoxContainer extends LitElement {
+      
+      static get properties() {
+        return {
+          column: {
+            type: Boolean,
+            reflect: true
+          },
+          name: {
+            type: String,
+            reflect: true
+          }
+        };
+      }
+
+      render() {
+        return html`
+    ${flex}
+    <style>
+      .headline {
+        color: var(--whcg-box-container-headline-color);
+        font-family: var(--whcg-box-container-headline-font-family);
+        font-size: var(--whcg-box-container-headline-font-size);
+        font-weight: var(--whcg-box-container-headline-font-weight);
+      }
+
+      ::slotted(*) {
+        padding-right: var(--whcg-box-container-slotted-padding-right);
+        padding-top: var(--whcg-box-container-slotted-padding-top);
+      }
+    </style>
+    <span class="headline">${this.name}</span>
+    <div id="box" class="flex ${classMap({'flex-column': this.column, 'flex-row': !this.column})}">
+      <slot id="slotid"></slot>
+    </div>
+  `;
+      }
+    }
+
+    window.customElements.define('whcg-box-container', WhcgBoxContainer);
+
+    /**
+     * `WhcgChart`
+     * 
+     * @customElement
+     * @polymer
+     */
+
+    class WhcgChart extends PolymerElement {
+        static get template() {
+            return html$1`
+        <style>
+        .thediv {
+            /* --_lumo-grid-border-color: var(--whcg-shade-20pct);
+            --_lumo-grid-secondary-border-color: var(--whcg-shade-10pct);
+            --_lumo-grid-border-width: 1px;
+            --_lumo-grid-selected-row-color: var(--parmaco-primary-color-10pct); */
+            font-size: var(--parmaco-font-size-m);
+            border: 1px solid var(--whcg-shade-20pct);
+            border-radius: 5px 5px 4px 4px;
+            background-color: var(--whcg-shade-10pct);
+        }
+
+        </style>
+    <div class="thediv">
+        <canvas id="myChart" width$="{{width}}" height$="{{height}}"></canvas>
+    </div>
+        `;
+        }
+        static get properties() {
+            return {
+                type: {
+                    type: String,
+                    notify: false,
+                    readOnly: false,
+                },
+        
+                chartjson: {
+                    type: String,
+                    notify: false,
+                    readOnly: false,
+                    observer: '_chartjsonChanged'
+                },
+                width: {
+                    type: String,
+                    notify: false,
+                    readOnly: false,
+                    value: '400px' 
+                },
+                height: {
+                    type: String,
+                    notify: false,
+                    readOnly: false,
+                    value: '400px' 
+                },
+                legendposition: {
+                    type: String,
+                    notify: false,
+                    readOnly: false,  
+                    value: 'right'
+                },
+
+                legendfontsize: {
+                    type: Number,
+                    notify: false,
+                    readOnly: false,
+                    value: 12  
+                },
+
+                legendfontfamily: {
+                    type: String,
+                    notify: false,
+                    readOnly: false,
+                    value: 'Arial' 
+                },
+
+                stacked: {
+                    type: Boolean,
+                    notify: false,
+                    readOnly: false,
+                    value: false 
+                },
+            }
+        }
+
+        _chartjsonChanged() {
+            // console.log("chartJsonChanged");
+            
+            this._chartJs(JSON.parse(this.chartjson));
+            // setInterval(function() {
+            //     console.log(this.thechart);
+            // }, 5000);
+        }
+
+        _chartJs(data) {
+            // console.log('data');
+            // console.log(data);
+            var ctx = this.$.myChart;
+            // console.log("ctx");
+            // console.log(ctx);
+            
+            //Chart.defaults.global.defaultFontColor = 'white';
+            //Chart.defaults.global.elements.rectangle.backgroundColor = 'hsla(24, 70%, 50%, 1)';
+            //Chart.defaults.global.elements.rectangle.borderColor = '#FFFFFF';
+            //Chart.defaults.global.elements.rectangle.borderWidth = 1;
+
+
+            //ctx.style.backgroundColor = "hsla(214, 50%, 22%, 0.1)";
+
+            // console.log('this');
+            // console.log(this);
+
+            if (this.thechart != null) {
+                this.thechart.destroy();
+            }
+
+            this.thechart = new Chart(ctx, {
+                type: this.type,
+                data: data,
+
+                options: {
+                    legend: {
+                        position: this.legendposition,
+                        labels: {
+                            fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                            fontColor: '#FFFFFF',
+                            fontSize: 14,
+                            boxWidth: 14
+                        }
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                                fontColor: '#FFFFFF',
+                                fontSize: 14
+                            },
+                            gridLines: {
+                                // display: true,
+                                // color: '#FFFFFF'
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                                fontColor: '#FFFFFF',
+                                fontSize: 14
+                            },
+                            gridLines: {
+                                // display: true,
+                                // color: '#FFFFFF'
+                            }
+                            // scaleLabel: { fontColor: '#6E6E6E', fontSize:16 }
+                        }]
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    // title: {
+                    //     display: true,
+                    //     text: 'Title',
+                    //     fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                    //     fontColor: '#FFFFFF',
+                    //     fontSize: 14
+                    // },
+                    layout: {
+                        padding: {
+                            left: 15,
+                            right: 15,
+                            top: 50,
+                            bottom: 20
+                        }
+                    }
+                    //  label: { fontSize:18 }
+                    
+                    // scales: {
+                    //     xAxes: [{
+                    //         stacked: this.stacked
+                    //     }],
+                    //     yAxes: [{
+                    //         stacked: this.stacked
+                    //     }
+                    //     // {
+                    //     //     ticks: {
+                    //     //         beginAtZero: true
+                    //     //     }
+                    //     // }
+                    // ]
+                    // }
+                }
+            });
+
+            // console.log("myChart");
+            // console.log(this.thechart);
+            // console.log('this');
+            // console.log(this);
+
+            // var that = this;
+
+            
+            // // 
+            // // this.thechart.update();
+
+            // setTimeout(function () {
+            //     // console.log('that');
+            //     // console.log(that);
+            //     // console.log(that.thechart);
+            //     that.thechart = new Chart(ctx, {
+            //         type: that.type,
+            //         data: data,
+
+            //         options: {
+            //             legend: {
+            //                 position: that.legendposition,
+            //                 labels: {
+            //                     fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+            //                     fontColor: '#FFFFFF',
+            //                     fontSize: 14,
+            //                     boxWidth: 14
+            //                 }
+            //             },
+            //             scales: {
+            //                 yAxes: [{
+            //                     ticks: {
+            //                         beginAtZero: true
+            //                     }
+            //                 }],
+            //                 yAxes: [{
+            //                     ticks: {
+            //                         fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+            //                         fontColor: '#FFFFFF',
+            //                         fontSize: 14
+            //                     },
+            //                     gridLines: {
+            //                         // display: true,
+            //                         // color: '#FFFFFF'
+            //                     }
+            //                 }],
+            //                 xAxes: [{
+            //                     ticks: {
+            //                         fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+            //                         fontColor: '#FFFFFF',
+            //                         fontSize: 14
+            //                     },
+            //                     gridLines: {
+            //                         // display: true,
+            //                         // color: '#FFFFFF'
+            //                     }
+            //                     // scaleLabel: { fontColor: '#6E6E6E', fontSize:16 }
+            //                 }]
+            //             },
+            //             // responsive: true,
+            //             // maintainAspectRatio: false,
+            //             // title: {
+            //             //     display: true,
+            //             //     text: 'Title',
+            //             //     fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+            //             //     fontColor: '#FFFFFF',
+            //             //     fontSize: 14
+            //             // },
+            //             layout: {
+            //                 padding: {
+            //                     left: 15,
+            //                     right: 15,
+            //                     top: 50,
+            //                     bottom: 20
+            //                 }
+            //             }
+            //             //  label: { fontSize:18 }
+
+            //             // scales: {
+            //             //     xAxes: [{
+            //             //         stacked: this.stacked
+            //             //     }],
+            //             //     yAxes: [{
+            //             //         stacked: this.stacked
+            //             //     }
+            //             //     // {
+            //             //     //     ticks: {
+            //             //     //         beginAtZero: true
+            //             //     //     }
+            //             //     // }
+            //             // ]
+            //             // }
+            //         }
+            //     });
+            // }, 1000);
+
+
+
+        }
+
+        // constructor() {
+        //     super();
+
+        // }
+
+        // connectedCallback() {
+        //     super.connectedCallback();
+        //    // this._chartJs(JSON.parse(this.chartjson));
+
+           
+        // }
+    }
+
+    window.customElements.define('whcg-chart', WhcgChart);
+
+    const $_documentContainer$r = document.createElement('template');
+
+    $_documentContainer$r.innerHTML = `<dom-module id="whcg-number-field-styles" theme-for="vaadin-text-field">
+  <template>
+    <style>
+
+    :host::before {
+      font-size: var(--whcg-host-before-font-size);
+      height: var(--whcg-host-before-height);
+      box-sizing: border-box;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    :host {        
+      font-size: var(--whcg-host-font-size);
+      padding-top: var(--whcg-host-padding-top);
+      padding-bottom: var(--whcg-host-padding-bottom);
+      padding-left: var(--whcg-host-padding-left);
+      padding-right: var(--whcg-host-padding-right);
+      box-sizing: border-box;
+    }
+
+    :host([has-label]) {
+      padding-top: var(--whcg-host-haslabel-padding-top);
+      padding-bottom: var(--whcg-host-haslabel-padding-bottom);
+      padding-left: var(--whcg-host-haslabel-padding-left);
+      padding-right: var(--whcg-host-haslabel-padding-right);
+    }
+
+    [part="label"] {
+      font-weight: var(--whcg-label-font-weight);
+      font-size: var(--whcg-label-font-size);
+      font-family: var(--whcg-label-font-family);
+      line-height: 1;
+      color: var(--whcg-label-color);
+      align-self: flex-start;
+      padding-top: var(--whcg-label-padding-top);
+      padding-bottom: var(--whcg-label-padding-bottom);
+      padding-right: var(--whcg-label-padding-right);
+      padding-left: var(--whcg-label-padding-left);
+
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      position: relative;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    :host(.dark) [part="label"] {
+      color: var(--whcg-label-host__dark-color);
+    }
+
+    :host([focused]:not([readonly])) [part="label"] {
+      color: var(--whcg-label-host-focused-not-readonly-color);
+    }
+
+    :host(:hover:not([focused])) [part="label"] {
+      color: var(--whcg-label-host-hover-not-focused-color);
+    }
+
+    :host([focused]) [part="label"] {
+      color: var(--whcg-label-host-focused-color);
+    }
+
+    [part="input-field"] {
+      font-size: var(--whcg-input-field-font-size);
+      font-weight: var(--whcg-input-field-font-weight);
+      font-family: var(--whcg-input-field-font-family);
+      line-height: 1;
+      
+      background-color: var(--whcg-input-field-background-color);
+      border-radius: var(--whcg-input-field-border-radius);
+      border-style: var(--whcg-input-field-border-style);
+      border-width: var(--whcg-input-field-border-width);
+      border-color: var(--whcg-input-field-border-color);
+      padding-top: var(--whcg-input-field-padding-top);
+      padding-bottom: var(--whcg-input-field-padding-bottom);
+      padding-left: var(--whcg-input-field-padding-left);
+      padding-right: var(--whcg-input-field-padding-right);
+
+      position: relative;
+      cursor: text;
+      box-sizing: border-box;
+    }
+
+    :host(.dark) [part="input-field"] {
+      background-color: var(--whcg-input-field-host__dark-background-color);
+    }
+    :host(.shadow) [part="input-field"] {
+      box-shadow: var(--whcg-input-field-host__shadow-box-shadow);
+    }
+
+
+    [part="value"] {
+      cursor: inherit;
+      color: var(--whcg-value-color);
+      min-height: var(--whcg-value-min-height);
+      padding: 0 0.25em;
+    }
+
+    :host(.dark) [part="value"] {
+      color: var(--whcg-value-host__dark-color);
+    }
+
+
+    [part="value"]::placeholder {
+      color: var(--whcg-value-placeholder-color);;
+    }
+
+
+
+  </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$r.content);
+
+    class WhcgNumberField extends LitElement {
+      render() {
+            return html `
+        <style>
+        vaadin-text-field {
+                --whcg-host-before-font-size: var(--whcg-text-field-host-before-font-size);
+                --whcg-host-before-height: var(--whcg-text-field-host-before-height);
+
+                --whcg-host-padding-top: var(--whcg-text-field-host-padding-top);
+                --whcg-host-padding-bottom: var(--whcg-text-field-host-padding-bottom);
+                --whcg-host-padding-left: var(--whcg-text-field-host-padding-left);
+                --whcg-host-padding-right: var(--whcg-text-field-host-padding-right);
+                --whcg-host-haslabel-padding-top: var(--whcg-text-field-host-haslabel-padding-top);
+                --whcg-host-haslabel-padding-bottom: var(--whcg-text-field-host-haslabel-padding-bottom);
+                --whcg-host-haslabel-padding-left: var(--whcg-text-field-host-haslabel-padding-left);
+                --whcg-host-haslabel-padding-right: var(--whcg-text-field-host-haslabel-padding-right);
+
+                --whcg-label-font-size: var(--whcg-text-field-label-font-size);
+                --whcg-label-font-weight: var(--whcg-text-field-label-font-weight);
+                --whcg-label-font-family: var(--whcg-text-field-label-font-family);
+
+                --whcg-label-color: var(--whcg-text-field-label-color);
+                --whcg-label-host-focused-color: var(--whcg-text-field-label-host-focused-color);
+                --whcg-label-host-hover-not-focused-color: var(--whcg-text-field-label-host-hover-not-focused-color);
+                --whcg-label-host__dark-color: var(--whcg-text-field-label-host__dark-color);
+
+                --whcg-label-padding-top: var(--whcg-text-field-label-padding-top);
+                --whcg-label-padding-bottom: var(--whcg-text-field-label-padding-bottom);
+                --whcg-label-padding-left: var(--whcg-text-field-label-padding-left);
+                --whcg-label-padding-right: var(--whcg-text-field-label-padding-right);
+
+                --whcg-input-field-font-family: var(--whcg-text-field-input-field-font-family);
+                --whcg-input-field-font-size: var(--whcg-text-field-input-field-font-size);
+                --whcg-input-field-font-weight: var(--whcg-text-field-input-field-font-weight);
+                --whcg-input-field-background-color: var(--whcg-text-field-input-field-background-color);
+                --whcg-input-field-host__dark-background-color: var(--whcg-text-field-input-field-host__dark-background-color);
+
+                --whcg-input-field-host__shadow-box-shadow: var(--whcg-text-field-input-field-host__shadow-box-shadow);
+                
+                --whcg-input-field-border-radius: var(--whcg-text-field-input-field-border-radius);
+                --whcg-input-field-border-style: var(--whcg-text-field-input-field-border-style);
+                --whcg-input-field-border-width: var(--whcg-text-field-input-field-border-width);
+                --whcg-input-field-border-color: var(--whcg-text-field-input-field-border-color);
+                --whcg-input-field-padding-top: var(--whcg-text-field-input-field-padding-top);
+                --whcg-input-field-padding-bottom: var(--whcg-text-field-input-field-padding-bottom);
+                --whcg-input-field-padding-left: var(--whcg-text-field-input-field-padding-left);
+                --whcg-input-field-padding-right: var(--whcg-text-field-input-field-padding-right);
+              
+                --whcg-value-color: var(--whcg-text-field-value-color);
+                --whcg-value-placeholder-color: var(--whcg-text-field-value-placeholder-color);
+                --whcg-value-host__dark-color: var(--whcg-text-field-value-host__dark-color);
+                --whcg-value-min-height: var(--whcg-text-field-value-min-height);  
+
+             }
+            
+        </style>
+      
+    <vaadin-text-field id="vtf" @change=${this.valueChanged.bind(this)} value=${this.value} label=${this.label} placeholder=${this.placeholder} prevent-invalid-input pattern="[0-9]*" >
+    </vaadin-text-field>
+    `;
+        }
+
+        static get properties() {
+          return {
+              label: {type: String, reflect: true},
+              value: {type: String, reflect: true},
+              placeholder: {type: String, reflect: true},
+              suffix: {type: String, reflect: true},
+              kind: {type: String, reflect: true},
+              period: {type: String, reflect: true},
+          };
+        }
+
+
+        valueChanged(e) {
+          let newValue = this.shadowRoot.querySelector('#vtf').__data.value;
+          this.dispatchEvent(new CustomEvent('valueChanged', { bubbles: true, composed: true, detail: { value: newValue } }));
+        }
+
+        connectedCallback() {
+            super.connectedCallback();
+            let event = new CustomEvent('childrenattached', {bubbles: true, composed: true});
+            this.dispatchEvent(event);
+
+        }
+    }
+
+    window.customElements.define('whcg-number-field', WhcgNumberField);
 
     class XTwo extends LitElement {
 
         static get properties() {
             return {
                 storeHolder: {type: Object},
-                first: {type: Number},
-                second: {type: Number},
+                initialsqm: {type: String},
+                initialEstablishCostPerSqmOwn: {type: String},
+                kwhOwn: {type: String},
+                krPerkwhOwn: {type: String}
+
+                // inflationrate: {type: String},
+                // startyear: {type: String},
+                // numberofyears: {type: String}
             };
         }
 
         render() {
-            console.log('new render');
-            console.log();
             return html`
+        ${grid}
         <style>
-            .bg {
-                background-color: lavender;
-                width: 80vw;
-                height: 90vh;
-                /* display: flex; */
-                /* align-items: center;
-                justify-content: center; */
-            }
-           
         </style>
-        <div class="bg">
-            <vaadin-text-field id="first" label="FIRST" @change=${this.firstChanged.bind(this)} value=${this.first}></vaadin-text-field>
-            <vaadin-text-field id="second" label="SECOND" @change=${this.secondChanged.bind(this)} value=${this.second}></vaadin-text-field>
-            <vaadin-text-field id="sum" label="SUM" value=${this.adder([this.first,this.second])}></vaadin-text-field>
-        </div>
-        `
-        }
-        
-        firstChanged(e) {
-            this.storeHolder.store.dispatch(action.fivevalue(Number(e.target.__data.value)));
+        <div class="grid-12">
+            <whcg-section-text-input class="col1span12">
+                <span slot="title">INITIAL YTSTORLEK</span>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-number-field-box slot="input" column name="">
+                    <whcg-number-field label="Antal kvm" @valueChanged=${this.initialsqmChanged.bind(this)} value=${this.initialsqm} suffix="kvm" placeholder="...antal"></whcg-number-field>
+                </whcg-number-field-box>
+            </whcg-section-text-input>
+
+
+            <whcg-section-textlong-input-chart class="col1span12">
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <span slot="title">INITIAL ETABLERINGSKOSTNAD</span>
+                <whcg-number-field-box slot="input" name="Inflation">
+                    <whcg-number-field label="Etableringskostnad per kvm" @valueChanged=${this.initialEstablishCostPerSqmOwnChanged.bind(this)} value=${this.initialEstablishCostPerSqmOwn} suffix="kr" placeholder="...antal kr"></whcg-number-field>
+                </whcg-number-field-box>
+                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsInitialEstablishCostOwn}}"></whcg-chart>
+            </whcg-section-textlong-input-chart>
+
+
+            <whcg-section-textlong-input-chart class="col1span12">
+                <span slot="title">VÄRMEKOSTNADER</span>
+                <span slot="text">Selectedpage sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-number-field-box slot="input" column name="">
+                    <whcg-number-field label="Antal kWh/kvm/år" @valueChanged=${this.kwhOwnChanged.bind(this)} value=${this.kwhOwn} placeholder="...antal" kind="amount" suffix="kWh"></whcg-number-field>
+                    <whcg-number-field label="Kostnad per kWh" @valueChanged=${this.krPerKwhOwnChanged.bind(this)} value=${this.krPerKwhOwn} placeholder="... antal" kind="price" suffix="kr"></whcg-number-field>
+                </whcg-number-field-box>
+                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+                    chartjson="{{chartJsCompoundedHeatCostsOwnJson}}">
+                </whcg-chart> 
+            </whcg-section-textlong-input-chart>
+
+
+            <whcg-section-chart-text-inputlong class="col1span12">
+                <span slot="title">PLANNERAT UNDERHÅLL</span>
+                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumMaintenanceAllJson}}">
+                </whcg-chart>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-box-container slot="input" name="Underhållsinsatser">
+                    <whcg-number-field-box column name="Underhållsinsats 1">
+                        <whcg-number-field label="År" value="3" placeholder="...antal" valueoutput="{{maint1yearOwn}}"></whcg-number-field>
+                        <whcg-number-field label="Kostnad" value="700" suffix="kr" placeholder="...antal" valueoutput="{{maint1costOwn}}"></whcg-number-field>
+                    </whcg-number-field-box>
+                    <whcg-number-field-box column name="Underhållsinsats 2">
+                        <whcg-number-field label="År" value="5" placeholder="...antal" valueoutput="{{maint2yearOwn}}"></whcg-number-field>
+                        <whcg-number-field label="Kostnad" value="340" suffix="kr" placeholder="...antal" valueoutput="{{maint2costOwn}}"></whcg-number-field>
+                    </whcg-number-field-box>
+                    <whcg-number-field-box column name="Underhållsinsats 3">
+                        <whcg-number-field label="År" value="2" placeholder="...antal" valueoutput="{{maint3yearOwn}}"></whcg-number-field>
+                        <whcg-number-field label="Kostnad" value="249" suffix="kr" placeholder="...antal" valueoutput="{{maint3costOwn}}"></whcg-number-field>
+                    </whcg-number-field-box>
+                    <whcg-number-field-box column name="Underhållsinsats 4">
+                        <whcg-number-field label="År" value="5" placeholder="...antal" valueoutput="{{maint4yearOwn}}"></whcg-number-field>
+                        <whcg-number-field label="Kostnad" value="340" suffix="kr" placeholder="...antal" valueoutput="{{maint4costOwn}}"></whcg-number-field>
+                    </whcg-number-field-box>
+                </whcg-box-container>
+            </whcg-section-chart-text-inputlong>
+
+
+
+        </div>  `
         }
 
-        secondChanged(e) {
-            this.storeHolder.store.dispatch(action.sixvalue(Number(e.target.__data.value)));
-        }
 
         adder(values) {
             return values.reduce((acc, value) => acc+value, 0);
         }
 
-        _stateChanged(state) {
-            this.first = state.five;
-            this.second = state.six;
+        valueChanged(e) {
+            let newValue = this.$.vdm.__data.value;
+            this.dispatchEvent(new CustomEvent('valueChanged', { bubbles: true, composed: true, detail: { value: newValue } }));
+          }
+
+        initialsqmChanged(e) {
+            this.storeHolder.store.dispatch(action.initialsqmvalue(e.detail.value));
         }
 
+        initialEstablishCostPerSqmOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.initialEstablishCostPerSqmOwnValue(e.detail.value));
+        }
 
+        _stateChanged(state) {
+            this.initialsqm = state.initialsqm;
+            this.initialEstablishCostPerSqmOwn = state.initialEstablishCostPerSqmOwn;
+            this.kwhOwn = state.kwhOwn;
+            this.krPerKwhOwn = state.krPerKwhOwn;
+        }
+
+        kwhOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.kwhOwnValue(e.detail.value));
+        }
+
+        krPerKwhOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.krPerKwhOwnValue(e.detail.value));
+        }
     }
 
     customElements.define('x-two', XTwo);

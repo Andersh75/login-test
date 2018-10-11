@@ -17,7 +17,7 @@ export class XLoggedout extends LitElement {
         </style>
         <div class="grid-12">
             <div class="col4span8 headline-big">
-                LOGGA IN!
+                LOGGA IN!!!!!!!
             </div>
         </div>
         `
