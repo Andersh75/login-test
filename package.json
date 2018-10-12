@@ -28,6 +28,7 @@
     "@whcg/whcg-section-chart-text-inputlong": "^1.2.3",
     "@whcg/whcg-section-input-text": "^1.2.3",
     "@whcg/whcg-section-text-input": "^1.2.3",
+    "@whcg/whcg-section-textlong-chart-input": "^1.2.3",
     "@whcg/whcg-section-textlong-input-chart": "^1.2.4",
     "@whcg/whcg-select": "^1.2.4",
     "browser-sync": "^2.26.0",

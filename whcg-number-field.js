@@ -1,4 +1,3 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { LitElement, html } from '@polymer/lit-element';
 import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 
@@ -121,7 +120,7 @@ $_documentContainer.innerHTML = `<dom-module id="whcg-number-field-styles" theme
 
 document.head.appendChild($_documentContainer.content);
 
-class WhcgNumberField extends LitElement {
+export class WhcgNumberField extends LitElement {
   render() {
         return html `
         <style>
@@ -188,9 +187,9 @@ class WhcgNumberField extends LitElement {
           label: {type: String, reflect: true},
           value: {type: String, reflect: true},
           placeholder: {type: String, reflect: true},
-          suffix: {type: String, reflect: true},
-          kind: {type: String, reflect: true},
-          period: {type: String, reflect: true},
+          // suffix: {type: String, reflect: true},
+          // kind: {type: String, reflect: true},
+          // period: {type: String, reflect: true},
       };
     }
 
@@ -200,14 +199,14 @@ class WhcgNumberField extends LitElement {
       this.dispatchEvent(new CustomEvent('valueChanged', { bubbles: true, composed: true, detail: { value: newValue } }))
     }
 
-    connectedCallback() {
-        super.connectedCallback();
-        let event = new CustomEvent('childrenattached', {bubbles: true, composed: true});
-        this.dispatchEvent(event);
-
-    }
 }
 
 window.customElements.define('whcg-number-field', WhcgNumberField);
 
-export { WhcgNumberField };
+
+
+    // connectedCallback() {
+    //     super.connectedCallback();
+    //     let event = new CustomEvent('childrenattached', {bubbles: true, composed: true});
+    //     this.dispatchEvent(event);
+    // }

@@ -35,7 +35,7 @@ export class WhcgBoxContainer extends LitElement {
     </style>
     <span class="headline">${this.name}</span>
     <div id="box" class="flex ${classMap({'flex-column': this.column, 'flex-row': !this.column})}">
-      <slot id="slotid"></slot>
+      <slot></slot>
     </div>
   `;
   }

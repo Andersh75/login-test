@@ -10,6 +10,36 @@ const INITIALSQM_VALUE = 'INITIALSQM_VALUE';
 const INITIALESTABLISHCOSTPERSQMOWN_VALUE = 'INITIALESTABLISHCOSTPERSQMOWN_VALUE';
 const KWHOWN_VALUE = 'KWHOWN_VALUE';
 const KRPERKWHOWN_VALUE = 'KRPERKWHOWN_VALUE';
+const MAIN1COSTOWN_VALUE = 'MAIN1COSTOWN_VALUE';
+const MAIN2COSTOWN_VALUE = 'MAIN2COSTOWN_VALUE';
+const MAIN3COSTOWN_VALUE = 'MAIN3COSTOWN_VALUE';
+const MAIN4COSTOWN_VALUE = 'MAIN4COSTOWN_VALUE';
+const MAIN1YEAROWN_VALUE = 'MAIN1YEAROWN_VALUE';
+const MAIN2YEAROWN_VALUE = 'MAIN2YEAROWN_VALUE';
+const MAIN3YEAROWN_VALUE = 'MAIN3YEAROWN_VALUE';
+const MAIN4YEAROWN_VALUE = 'MAIN4YEAROWN_VALUE';
+const INITIALREPAIRCOSTPERSQMOWN_VALUE = 'INITIALREPAIRCOSTPERSQMOWN_VALUE';
+const COMPOUNDRATEREPAIROWN_VALUE = 'COMPOUNDRATEREPAIROWN_VALUE';
+const INITIALAREAAMOUNT_VALUE = 'INITIALAREAAMOUNT_VALUE';
+const EXP1YEAR_VALUE = 'EXP1YEAR_VALUE';
+const EXP2YEAR_VALUE = 'EXP2YEAR_VALUE';
+const EXP3YEAR_VALUE = 'EXP3YEAR_VALUE';
+const EXP4YEAR_VALUE = 'EXP4YEAR_VALUE';
+const EXP1AREA_VALUE = 'EXP1AREA_VALUE';
+const EXP2AREA_VALUE = 'EXP2AREA_VALUE';
+const EXP3AREA_VALUE = 'EXP3AREA_VALUE';
+const EXP4AREA_VALUE = 'EXP4AREA_VALUE';
+
+const DEC1YEAR_VALUE = 'DEC1YEAR_VALUE';
+const DEC2YEAR_VALUE = 'DEC2YEAR_VALUE';
+const DEC3YEAR_VALUE = 'DEC3YEAR_VALUE';
+const DEC4YEAR_VALUE = 'DEC4YEAR_VALUE';
+const DEC1AREA_VALUE = 'DEC1AREA_VALUE';
+const DEC2AREA_VALUE = 'DEC2AREA_VALUE';
+const DEC3AREA_VALUE = 'DEC3AREA_VALUE';
+const DEC4AREA_VALUE = 'DEC4AREA_VALUE';
+
+
 
 export const action = {
     threevalue: (payload) => {
@@ -83,5 +113,167 @@ export const action = {
           type: KRPERKWHOWN_VALUE,
           payload: payload
         };
-      }
+      },
+      maint1costOwnValue: (payload) => {
+        return {
+          type: MAIN1COSTOWN_VALUE,
+          payload: payload
+        };
+      },
+      maint2costOwnValue: (payload) => {
+        return {
+          type: MAIN2COSTOWN_VALUE,
+          payload: payload
+        };
+      },
+      maint3costOwnValue: (payload) => {
+        return {
+          type: MAIN3COSTOWN_VALUE,
+          payload: payload
+        };
+      },
+      maint4costOwnValue: (payload) => {
+        return {
+          type: MAIN4COSTOWN_VALUE,
+          payload: payload
+        };
+      },
+      maint1yearOwnValue: (payload) => {
+        return {
+          type: MAIN1YEAROWN_VALUE,
+          payload: payload
+        };
+      },
+      maint2yearOwnValue: (payload) => {
+        return {
+          type: MAIN2YEAROWN_VALUE,
+          payload: payload
+        };
+      },
+      maint3yearOwnValue: (payload) => {
+        return {
+          type: MAIN3YEAROWN_VALUE,
+          payload: payload
+        };
+      },
+      maint4yearOwnValue: (payload) => {
+        return {
+          type: MAIN4YEAROWN_VALUE,
+          payload: payload
+        };
+      },
+      compoundrateRepairOwnValue: (payload) => {
+        return {
+          type: COMPOUNDRATEREPAIROWN_VALUE,
+          payload: payload
+        };
+      },
+      initialRepairCostPerSqmOwnValue: (payload) => {
+        return {
+          type: INITIALREPAIRCOSTPERSQMOWN_VALUE,
+          payload: payload
+        };
+      },
+      initialAreaAmountValue: (payload) => {
+        return {
+          type: INITIALAREAAMOUNT_VALUE,
+          payload: payload
+        };
+      },
+      exp1yearValue: (payload) => {
+        return {
+          type: EXP1YEAR_VALUE,
+          payload: payload
+        };
+      },
+      exp2yearValue: (payload) => {
+        return {
+          type: EXP2YEAR_VALUE,
+          payload: payload
+        };
+      },
+      exp3yearValue: (payload) => {
+        return {
+          type: EXP3YEAR_VALUE,
+          payload: payload
+        };
+      },
+      exp4yearValue: (payload) => {
+        return {
+          type: EXP4YEAR_VALUE,
+          payload: payload
+        };
+      },
+      exp1areaValue: (payload) => {
+        return {
+          type: EXP1AREA_VALUE,
+          payload: payload
+        };
+      },
+      exp2areaValue: (payload) => {
+        return {
+          type: EXP2AREA_VALUE,
+          payload: payload
+        };
+      },
+      exp3areaValue: (payload) => {
+        return {
+          type: EXP3AREA_VALUE,
+          payload: payload
+        };
+      },
+      exp4areaValue: (payload) => {
+        return {
+          type: EXP4AREA_VALUE,
+          payload: payload
+        };
+      },
+      dec1yearValue: (payload) => {
+        return {
+          type: DEC1YEAR_VALUE,
+          payload: payload
+        };
+      },
+      dec2yearValue: (payload) => {
+        return {
+          type: DEC2YEAR_VALUE,
+          payload: payload
+        };
+      },
+      dec3yearValue: (payload) => {
+        return {
+          type: DEC3YEAR_VALUE,
+          payload: payload
+        };
+      },
+      dec4yearValue: (payload) => {
+        return {
+          type: DEC4YEAR_VALUE,
+          payload: payload
+        };
+      },
+      dec1areaValue: (payload) => {
+        return {
+          type: DEC1AREA_VALUE,
+          payload: payload
+        };
+      },
+      dec2areaValue: (payload) => {
+        return {
+          type: DEC2AREA_VALUE,
+          payload: payload
+        };
+      },
+      dec3areaValue: (payload) => {
+        return {
+          type: DEC3AREA_VALUE,
+          payload: payload
+        };
+      },
+      dec4areaValue: (payload) => {
+        return {
+          type: DEC4AREA_VALUE,
+          payload: payload
+        };
+      }  
 }

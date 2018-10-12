@@ -2,19 +2,9 @@ import {html, LitElement} from '@polymer/lit-element';
 import {flex} from './flex.css.js';
 import {classMap} from 'lit-html/directives/classMap.js'
 
-class WhcgNumberFieldBox extends LitElement {
-    
-    render() {
-        return html`
-        ${flex}
-        <div id="flexbox" class="flex ${classMap({'flex-column': this.column, 'flex-row': !this.column})}">
-            <slot></slot>
-        </div>  
-    `
-    };
+export class WhcgNumberFieldBox extends LitElement {
 
     static get properties() {
-
         return {
             column: {
                 type: Boolean,
@@ -26,6 +16,25 @@ class WhcgNumberFieldBox extends LitElement {
             }
         }
     };
+        
+    render() {
+        return html`
+        ${flex}
+        <div class="flex ${classMap({'flex-column': this.column, 'flex-row': !this.column})}">
+            <slot></slot>
+        </div>  
+    `
+    };
+}
+
+window.customElements.define('whcg-number-field-box', WhcgNumberFieldBox);
+
+
+
+
+
+
+
 
 
 
@@ -63,11 +72,7 @@ class WhcgNumberFieldBox extends LitElement {
 //         }, 1);
 //     };
 
-}
 
-window.customElements.define('whcg-number-field-box', WhcgNumberFieldBox);
-
-export { WhcgNumberFieldBox };
 
 
 

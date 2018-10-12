@@ -25248,6 +25248,60 @@ var MyModule = (function (exports) {
             return {...state, kwhOwn: action.payload}
         case 'KRPERKWHOWN_VALUE':
             return {...state, krPerKwhOwn: action.payload}
+        case 'MAIN1COSTOWN_VALUE':
+            return {...state, maint1costOwn: action.payload}
+        case 'MAIN2COSTOWN_VALUE':
+            return {...state, maint2costOwn: action.payload}
+        case 'MAIN3COSTOWN_VALUE':
+            return {...state, maint3costOwn: action.payload}
+        case 'MAIN4COSTOWN_VALUE':
+            return {...state, maint4costOwn: action.payload}
+        case 'MAIN1YEAROWN_VALUE':
+            return {...state, maint1yearOwn: action.payload}
+        case 'MAIN2YEAROWN_VALUE':
+            return {...state, maint2yearOwn: action.payload}
+        case 'MAIN3YEAROWN_VALUE':
+            return {...state, maint3yearOwn: action.payload}
+        case 'MAIN4YEAROWN_VALUE':
+            return {...state, maint4yearOwn: action.payload}
+        case 'COMPOUNDRATEREPAIROWN_VALUE':
+            return {...state, compoundrateRepairOwn: action.payload}
+        case 'INITIALREPAIRCOSTPERSQMOWN_VALUE':
+            return {...state, initialRepairCostPerSqmOwn: action.payload}
+        case 'INITIALAREAAMOUNT_VALUE':
+            return {...state, initialAreaAmount: action.payload}
+        case 'EXP1YEAR_VALUE':
+            return {...state, exp1year: action.payload}
+        case 'EXP2YEAR_VALUE':
+            return {...state, exp2year: action.payload}
+        case 'EXP3YEAR_VALUE':
+            return {...state, exp3year: action.payload}
+        case 'EXP4YEAR_VALUE':
+            return {...state, exp4year: action.payload}
+        case 'EXP1AREA_VALUE':
+            return {...state, exp1area: action.payload}
+        case 'EXP2AREA_VALUE':
+            return {...state, exp2area: action.payload}
+        case 'EXP3AREA_VALUE':
+            return {...state, exp3area: action.payload}
+        case 'EXP4AREA_VALUE':
+            return {...state, exp4area: action.payload}
+        case 'DEC1YEAR_VALUE':
+            return {...state, dec1year: action.payload}
+        case 'DEC2YEAR_VALUE':
+            return {...state, dec2year: action.payload}
+        case 'DEC3YEAR_VALUE':
+            return {...state, dec3year: action.payload}
+        case 'DEC4YEAR_VALUE':
+            return {...state, dec4year: action.payload}
+        case 'DEC1AREA_VALUE':
+            return {...state, dec1area: action.payload}
+        case 'DEC2AREA_VALUE':
+            return {...state, dec2area: action.payload}
+        case 'DEC3AREA_VALUE':
+            return {...state, dec3area: action.payload}
+        case 'DEC4AREA_VALUE':
+            return {...state, dec4area: action.payload}
         default:
             return state
         }
@@ -25285,7 +25339,34 @@ var MyModule = (function (exports) {
         initialsqm: 3000,
         initialEstablishCostPerSqmOwn: 70,
         kwhOwn: 14,
-        krPerKwhOwn: 10
+        krPerKwhOwn: 10,
+        maint1yearOwn: 10,
+        maint2yearOwn: 10,
+        maint3yearOwn: 10,
+        maint4yearOwn: 10,
+        maint1costOwn: 10,
+        maint2costOwn: 10,
+        maint3costOwn: 10,
+        maint4costOwn: 10,
+        compoundrateRepairOwn: 10,
+        initialRepairCostPerSqmOwn: 10,
+        initialAreaAmount: 10,
+        exp1year: 10,
+        exp2year: 10,
+        exp3year: 10,
+        exp4year: 10,
+        exp1area: 10,
+        exp2area: 10,
+        exp3area: 10,
+        exp4area: 10,
+        dec1year: 10,
+        dec2year: 10,
+        dec3year: 10,
+        dec4year: 10,
+        dec1area: 10,
+        dec2area: 10,
+        dec3area: 10,
+        dec4area: 10
     };
 
     const connectmixin = (element) => {
@@ -27884,6 +27965,36 @@ var MyModule = (function (exports) {
     const INITIALESTABLISHCOSTPERSQMOWN_VALUE = 'INITIALESTABLISHCOSTPERSQMOWN_VALUE';
     const KWHOWN_VALUE = 'KWHOWN_VALUE';
     const KRPERKWHOWN_VALUE = 'KRPERKWHOWN_VALUE';
+    const MAIN1COSTOWN_VALUE = 'MAIN1COSTOWN_VALUE';
+    const MAIN2COSTOWN_VALUE = 'MAIN2COSTOWN_VALUE';
+    const MAIN3COSTOWN_VALUE = 'MAIN3COSTOWN_VALUE';
+    const MAIN4COSTOWN_VALUE = 'MAIN4COSTOWN_VALUE';
+    const MAIN1YEAROWN_VALUE = 'MAIN1YEAROWN_VALUE';
+    const MAIN2YEAROWN_VALUE = 'MAIN2YEAROWN_VALUE';
+    const MAIN3YEAROWN_VALUE = 'MAIN3YEAROWN_VALUE';
+    const MAIN4YEAROWN_VALUE = 'MAIN4YEAROWN_VALUE';
+    const INITIALREPAIRCOSTPERSQMOWN_VALUE = 'INITIALREPAIRCOSTPERSQMOWN_VALUE';
+    const COMPOUNDRATEREPAIROWN_VALUE = 'COMPOUNDRATEREPAIROWN_VALUE';
+    const INITIALAREAAMOUNT_VALUE = 'INITIALAREAAMOUNT_VALUE';
+    const EXP1YEAR_VALUE = 'EXP1YEAR_VALUE';
+    const EXP2YEAR_VALUE = 'EXP2YEAR_VALUE';
+    const EXP3YEAR_VALUE = 'EXP3YEAR_VALUE';
+    const EXP4YEAR_VALUE = 'EXP4YEAR_VALUE';
+    const EXP1AREA_VALUE = 'EXP1AREA_VALUE';
+    const EXP2AREA_VALUE = 'EXP2AREA_VALUE';
+    const EXP3AREA_VALUE = 'EXP3AREA_VALUE';
+    const EXP4AREA_VALUE = 'EXP4AREA_VALUE';
+
+    const DEC1YEAR_VALUE = 'DEC1YEAR_VALUE';
+    const DEC2YEAR_VALUE = 'DEC2YEAR_VALUE';
+    const DEC3YEAR_VALUE = 'DEC3YEAR_VALUE';
+    const DEC4YEAR_VALUE = 'DEC4YEAR_VALUE';
+    const DEC1AREA_VALUE = 'DEC1AREA_VALUE';
+    const DEC2AREA_VALUE = 'DEC2AREA_VALUE';
+    const DEC3AREA_VALUE = 'DEC3AREA_VALUE';
+    const DEC4AREA_VALUE = 'DEC4AREA_VALUE';
+
+
 
     const action = {
         threevalue: (payload) => {
@@ -27957,7 +28068,169 @@ var MyModule = (function (exports) {
               type: KRPERKWHOWN_VALUE,
               payload: payload
             };
-          }
+          },
+          maint1costOwnValue: (payload) => {
+            return {
+              type: MAIN1COSTOWN_VALUE,
+              payload: payload
+            };
+          },
+          maint2costOwnValue: (payload) => {
+            return {
+              type: MAIN2COSTOWN_VALUE,
+              payload: payload
+            };
+          },
+          maint3costOwnValue: (payload) => {
+            return {
+              type: MAIN3COSTOWN_VALUE,
+              payload: payload
+            };
+          },
+          maint4costOwnValue: (payload) => {
+            return {
+              type: MAIN4COSTOWN_VALUE,
+              payload: payload
+            };
+          },
+          maint1yearOwnValue: (payload) => {
+            return {
+              type: MAIN1YEAROWN_VALUE,
+              payload: payload
+            };
+          },
+          maint2yearOwnValue: (payload) => {
+            return {
+              type: MAIN2YEAROWN_VALUE,
+              payload: payload
+            };
+          },
+          maint3yearOwnValue: (payload) => {
+            return {
+              type: MAIN3YEAROWN_VALUE,
+              payload: payload
+            };
+          },
+          maint4yearOwnValue: (payload) => {
+            return {
+              type: MAIN4YEAROWN_VALUE,
+              payload: payload
+            };
+          },
+          compoundrateRepairOwnValue: (payload) => {
+            return {
+              type: COMPOUNDRATEREPAIROWN_VALUE,
+              payload: payload
+            };
+          },
+          initialRepairCostPerSqmOwnValue: (payload) => {
+            return {
+              type: INITIALREPAIRCOSTPERSQMOWN_VALUE,
+              payload: payload
+            };
+          },
+          initialAreaAmountValue: (payload) => {
+            return {
+              type: INITIALAREAAMOUNT_VALUE,
+              payload: payload
+            };
+          },
+          exp1yearValue: (payload) => {
+            return {
+              type: EXP1YEAR_VALUE,
+              payload: payload
+            };
+          },
+          exp2yearValue: (payload) => {
+            return {
+              type: EXP2YEAR_VALUE,
+              payload: payload
+            };
+          },
+          exp3yearValue: (payload) => {
+            return {
+              type: EXP3YEAR_VALUE,
+              payload: payload
+            };
+          },
+          exp4yearValue: (payload) => {
+            return {
+              type: EXP4YEAR_VALUE,
+              payload: payload
+            };
+          },
+          exp1areaValue: (payload) => {
+            return {
+              type: EXP1AREA_VALUE,
+              payload: payload
+            };
+          },
+          exp2areaValue: (payload) => {
+            return {
+              type: EXP2AREA_VALUE,
+              payload: payload
+            };
+          },
+          exp3areaValue: (payload) => {
+            return {
+              type: EXP3AREA_VALUE,
+              payload: payload
+            };
+          },
+          exp4areaValue: (payload) => {
+            return {
+              type: EXP4AREA_VALUE,
+              payload: payload
+            };
+          },
+          dec1yearValue: (payload) => {
+            return {
+              type: DEC1YEAR_VALUE,
+              payload: payload
+            };
+          },
+          dec2yearValue: (payload) => {
+            return {
+              type: DEC2YEAR_VALUE,
+              payload: payload
+            };
+          },
+          dec3yearValue: (payload) => {
+            return {
+              type: DEC3YEAR_VALUE,
+              payload: payload
+            };
+          },
+          dec4yearValue: (payload) => {
+            return {
+              type: DEC4YEAR_VALUE,
+              payload: payload
+            };
+          },
+          dec1areaValue: (payload) => {
+            return {
+              type: DEC1AREA_VALUE,
+              payload: payload
+            };
+          },
+          dec2areaValue: (payload) => {
+            return {
+              type: DEC2AREA_VALUE,
+              payload: payload
+            };
+          },
+          dec3areaValue: (payload) => {
+            return {
+              type: DEC3AREA_VALUE,
+              payload: payload
+            };
+          },
+          dec4areaValue: (payload) => {
+            return {
+              type: DEC4AREA_VALUE,
+              payload: payload
+            };
+          }  
     };
 
     const styleElementGrid$1 = document.createElement('dom-module');
@@ -31646,18 +31919,8 @@ var MyModule = (function (exports) {
     });
 
     class WhcgNumberFieldBox extends LitElement {
-        
-        render() {
-            return html`
-        ${flex}
-        <div id="flexbox" class="flex ${classMap({'flex-column': this.column, 'flex-row': !this.column})}">
-            <slot></slot>
-        </div>  
-    `
-        };
 
         static get properties() {
-
             return {
                 column: {
                     type: Boolean,
@@ -31669,6 +31932,25 @@ var MyModule = (function (exports) {
                 }
             }
         };
+            
+        render() {
+            return html`
+        ${flex}
+        <div class="flex ${classMap({'flex-column': this.column, 'flex-row': !this.column})}">
+            <slot></slot>
+        </div>  
+    `
+        };
+    }
+
+    window.customElements.define('whcg-number-field-box', WhcgNumberFieldBox);
+
+
+
+
+
+
+
 
 
 
@@ -31706,9 +31988,7 @@ var MyModule = (function (exports) {
     //         }, 1);
     //     };
 
-    }
 
-    window.customElements.define('whcg-number-field-box', WhcgNumberFieldBox);
 
 
 
@@ -32045,6 +32325,66 @@ var MyModule = (function (exports) {
 
     window.customElements.define('whcg-section-chart-text-inputlong', WhcgSectionChartTextInputlong);
 
+    class WhcgSectionTextlongChartInput extends PolymerElement {
+      static get template() {
+        return html$1`
+    <style include = "style-element-grid">
+      
+        .section {
+            padding-top: 130px;
+        }
+
+        .headline {
+            padding-top: 32px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-xl);
+            color: var(--parmaco-base-color-100pct);    
+        }
+
+        .content {
+            grid-template-rows: auto 350px;
+        }
+
+        .content-text{
+            padding-top: 33px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-s);
+            font-weight: var(--parmaco-font-weight-normal);
+            color: var(--parmaco-base-color-100pct);
+        }
+
+        .content-chart {
+            padding-top: 33px;
+        }
+
+        .content-inputbox {
+            justify-self: end;
+        }
+
+    </style>
+
+
+    <div class="col1span12 grid-12 section">
+        <div class="col2span2 headline"><slot name="title"></slot></div>
+        <div class="col4span8 grid-8 content">
+            <div class="col1span8 content-text">
+                <slot name="text"></slot>
+            </div>
+            <div class="col1span5 content-chart">
+                <slot name="chart"></slot> 
+            </div>
+            <div class="col6span3 content-inputbox">
+                <slot name="input"></slot> 
+            </div>
+            
+        </div>
+    </div>
+  `;
+      }
+    }
+
+    window.customElements.define('whcg-section-textlong-chart-input', WhcgSectionTextlongChartInput);
+
     class WhcgBoxContainer extends LitElement {
       
       static get properties() {
@@ -32078,7 +32418,7 @@ var MyModule = (function (exports) {
     </style>
     <span class="headline">${this.name}</span>
     <div id="box" class="flex ${classMap({'flex-column': this.column, 'flex-row': !this.column})}">
-      <slot id="slotid"></slot>
+      <slot></slot>
     </div>
   `;
       }
@@ -32582,9 +32922,9 @@ var MyModule = (function (exports) {
               label: {type: String, reflect: true},
               value: {type: String, reflect: true},
               placeholder: {type: String, reflect: true},
-              suffix: {type: String, reflect: true},
-              kind: {type: String, reflect: true},
-              period: {type: String, reflect: true},
+              // suffix: {type: String, reflect: true},
+              // kind: {type: String, reflect: true},
+              // period: {type: String, reflect: true},
           };
         }
 
@@ -32594,15 +32934,17 @@ var MyModule = (function (exports) {
           this.dispatchEvent(new CustomEvent('valueChanged', { bubbles: true, composed: true, detail: { value: newValue } }));
         }
 
-        connectedCallback() {
-            super.connectedCallback();
-            let event = new CustomEvent('childrenattached', {bubbles: true, composed: true});
-            this.dispatchEvent(event);
-
-        }
     }
 
     window.customElements.define('whcg-number-field', WhcgNumberField);
+
+
+
+        // connectedCallback() {
+        //     super.connectedCallback();
+        //     let event = new CustomEvent('childrenattached', {bubbles: true, composed: true});
+        //     this.dispatchEvent(event);
+        // }
 
     class XTwo extends LitElement {
 
@@ -32612,11 +32954,17 @@ var MyModule = (function (exports) {
                 initialsqm: {type: String},
                 initialEstablishCostPerSqmOwn: {type: String},
                 kwhOwn: {type: String},
-                krPerkwhOwn: {type: String}
-
-                // inflationrate: {type: String},
-                // startyear: {type: String},
-                // numberofyears: {type: String}
+                krPerkwhOwn: {type: String},
+                maint1yearOwn: {type: String},
+                maint2yearOwn: {type: String},
+                maint3yearOwn: {type: String},
+                maint4yearOwn: {type: String},
+                maint1costOwn: {type: String},
+                maint2costOwn: {type: String},
+                maint3costOwn: {type: String},
+                maint4costOwn: {type: String},
+                compoundrateRepairOwn: {type: String},
+                initialRepairCostPerSqmOwn: {type: String}     
             };
         }
 
@@ -32669,25 +33017,36 @@ var MyModule = (function (exports) {
                 </span>
                 <whcg-box-container slot="input" name="Underhållsinsatser">
                     <whcg-number-field-box column name="Underhållsinsats 1">
-                        <whcg-number-field label="År" value="3" placeholder="...antal" valueoutput="{{maint1yearOwn}}"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" value="700" suffix="kr" placeholder="...antal" valueoutput="{{maint1costOwn}}"></whcg-number-field>
+                        <whcg-number-field label="År" @valueChanged=${this.maint1yearOwnChanged.bind(this)} value=${this.maint1yearOwn} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint1costOwnChanged.bind(this)} value=${this.maint1costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
                     </whcg-number-field-box>
                     <whcg-number-field-box column name="Underhållsinsats 2">
-                        <whcg-number-field label="År" value="5" placeholder="...antal" valueoutput="{{maint2yearOwn}}"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" value="340" suffix="kr" placeholder="...antal" valueoutput="{{maint2costOwn}}"></whcg-number-field>
+                        <whcg-number-field label="År" @valueChanged=${this.maint2yearOwnChanged.bind(this)} value=${this.maint2yearOwn} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint2costOwnChanged.bind(this)} value=${this.maint2costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
                     </whcg-number-field-box>
                     <whcg-number-field-box column name="Underhållsinsats 3">
-                        <whcg-number-field label="År" value="2" placeholder="...antal" valueoutput="{{maint3yearOwn}}"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" value="249" suffix="kr" placeholder="...antal" valueoutput="{{maint3costOwn}}"></whcg-number-field>
+                        <whcg-number-field label="År" @valueChanged=${this.maint3yearOwnChanged.bind(this)} value=${this.maint3yearOwn} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint3costOwnChanged.bind(this)} value=${this.maint3costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
                     </whcg-number-field-box>
                     <whcg-number-field-box column name="Underhållsinsats 4">
-                        <whcg-number-field label="År" value="5" placeholder="...antal" valueoutput="{{maint4yearOwn}}"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" value="340" suffix="kr" placeholder="...antal" valueoutput="{{maint4costOwn}}"></whcg-number-field>
+                        <whcg-number-field label="År" @valueChanged=${this.maint4yearOwnChanged.bind(this)} value=${this.maint4yearOwn} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint4costOwnChanged.bind(this)} value=${this.maint4costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
                     </whcg-number-field-box>
                 </whcg-box-container>
             </whcg-section-chart-text-inputlong>
 
-
+            <whcg-section-textlong-chart-input class="col1span12">
+                <span slot="title">KOSTNADER FÖR REPARATIONER OCH LÖPANDE UNDERHÅLL</span>
+                <span slot="text">Selectedpage sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+                    chartjson="{{chartJsCompoundedRepairCostsOwnJson}}">
+                </whcg-chart> 
+                <whcg-number-field-box slot="input" column name="" mode="none">
+                    <whcg-select label="Kostnadsutveckling" suffix="%" @valueChanged=${this.compoundrateRepairOwnChanged.bind(this)} value=${this.compoundrateRepairOwn} placeholder="...antal procent" jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
+                    <whcg-number-field label="Kostnad per kvm" @valueChanged=${this.initialRepairCostPerSqmOwnChanged.bind(this)} value=${this.initialRepairCostPerSqmOwn} placeholder="... antal" kind="price" suffix="kr"></whcg-number-field>
+                </whcg-number-field-box>
+            </whcg-section-textlong-input-chart>
 
         </div>  `
         }
@@ -32715,6 +33074,16 @@ var MyModule = (function (exports) {
             this.initialEstablishCostPerSqmOwn = state.initialEstablishCostPerSqmOwn;
             this.kwhOwn = state.kwhOwn;
             this.krPerKwhOwn = state.krPerKwhOwn;
+            this.maint1yearOwn = state.maint1yearOwn;
+            this.maint2yearOwn = state.maint2yearOwn;
+            this.maint3yearOwn = state.maint3yearOwn;
+            this.maint4yearOwn = state.maint4yearOwn;
+            this.maint1costOwn = state.maint1costOwn;
+            this.maint2costOwn = state.maint2costOwn;
+            this.maint3costOwn = state.maint3costOwn;
+            this.maint4costOwn = state.maint4costOwn;
+            this.initialRepairCostPerSqmOwn = state.initialRepairCostPerSqmOwn;
+            this.compoundrateRepairOwn = state.compoundrateRepairOwn;
         }
 
         kwhOwnChanged(e) {
@@ -32724,32 +33093,239 @@ var MyModule = (function (exports) {
         krPerKwhOwnChanged(e) {
             this.storeHolder.store.dispatch(action.krPerKwhOwnValue(e.detail.value));
         }
+
+        maint1costOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint1costOwnValue(e.detail.value));
+        }
+
+        maint2costOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint2costOwnValue(e.detail.value));
+        }
+
+        maint3costOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint3costOwnValue(e.detail.value));
+        }
+
+        maint4costOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint4costOwnValue(e.detail.value));
+        }
+
+        maint1yearOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint1yearOwnValue(e.detail.value));
+        }
+
+        maint2yearOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint2yearOwnValue(e.detail.value));
+        }
+
+        maint3yearOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint3yearOwnValue(e.detail.value));
+        }
+
+        maint4yearOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint4yearOwnValue(e.detail.value));
+        }
+
+        compoundrateRepairOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.compoundrateRepairOwnValue(e.detail.value));
+        }
+
+        initialRepairCostPerSqmOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.initialRepairCostPerSqmOwnValue(e.detail.value));
+        } 
     }
 
     customElements.define('x-two', XTwo);
 
     class XThree extends LitElement {
 
+        static get properties() {
+            return {
+                storeHolder: {type: Object},
+                initialAreaAmount: {type: String},
+                exp1year: {type: String},
+                exp2year: {type: String},
+                exp3year: {type: String},
+                exp4year: {type: String},
+                exp1area: {type: String},
+                exp2area: {type: String},
+                exp3area: {type: String},
+                exp4area: {type: String},
+                dec1year: {type: String},
+                dec2year: {type: String},
+                dec3year: {type: String},
+                dec4year: {type: String},
+                dec1area: {type: String},
+                dec2area: {type: String},
+                dec3area: {type: String},
+                dec4area: {type: String} 
+            };
+        }
+
         render() {
-            console.log('new render');
-
             return html`
+        ${grid}
         <style>
-            .bg {
-                background-color: brown;
-                width: 80vw;
-                height: 90vh;
-                display: flex;
-                /* align-items: center;
-                justify-content: center; */
-            }
-           
         </style>
-        <div class="bg">
-        </div>
-        `
-        }  
+        <div class="grid-12">
+            <whcg-section-text-input class="col1span12">
+                <span slot="title">INITIAL YTSTORLEK</span>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-number-field-box slot="input" column name="" mode="none">
+                    <whcg-number-field label="Antal kvm" @valueChanged=${this.initialAreaAmountChanged.bind(this)} value=${this.initialAreaAmount} suffix="kvm" placeholder="...antal"></whcg-number-field>
+                </whcg-number-field-box>
+            </whcg-section-text-input>
 
+            <whcg-section-chart-text-inputlong class="col1span12">
+                <span slot="title">EXPANSION</span>
+                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumExpansionAreasJson}}">
+                </whcg-chart>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-box-container slot="input" name="Expansionsfaser">
+                    <whcg-number-field-box column name="Expansionsfas 1" mode="none">
+                        <whcg-number-field label="År" @valueChanged=${this.exp1yearChanged.bind(this)} value=${this.exp1year} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Tillfört antal kvm" @valueChanged=${this.exp1areaChanged.bind(this)} value=${this.exp1area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+                    </whcg-number-field-box>
+                    <whcg-number-field-box column name="Expansionsfas 2" mode="none">
+                        <whcg-number-field label="År" @valueChanged=${this.exp2yearChanged.bind(this)} value=${this.exp2year} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Tillfört antal kvm" @valueChanged=${this.exp2areaChanged.bind(this)} value=${this.exp2area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+                    </whcg-number-field-box>
+                    <whcg-number-field-box column name="Expansionsfas 3" mode="none">
+                        <whcg-number-field label="År" @valueChanged=${this.exp3yearChanged.bind(this)} value=${this.exp3year} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Tillfört antal kvm" @valueChanged=${this.exp3areaChanged.bind(this)} value=${this.exp3area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+                    </whcg-number-field-box>
+                    <whcg-number-field-box column name="Expansionsfas 4" mode="none">
+                        <whcg-number-field label="År" @valueChanged=${this.exp4yearChanged.bind(this)} value=${this.exp4year} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Tillfört antal kvm" @valueChanged=${this.exp4areaChanged.bind(this)} value=${this.exp4area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+                    </whcg-number-field-box>
+                </whcg-box-container>
+            </whcg-section-chart-text-inputlong>
+
+
+
+            <whcg-section-chart-text-inputlong class="col1span12">
+                <span slot="title">AVVECKLING</span>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumDeclineAreasJson}}">
+                </whcg-chart>
+                <whcg-box-container slot="input" name="Avvecklingsfaser">
+                    <whcg-number-field-box column name="Avvecklingsfas 1" mode="none">
+                        <whcg-number-field label="År" @valueChanged=${this.dec1yearChanged.bind(this)} value=${this.dec1year} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Avvecklat antal kvm" @valueChanged=${this.dec1areaChanged.bind(this)} value=${this.dec1area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+                    </whcg-number-field-box>
+                    <whcg-number-field-box column name="Avvecklingsfas 2" mode="none">
+                        <whcg-number-field label="År" @valueChanged=${this.dec2yearChanged.bind(this)} value=${this.dec2year} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Avvecklat antal kvm" @valueChanged=${this.dec2areaChanged.bind(this)} value=${this.dec2area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+                    </whcg-number-field-box>
+                    <whcg-number-field-box column name="Avvecklingsfas 3" mode="none">
+                        <whcg-number-field label="År" @valueChanged=${this.dec3yearChanged.bind(this)} value=${this.dec3year} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Avvecklat antal kvm" @valueChanged=${this.dec3areaChanged.bind(this)} value=${this.dec3area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+                    </whcg-number-field-box>
+                    <whcg-number-field-box column name="Avvecklingsfas 4" mode="none">
+                        <whcg-number-field label="År" @valueChanged=${this.dec4yearChanged.bind(this)} value=${this.dec4year} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Avvecklat antal kvm" @valueChanged=${this.dec4areaChanged.bind(this)} value=${this.dec4area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+                    </whcg-number-field-box>
+                </whcg-box-container>
+            </whcg-section-chart-text-inputlong>
+
+        </div>  `
+        }
+
+
+        initialAreaAmountChanged(e) {
+            this.storeHolder.store.dispatch(action.initialAreaAmountValue(e.detail.value));
+        }
+
+        exp1yearChanged(e) {
+            this.storeHolder.store.dispatch(action.exp1yearValue(e.detail.value));
+        }
+
+        exp2yearChanged(e) {
+            this.storeHolder.store.dispatch(action.exp2yearValue(e.detail.value));
+        }
+
+        exp3yearChanged(e) {
+            this.storeHolder.store.dispatch(action.exp3yearValue(e.detail.value));
+        }
+
+        exp4yearChanged(e) {
+            this.storeHolder.store.dispatch(action.exp4yearValue(e.detail.value));
+        }
+
+        exp1areaChanged(e) {
+            this.storeHolder.store.dispatch(action.exp1areaValue(e.detail.value));
+        }
+
+        exp2areaChanged(e) {
+            this.storeHolder.store.dispatch(action.exp2areaValue(e.detail.value));
+        }
+
+        exp3areaChanged(e) {
+            this.storeHolder.store.dispatch(action.exp3areaValue(e.detail.value));
+        }
+
+        exp4areaChanged(e) {
+            this.storeHolder.store.dispatch(action.exp4areaValue(e.detail.value));
+        }
+
+
+        dec1yearChanged(e) {
+            this.storeHolder.store.dispatch(action.dec1yearValue(e.detail.value));
+        }
+
+        dec2yearChanged(e) {
+            this.storeHolder.store.dispatch(action.dec2yearValue(e.detail.value));
+        }
+
+        dec3yearChanged(e) {
+            this.storeHolder.store.dispatch(action.dec3yearValue(e.detail.value));
+        }
+
+        dec4yearChanged(e) {
+            this.storeHolder.store.dispatch(action.dec4yearValue(e.detail.value));
+        }
+
+        dec1areaChanged(e) {
+            this.storeHolder.store.dispatch(action.dec1areaValue(e.detail.value));
+        }
+
+        dec2areaChanged(e) {
+            this.storeHolder.store.dispatch(action.dec2areaValue(e.detail.value));
+        }
+
+        dec3areaChanged(e) {
+            this.storeHolder.store.dispatch(action.dec3areaValue(e.detail.value));
+        }
+
+        dec4areaChanged(e) {
+            this.storeHolder.store.dispatch(action.dec4areaValue(e.detail.value));
+        }
+
+
+
+        _stateChanged(state) {
+            this.initialAreaAmount = state.initialAreaAmount;
+            this.exp1year = state.exp1year;
+            this.exp2year = state.exp2year;
+            this.exp3year = state.exp3year;
+            this.exp4year = state.exp4year;
+            this.exp1area = state.exp1area;
+            this.exp2area = state.exp2area;
+            this.exp3area = state.exp3area;
+            this.exp4area = state.exp4area;
+
+            this.dec1year = state.dec1year;
+            this.dec2year = state.dec2year;
+            this.dec3year = state.dec3year;
+            this.dec4year = state.dec4year;
+            this.dec1area = state.dec1area;
+            this.dec2area = state.dec2area;
+            this.dec3area = state.dec3area;
+            this.dec4area = state.dec4area;
+        }
     }
 
     customElements.define('x-three', XThree);
