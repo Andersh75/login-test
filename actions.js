@@ -1,3 +1,9 @@
+const INITIALAMOUNTAREAOWN_VALUE = 'INITIALAMOUNTAREAOWN_VALUE';
+const INITIALAMOUNTHEATOWN_VALUE = 'INITIALAMOUNTHEATOWN_VALUE';
+const INITIALPRICEHEATOWN_VALUE = 'INITIALPRICEHEATOWN_VALUE';
+
+
+
 const THREE_VALUE = 'THREE_VALUE';
 const FOUR_VALUE = 'FOUR_VALUE';
 const FIVE_VALUE = 'FIVE_VALUE';
@@ -20,7 +26,7 @@ const MAIN3YEAROWN_VALUE = 'MAIN3YEAROWN_VALUE';
 const MAIN4YEAROWN_VALUE = 'MAIN4YEAROWN_VALUE';
 const INITIALREPAIRCOSTPERSQMOWN_VALUE = 'INITIALREPAIRCOSTPERSQMOWN_VALUE';
 const COMPOUNDRATEREPAIROWN_VALUE = 'COMPOUNDRATEREPAIROWN_VALUE';
-const INITIALAREAAMOUNT_VALUE = 'INITIALAREAAMOUNT_VALUE';
+
 const EXP1YEAR_VALUE = 'EXP1YEAR_VALUE';
 const EXP2YEAR_VALUE = 'EXP2YEAR_VALUE';
 const EXP3YEAR_VALUE = 'EXP3YEAR_VALUE';
@@ -42,12 +48,27 @@ const DEC4AREA_VALUE = 'DEC4AREA_VALUE';
 const RENTINCREASE_VALUE = 'RENTINCREASE_VALUE';
 const INITIALRENTCOSTPERSQM_VALUE = 'INITIALRENTCOSTPERSQM_VALUE';
 
-const KRPERKWH_VALUE = 'KRPERKWH_VALUE';
-const KWH_VALUE = 'KWH_VALUE';
 
-const TESTVALUE_VALUE = 'TESTVALUE_VALUE';
 
 export const action = {
+    initialAmountAreaOwnValue: (payload) => {
+      return {
+        type: INITIALAMOUNTAREAOWN_VALUE,
+        payload: payload
+      };
+    },
+    initialPriceHeatOwnValue: (payload) => {
+      return {
+        type: INITIALPRICEHEATOWN_VALUE,
+        payload: payload
+      };
+    },
+    initialAmountHeatOwnValue: (payload) => {
+      return {
+        type: INITIALAMOUNTHEATOWN_VALUE,
+        payload: payload
+      };
+    },
     threevalue: (payload) => {
         return {
           type: THREE_VALUE,
@@ -105,18 +126,6 @@ export const action = {
       initialEstablishCostPerSqmOwnValue: (payload) => {
         return {
           type: INITIALESTABLISHCOSTPERSQMOWN_VALUE,
-          payload: payload
-        };
-      },
-      kwhOwnValue: (payload) => {
-        return {
-          type: KWHOWN_VALUE,
-          payload: payload
-        };
-      },
-      krPerKwhOwnValue: (payload) => {
-        return {
-          type: KRPERKWHOWN_VALUE,
           payload: payload
         };
       },
@@ -180,12 +189,7 @@ export const action = {
           payload: payload
         };
       },
-      initialAreaAmountValue: (payload) => {
-        return {
-          type: INITIALAREAAMOUNT_VALUE,
-          payload: payload
-        };
-      },
+
       exp1yearValue: (payload) => {
         return {
           type: EXP1YEAR_VALUE,

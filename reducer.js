@@ -1,5 +1,12 @@
 export function reducer(state, action) {
     switch (action.type) {
+    case 'INITIALAMOUNTAREAOWN_VALUE':
+        return {...state, initialAmountAreaOwn: action.payload}
+    case 'INITIALPRICEHEATOWN_VALUE':
+        return {...state, initialPriceHeatOwn: action.payload}
+    case 'INITIALAMOUNTHEATOWN_VALUE':
+        return {...state, initialAmountHeatOwn: action.payload}
+
     case 'ONE_INCREMENT':
         return {...state, one: state.one + 1}
     case 'TWO_INCREMENT':
@@ -24,10 +31,6 @@ export function reducer(state, action) {
         return {...state, initialAreaAmountOwn: action.payload}
     case 'INITIALESTABLISHCOSTPERSQMOWN_VALUE':
         return {...state, initialEstablishCostPerSqmOwn: action.payload}
-    case 'KWHOWN_VALUE':
-        return {...state, kwhOwn: action.payload}
-    case 'KRPERKWHOWN_VALUE':
-        return {...state, krPerKwhOwn: action.payload}
     case 'MAIN1COSTOWN_VALUE':
         return {...state, maint1costOwn: action.payload}
     case 'MAIN2COSTOWN_VALUE':
@@ -48,8 +51,6 @@ export function reducer(state, action) {
         return {...state, compoundrateRepairOwn: action.payload}
     case 'INITIALREPAIRCOSTPERSQMOWN_VALUE':
         return {...state, initialRepairCostPerSqmOwn: action.payload}
-    case 'INITIALAREAAMOUNT_VALUE':
-        return {...state, initialAreaAmount: action.payload}
     case 'EXP1YEAR_VALUE':
         return {...state, exp1year: action.payload}
     case 'EXP2YEAR_VALUE':
@@ -88,8 +89,6 @@ export function reducer(state, action) {
         return {...state, rentincrease: action.payload}
     case 'KRPERKWH_VALUE':
         return {...state, krperkwh: action.payload}
-    case 'KWH_VALUE':
-        return {...state, kwh: action.payload}
     case 'TESTVALUE_VALUE':
         return {...state, testvalue: action.payload}
     default:
