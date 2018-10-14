@@ -8,7 +8,7 @@ import '@whcg/whcg-section-textlong-input-chart';
 import '@whcg/whcg-section-chart-text-inputlong';
 import '@whcg/whcg-section-textlong-chart-input'
 import './whcg-box-container.js';
-import '@whcg/whcg-chart';
+// import './whcg-chart';
 import './whcg-number-field';
 import { grid } from './grid.css.js';
 
@@ -34,7 +34,11 @@ export class XThree extends LitElement {
             dec1area: {type: String},
             dec2area: {type: String},
             dec3area: {type: String},
-            dec4area: {type: String} 
+            dec4area: {type: String},
+            rentincrease: {type: String},
+            initialRentCostPerSqm: {type: String},
+            krperkwh: {type: String},
+            kwh: {type: String} 
         };
     }
 
@@ -55,8 +59,8 @@ export class XThree extends LitElement {
 
             <whcg-section-chart-text-inputlong class="col1span12">
                 <span slot="title">EXPANSION</span>
-                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumExpansionAreasJson}}">
-                </whcg-chart>
+                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumExpansionAreasJson}}">
+                </whcg-chart> -->
                 <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
                 </span>
                 <whcg-box-container slot="input" name="Expansionsfaser">
@@ -85,8 +89,8 @@ export class XThree extends LitElement {
                 <span slot="title">AVVECKLING</span>
                 <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
                 </span>
-                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumDeclineAreasJson}}">
-                </whcg-chart>
+                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumDeclineAreasJson}}">
+                </whcg-chart> -->
                 <whcg-box-container slot="input" name="Avvecklingsfaser">
                     <whcg-number-field-box column name="Avvecklingsfas 1" mode="none">
                         <whcg-number-field label="År" @valueChanged=${this.dec1yearChanged.bind(this)} value=${this.dec1year} placeholder="...antal"></whcg-number-field>
@@ -106,6 +110,35 @@ export class XThree extends LitElement {
                     </whcg-number-field-box>
                 </whcg-box-container>
             </whcg-section-chart-text-inputlong>
+
+
+            <whcg-section-textlong-chart-input class="col1span12">
+                <span slot="title">HYRESNIVÅ OCH HYRESUTVECKLING</span>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <!-- <whcg-lit-grid slot="chart"></whcg-lit-grid> -->
+                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+                    chartjson="{{chartJsCompoundedRentCostsJson}}">
+                </whcg-chart> -->
+                <whcg-number-field-box slot="input" column name="" mode="none">
+                    <whcg-number-field label="Hyreskostnad per kvm" @valueChanged=${this.initialRentCostPerSqmChanged.bind(this)} value=${this.initialRentCostPerSqm} suffix="kr" placeholder="...antal" kind="amount"></whcg-number-field>
+                    <whcg-select label="Hyreshöjningstakt" suffix="%" @valueChanged=${this.rentincreaseChanged.bind(this)} value=${this.rentincrease} placeholder="...antal procent"
+                        jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
+                </whcg-number-field-box>
+            </whcg-section-textlong-chart-input>
+
+            <whcg-section-textlong-input-chart class="col1span12">
+                <span slot="title">Värmekostnader</span>
+                <span slot="text">Selectedpage sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-number-field-box slot="input" column name="" mode="none">
+                    <whcg-number-field label="Antal kWh/kvm/år" @valueChanged=${this.kwhChanged.bind(this)} value=${this.kwh} placeholder="...antal" kind="amount" suffix="kWh" valueoutput="{{kwh}}"></whcg-number-field>
+                    <whcg-number-field label="Kostnad per kWh" @valueChanged=${this.krperkwhChanged.bind(this)} value=${this.krperkwh} placeholder="... antal" kind="price" suffix="kr" valueoutput="{{krperkwh}}"></whcg-number-field>
+                </whcg-number-field-box>
+                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="450px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+                    chartjson="{{chartJsCompoundedHeatCostsJson}}">
+                </whcg-chart>  -->
+            </whcg-section-textlong-input-chart>
 
         </div>  `
     }
@@ -182,6 +215,27 @@ export class XThree extends LitElement {
 
 
 
+
+
+    initialRentCostPerSqmChanged(e) {
+        this.storeHolder.store.dispatch(action.initialRentCostPerSqmValue(e.detail.value));
+    }
+
+    rentincreaseChanged(e) {
+        this.storeHolder.store.dispatch(action.rentincreaseValue(e.detail.value));
+    }
+
+
+    krperkwhChanged(e) {
+        this.storeHolder.store.dispatch(action.krperkwhValue(e.detail.value));
+    }
+
+    kwhChanged(e) {
+        this.storeHolder.store.dispatch(action.kwhValue(e.detail.value));
+    }
+
+
+
     _stateChanged(state) {
         this.initialAreaAmount = state.initialAreaAmount;
         this.exp1year = state.exp1year;
@@ -201,6 +255,11 @@ export class XThree extends LitElement {
         this.dec2area = state.dec2area;
         this.dec3area = state.dec3area;
         this.dec4area = state.dec4area;
+        this.initialRentCostPerSqm = state.initialRentCostPerSqm;
+        this.rentincrease = state.rentincrease;
+        this.kwh = state.kwh;
+        this.krperkwh = state.krperkwh;
+
     }
 }
 

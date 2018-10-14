@@ -20,8 +20,8 @@ export function reducer(state, action) {
         return {...state, startyear: action.payload}
     case 'NUMBEROFYEARS_VALUE':
         return {...state, numberofyears: action.payload}
-    case 'INITIALSQM_VALUE':
-        return {...state, initialsqm: action.payload}
+    case 'INITIALAREAAMOUNTOWN_VALUE':
+        return {...state, initialAreaAmountOwn: action.payload}
     case 'INITIALESTABLISHCOSTPERSQMOWN_VALUE':
         return {...state, initialEstablishCostPerSqmOwn: action.payload}
     case 'KWHOWN_VALUE':
@@ -82,6 +82,16 @@ export function reducer(state, action) {
         return {...state, dec3area: action.payload}
     case 'DEC4AREA_VALUE':
         return {...state, dec4area: action.payload}
+    case 'INITIALRENTCOSTPERSQM_VALUE':
+        return {...state, initialRentCostPerSqm: action.payload}
+    case 'RENTINCREASE_VALUE':
+        return {...state, rentincrease: action.payload}
+    case 'KRPERKWH_VALUE':
+        return {...state, krperkwh: action.payload}
+    case 'KWH_VALUE':
+        return {...state, kwh: action.payload}
+    case 'TESTVALUE_VALUE':
+        return {...state, testvalue: action.payload}
     default:
         return state
     }

@@ -9,7 +9,7 @@ export const initState = {
     inflationrate: '0,04',
     startyear: 2018,
     numberofyears: 10,
-    initialsqm: 3000,
+    initialAreaAmountOwn: 3000,
     initialEstablishCostPerSqmOwn: 70,
     kwhOwn: 14,
     krPerKwhOwn: 10,
@@ -39,5 +39,10 @@ export const initState = {
     dec1area: 10,
     dec2area: 10,
     dec3area: 10,
-    dec4area: 10
+    dec4area: 10,
+    initialRentCostPerSqm: 10,
+    rentincrease: 10,
+    krperkwh: 10,
+    kwh: 10,
+    testvalue: 'hopp'
 }

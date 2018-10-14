@@ -6,7 +6,7 @@ const DISCOUNTRATE_VALUE = 'DISCOUNTRATE_VALUE';
 const INFLATIONRATE_VALUE = 'INFLATIONRATE_VALUE';
 const STARTYEAR_VALUE = 'STARTYEAR_VALUE';
 const NUMBEROFYEARS_VALUE = 'NUMBEROFYEARS_VALUE';
-const INITIALSQM_VALUE = 'INITIALSQM_VALUE';
+const INITIALAREAAMOUNTOWN_VALUE = 'INITIALAREAAMOUNTOWN_VALUE';
 const INITIALESTABLISHCOSTPERSQMOWN_VALUE = 'INITIALESTABLISHCOSTPERSQMOWN_VALUE';
 const KWHOWN_VALUE = 'KWHOWN_VALUE';
 const KRPERKWHOWN_VALUE = 'KRPERKWHOWN_VALUE';
@@ -39,7 +39,13 @@ const DEC2AREA_VALUE = 'DEC2AREA_VALUE';
 const DEC3AREA_VALUE = 'DEC3AREA_VALUE';
 const DEC4AREA_VALUE = 'DEC4AREA_VALUE';
 
+const RENTINCREASE_VALUE = 'RENTINCREASE_VALUE';
+const INITIALRENTCOSTPERSQM_VALUE = 'INITIALRENTCOSTPERSQM_VALUE';
 
+const KRPERKWH_VALUE = 'KRPERKWH_VALUE';
+const KWH_VALUE = 'KWH_VALUE';
+
+const TESTVALUE_VALUE = 'TESTVALUE_VALUE';
 
 export const action = {
     threevalue: (payload) => {
@@ -90,9 +96,9 @@ export const action = {
           payload: payload
         };
       },
-      initialsqmvalue: (payload) => {
+      initialAreaAmountOwnValue: (payload) => {
         return {
-          type: INITIALSQM_VALUE,
+          type: INITIALAREAAMOUNTOWN_VALUE,
           payload: payload
         };
       },
@@ -275,5 +281,35 @@ export const action = {
           type: DEC4AREA_VALUE,
           payload: payload
         };
-      }  
+      },
+      rentincreaseValue: (payload) => {
+        return {
+          type: RENTINCREASE_VALUE,
+          payload: payload
+        };
+      },
+      initialRentCostPerSqmValue: (payload) => {
+        return {
+          type: INITIALRENTCOSTPERSQM_VALUE,
+          payload: payload
+        };
+      },
+      kwhValue: (payload) => {
+        return {
+          type: KWH_VALUE,
+          payload: payload
+        };
+      },
+      krperkwhValue: (payload) => {
+        return {
+          type: KRPERKWH_VALUE,
+          payload: payload
+        };
+      },
+      testvalueValue: (payload) => {
+        return {
+          type: TESTVALUE_VALUE,
+          payload: payload
+        };
+      }   
 }

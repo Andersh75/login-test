@@ -8,8 +8,11 @@ import '@whcg/whcg-section-textlong-input-chart';
 import '@whcg/whcg-section-chart-text-inputlong';
 import '@whcg/whcg-section-textlong-chart-input'
 import './whcg-box-container.js';
-import '@whcg/whcg-chart';
 import './whcg-number-field';
+import './whcg-chart.js';
+
+
+import { whcgJsonMaker, whcgObjMerger, whcgPeriodOperator, getRandomColor, whcgChartJsTransformer, whcgMultiplier, whcgCompounder } from './whcg-functions.js';
 import { grid } from './grid.css.js';
 
 
@@ -17,11 +20,107 @@ import { grid } from './grid.css.js';
 
 export class XTwo extends LitElement {
 
+    updated(changedProps) {
+        super.updated(changedProps);
+        if (changedProps.has('kwhOwn')) {
+            if(this.krPerKwhOwn) {
+                let data = {
+                    updatedProp: whcgMultiplier([this.kwhOwn, this.krPerKwhOwn]),
+                    period: '10',
+                    fill: true,
+                    key: '0',
+                    datapackage: 'yearlyamounts',
+                    label: 'kr/kvm',
+                    name: 'Värmekostnader per kvm (ej uppräknade)',
+                }
+    
+                this.whcgCompoundedHeatCostsPerSqmOwnObj = whcgCompounder(whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill), 0.03)
+            } 
+        }
+
+        if (changedProps.has('krPerKwhOwn')) {
+            if(this.kwhOwn) {
+                let data = {
+                    updatedProp: whcgMultiplier([this.kwhOwn, this.krPerKwhOwn]),
+                    period: '10',
+                    fill: true,
+                    key: '0',
+                    datapackage: 'yearlyamounts',
+                    label: 'kr/kvm',
+                    name: 'Värmekostnader per kvm (ej uppräknade)',
+                }
+    
+                this.whcgCompoundedHeatCostsPerSqmOwnObj = whcgCompounder(whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill), 0.03)
+            } 
+        }
+
+        if (changedProps.has('whcgCompoundedHeatCostsPerSqmOwnObj')) {
+            console.log('COMPOUNDER!!!!');
+            console.log(this.whcgCompoundedHeatCostsPerSqmOwnObj);
+
+
+            //YTA NEXT
+
+            //PUT YTA IN COMMON TO STORE IN ORDER TO SHARE PROPERTIES
+        }
+
+
+
+
+        if (changedProps.has('initialAreaAmountOwn')) {
+            let data = {
+                updatedProp: this.initialAreaAmountOwn,
+                period: '10',
+                fill: false,
+                key: '0',
+                datapackage: 'yearlyamounts',
+                label: 'kvm',
+                name: 'Initialt etablerad yta',
+            }
+
+            this.whcgNonCompoundedAreaAmountsOwnObj = whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill)
+        }
+
+        if (changedProps.has('initialEstablishCostPerSqmOwn')) {
+            let data = {
+                updatedProp: this.initialEstablishCostPerSqmOwn,
+                period: '10',
+                fill: false,
+                key: '0',
+                datapackage: 'yearlyamounts',
+                label: 'kr',
+                name: 'Etableringskostnader per kvm',
+            }
+
+            this.whcgInitialEstablishCostPerSqmOwnObj = whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill)
+        }
+
+        if (changedProps.has('whcgNonCompoundedAreaAmountsOwnObj')) {
+            if(this.whcgInitialEstablishCostPerSqmOwnObj) {
+                this.whcgInitialEstablishCostOwnObj = whcgPeriodOperator(whcgObjMerger([this.whcgNonCompoundedAreaAmountsOwnObj, this.whcgInitialEstablishCostPerSqmOwnObj]), 'multiply', 'Etableringskostnader', 'kr', 'yearlyamounts');
+            }
+        }
+
+        if (changedProps.has('whcgInitialEstablishCostPerSqmOwnObj')) {
+            if(this.whcgNonCompoundedAreaAmountsOwnObj) {
+                this.whcgInitialEstablishCostOwnObj = whcgPeriodOperator(whcgObjMerger([this.whcgInitialEstablishCostPerSqmOwnObj, this.whcgNonCompoundedAreaAmountsOwnObj]), 'multiply', 'Etableringskostnader', 'kr', 'yearlyamounts')
+            }
+        }
+
+        if (changedProps.has('whcgInitialEstablishCostOwnObj')) {
+            this.chartJsInitialEstablishCostOwnObj = whcgChartJsTransformer({whcgObj: this.whcgInitialEstablishCostOwnObj, datapackage: 'yearlyamounts'})
+        } 
+    }
+
     static get properties() {
         return {
             storeHolder: {type: Object},
-            initialsqm: {type: String},
+            initialAreaAmountOwn: {type: String},
             initialEstablishCostPerSqmOwn: {type: String},
+            whcgNonCompoundedAreaAmountsOwnObj: {type: Object},
+            whcgInitialEstablishCostPerSqmOwnObj: {type: Object},
+            whcgInitialEstablishCostOwnObj: {type: Object},
+            chartJsInitialEstablishCostOwnObj: {type: Object},
             kwhOwn: {type: String},
             krPerkwhOwn: {type: String},
             maint1yearOwn: {type: String},
@@ -33,8 +132,13 @@ export class XTwo extends LitElement {
             maint3costOwn: {type: String},
             maint4costOwn: {type: String},
             compoundrateRepairOwn: {type: String},
-            initialRepairCostPerSqmOwn: {type: String}     
+            initialRepairCostPerSqmOwn: {type: String},
+            whcgCompoundedHeatCostsPerSqmOwnObj: {type: Object}
         };
+    }
+
+    constructor() {
+        super();
     }
 
     render() {
@@ -48,7 +152,7 @@ export class XTwo extends LitElement {
                 <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
                 </span>
                 <whcg-number-field-box slot="input" column name="">
-                    <whcg-number-field label="Antal kvm" @valueChanged=${this.initialsqmChanged.bind(this)} value=${this.initialsqm} suffix="kvm" placeholder="...antal"></whcg-number-field>
+                    <whcg-number-field label="Antal kvm" @valueChanged=${this.initialAreaAmountOwnChanged.bind(this)} value=${this.initialAreaAmountOwn} suffix="kvm" placeholder="...antal"></whcg-number-field>
                 </whcg-number-field-box>
             </whcg-section-text-input>
 
@@ -60,9 +164,8 @@ export class XTwo extends LitElement {
                 <whcg-number-field-box slot="input" name="Inflation">
                     <whcg-number-field label="Etableringskostnad per kvm" @valueChanged=${this.initialEstablishCostPerSqmOwnChanged.bind(this)} value=${this.initialEstablishCostPerSqmOwn} suffix="kr" placeholder="...antal kr"></whcg-number-field>
                 </whcg-number-field-box>
-                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsInitialEstablishCostOwn}}"></whcg-chart>
+                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" .value=${this.chartJsInitialEstablishCostOwnObj}></whcg-chart>
             </whcg-section-textlong-input-chart>
-
 
             <whcg-section-textlong-input-chart class="col1span12">
                 <span slot="title">VÄRMEKOSTNADER</span>
@@ -72,87 +175,24 @@ export class XTwo extends LitElement {
                     <whcg-number-field label="Antal kWh/kvm/år" @valueChanged=${this.kwhOwnChanged.bind(this)} value=${this.kwhOwn} placeholder="...antal" kind="amount" suffix="kWh"></whcg-number-field>
                     <whcg-number-field label="Kostnad per kWh" @valueChanged=${this.krPerKwhOwnChanged.bind(this)} value=${this.krPerKwhOwn} placeholder="... antal" kind="price" suffix="kr"></whcg-number-field>
                 </whcg-number-field-box>
-                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
                     chartjson="{{chartJsCompoundedHeatCostsOwnJson}}">
-                </whcg-chart> 
+                </whcg-chart>  -->
             </whcg-section-textlong-input-chart>
 
-
-            <whcg-section-chart-text-inputlong class="col1span12">
-                <span slot="title">PLANNERAT UNDERHÅLL</span>
-                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumMaintenanceAllJson}}">
-                </whcg-chart>
-                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-                </span>
-                <whcg-box-container slot="input" name="Underhållsinsatser">
-                    <whcg-number-field-box column name="Underhållsinsats 1">
-                        <whcg-number-field label="År" @valueChanged=${this.maint1yearOwnChanged.bind(this)} value=${this.maint1yearOwn} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint1costOwnChanged.bind(this)} value=${this.maint1costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Underhållsinsats 2">
-                        <whcg-number-field label="År" @valueChanged=${this.maint2yearOwnChanged.bind(this)} value=${this.maint2yearOwn} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint2costOwnChanged.bind(this)} value=${this.maint2costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Underhållsinsats 3">
-                        <whcg-number-field label="År" @valueChanged=${this.maint3yearOwnChanged.bind(this)} value=${this.maint3yearOwn} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint3costOwnChanged.bind(this)} value=${this.maint3costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Underhållsinsats 4">
-                        <whcg-number-field label="År" @valueChanged=${this.maint4yearOwnChanged.bind(this)} value=${this.maint4yearOwn} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint4costOwnChanged.bind(this)} value=${this.maint4costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                </whcg-box-container>
-            </whcg-section-chart-text-inputlong>
-
-            <whcg-section-textlong-chart-input class="col1span12">
-                <span slot="title">KOSTNADER FÖR REPARATIONER OCH LÖPANDE UNDERHÅLL</span>
-                <span slot="text">Selectedpage sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-                </span>
-                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
-                    chartjson="{{chartJsCompoundedRepairCostsOwnJson}}">
-                </whcg-chart> 
-                <whcg-number-field-box slot="input" column name="" mode="none">
-                    <whcg-select label="Kostnadsutveckling" suffix="%" @valueChanged=${this.compoundrateRepairOwnChanged.bind(this)} value=${this.compoundrateRepairOwn} placeholder="...antal procent" jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
-                    <whcg-number-field label="Kostnad per kvm" @valueChanged=${this.initialRepairCostPerSqmOwnChanged.bind(this)} value=${this.initialRepairCostPerSqmOwn} placeholder="... antal" kind="price" suffix="kr"></whcg-number-field>
-                </whcg-number-field-box>
-            </whcg-section-textlong-input-chart>
-
-        </div>  `
+        </div>
+        `
     }
 
 
-    adder(values) {
-        return values.reduce((acc, value) => acc+value, 0);
-    }
-
-    valueChanged(e) {
-        let newValue = this.$.vdm.__data.value;
-        this.dispatchEvent(new CustomEvent('valueChanged', { bubbles: true, composed: true, detail: { value: newValue } }))
-      }
-
-    initialsqmChanged(e) {
-        this.storeHolder.store.dispatch(action.initialsqmvalue(e.detail.value));
+    initialAreaAmountOwnChanged(e) {
+        console.log('initialAreaAmountOwnChanged');
+        this.storeHolder.store.dispatch(action.initialAreaAmountOwnValue(e.detail.value));
     }
 
     initialEstablishCostPerSqmOwnChanged(e) {
+        console.log('initialEstablishCostPerSqmOwnChanged');
         this.storeHolder.store.dispatch(action.initialEstablishCostPerSqmOwnValue(e.detail.value));
-    }
-
-    _stateChanged(state) {
-        this.initialsqm = state.initialsqm;
-        this.initialEstablishCostPerSqmOwn = state.initialEstablishCostPerSqmOwn;
-        this.kwhOwn = state.kwhOwn;
-        this.krPerKwhOwn = state.krPerKwhOwn;
-        this.maint1yearOwn = state.maint1yearOwn;
-        this.maint2yearOwn = state.maint2yearOwn;
-        this.maint3yearOwn = state.maint3yearOwn;
-        this.maint4yearOwn = state.maint4yearOwn;
-        this.maint1costOwn = state.maint1costOwn;
-        this.maint2costOwn = state.maint2costOwn;
-        this.maint3costOwn = state.maint3costOwn;
-        this.maint4costOwn = state.maint4costOwn;
-        this.initialRepairCostPerSqmOwn = state.initialRepairCostPerSqmOwn;
-        this.compoundrateRepairOwn = state.compoundrateRepairOwn;
     }
 
     kwhOwnChanged(e) {
@@ -202,6 +242,67 @@ export class XTwo extends LitElement {
     initialRepairCostPerSqmOwnChanged(e) {
         this.storeHolder.store.dispatch(action.initialRepairCostPerSqmOwnValue(e.detail.value));
     } 
+
+
+    _stateChanged(state) {
+        console.log('stateChanged');
+        if (this.initialAreaAmountOwn !== state.initialAreaAmountOwn) {
+            this.initialAreaAmountOwn = state.initialAreaAmountOwn;
+        }
+
+        if (this.initialEstablishCostPerSqmOwn !== state.initialEstablishCostPerSqmOwn) {
+            this.initialEstablishCostPerSqmOwn = state.initialEstablishCostPerSqmOwn;
+        }
+
+        if (this.kwhOwn !== state.kwhOwn) {
+            this.kwhOwn = state.kwhOwn;
+        }
+
+        if (this.krPerKwhOwn !== state.krPerKwhOwn) {
+            this.krPerKwhOwn = state.krPerKwhOwn;
+        }
+
+        if (this.maint1yearOwn !== state.maint1yearOwn) {
+            this.maint1yearOwn = state.maint1yearOwn;
+        }
+
+        if (this.maint2yearOwn !== state.maint2yearOwn) {
+            this.maint2yearOwn = state.maint2yearOwn;
+        }
+
+        if (this.maint3yearOwn !== state.maint3yearOwn) {
+            this.maint3yearOwn = state.maint3yearOwn;
+        }
+
+        if (this.maint4yearOwn !== state.maint4yearOwn) {
+            this.maint4yearOwn = state.maint4yearOwn;
+        }
+
+        if (this.maint1costOwn !== state.maint1costOwn) {
+            this.maint1costOwn = state.maint1costOwn;
+        }
+
+        if (this.maint2costOwn !== state.maint2costOwn) {
+            this.maint2costOwn = state.maint2costOwn;
+        }
+
+        if (this.maint3costOwn !== state.maint3costOwn) {
+            this.maint3costOwn = state.maint3costOwn;
+        }
+
+        if (this.maint4costOwn !== state.maint4costOwn) {
+            this.maint4costOwn = state.maint4costOwn;
+        }
+
+        if (this.initialRepairCostPerSqmOwn !== state.initialRepairCostPerSqmOwn) {
+            this.initialRepairCostPerSqmOwn = state.initialRepairCostPerSqmOwn;
+        }
+
+        if (this.compoundrateRepairOwn !== state.compoundrateRepairOwn) {
+            this.compoundrateRepairOwn = state.compoundrateRepairOwn;
+        }
+    }
+
 }
 
 customElements.define('x-two', XTwo);

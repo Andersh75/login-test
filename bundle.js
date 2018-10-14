@@ -25240,8 +25240,8 @@ var MyModule = (function (exports) {
             return {...state, startyear: action.payload}
         case 'NUMBEROFYEARS_VALUE':
             return {...state, numberofyears: action.payload}
-        case 'INITIALSQM_VALUE':
-            return {...state, initialsqm: action.payload}
+        case 'INITIALAREAAMOUNTOWN_VALUE':
+            return {...state, initialAreaAmountOwn: action.payload}
         case 'INITIALESTABLISHCOSTPERSQMOWN_VALUE':
             return {...state, initialEstablishCostPerSqmOwn: action.payload}
         case 'KWHOWN_VALUE':
@@ -25302,6 +25302,16 @@ var MyModule = (function (exports) {
             return {...state, dec3area: action.payload}
         case 'DEC4AREA_VALUE':
             return {...state, dec4area: action.payload}
+        case 'INITIALRENTCOSTPERSQM_VALUE':
+            return {...state, initialRentCostPerSqm: action.payload}
+        case 'RENTINCREASE_VALUE':
+            return {...state, rentincrease: action.payload}
+        case 'KRPERKWH_VALUE':
+            return {...state, krperkwh: action.payload}
+        case 'KWH_VALUE':
+            return {...state, kwh: action.payload}
+        case 'TESTVALUE_VALUE':
+            return {...state, testvalue: action.payload}
         default:
             return state
         }
@@ -25336,7 +25346,7 @@ var MyModule = (function (exports) {
         inflationrate: '0,04',
         startyear: 2018,
         numberofyears: 10,
-        initialsqm: 3000,
+        initialAreaAmountOwn: 3000,
         initialEstablishCostPerSqmOwn: 70,
         kwhOwn: 14,
         krPerKwhOwn: 10,
@@ -25366,7 +25376,12 @@ var MyModule = (function (exports) {
         dec1area: 10,
         dec2area: 10,
         dec3area: 10,
-        dec4area: 10
+        dec4area: 10,
+        initialRentCostPerSqm: 10,
+        rentincrease: 10,
+        krperkwh: 10,
+        kwh: 10,
+        testvalue: 'hopp'
     };
 
     const connectmixin = (element) => {
@@ -27961,7 +27976,7 @@ var MyModule = (function (exports) {
     const INFLATIONRATE_VALUE = 'INFLATIONRATE_VALUE';
     const STARTYEAR_VALUE = 'STARTYEAR_VALUE';
     const NUMBEROFYEARS_VALUE = 'NUMBEROFYEARS_VALUE';
-    const INITIALSQM_VALUE = 'INITIALSQM_VALUE';
+    const INITIALAREAAMOUNTOWN_VALUE = 'INITIALAREAAMOUNTOWN_VALUE';
     const INITIALESTABLISHCOSTPERSQMOWN_VALUE = 'INITIALESTABLISHCOSTPERSQMOWN_VALUE';
     const KWHOWN_VALUE = 'KWHOWN_VALUE';
     const KRPERKWHOWN_VALUE = 'KRPERKWHOWN_VALUE';
@@ -27994,7 +28009,13 @@ var MyModule = (function (exports) {
     const DEC3AREA_VALUE = 'DEC3AREA_VALUE';
     const DEC4AREA_VALUE = 'DEC4AREA_VALUE';
 
+    const RENTINCREASE_VALUE = 'RENTINCREASE_VALUE';
+    const INITIALRENTCOSTPERSQM_VALUE = 'INITIALRENTCOSTPERSQM_VALUE';
 
+    const KRPERKWH_VALUE = 'KRPERKWH_VALUE';
+    const KWH_VALUE = 'KWH_VALUE';
+
+    const TESTVALUE_VALUE = 'TESTVALUE_VALUE';
 
     const action = {
         threevalue: (payload) => {
@@ -28045,9 +28066,9 @@ var MyModule = (function (exports) {
               payload: payload
             };
           },
-          initialsqmvalue: (payload) => {
+          initialAreaAmountOwnValue: (payload) => {
             return {
-              type: INITIALSQM_VALUE,
+              type: INITIALAREAAMOUNTOWN_VALUE,
               payload: payload
             };
           },
@@ -28230,7 +28251,37 @@ var MyModule = (function (exports) {
               type: DEC4AREA_VALUE,
               payload: payload
             };
-          }  
+          },
+          rentincreaseValue: (payload) => {
+            return {
+              type: RENTINCREASE_VALUE,
+              payload: payload
+            };
+          },
+          initialRentCostPerSqmValue: (payload) => {
+            return {
+              type: INITIALRENTCOSTPERSQM_VALUE,
+              payload: payload
+            };
+          },
+          kwhValue: (payload) => {
+            return {
+              type: KWH_VALUE,
+              payload: payload
+            };
+          },
+          krperkwhValue: (payload) => {
+            return {
+              type: KRPERKWH_VALUE,
+              payload: payload
+            };
+          },
+          testvalueValue: (payload) => {
+            return {
+              type: TESTVALUE_VALUE,
+              payload: payload
+            };
+          }   
     };
 
     const styleElementGrid$1 = document.createElement('dom-module');
@@ -32426,316 +32477,6 @@ var MyModule = (function (exports) {
 
     window.customElements.define('whcg-box-container', WhcgBoxContainer);
 
-    /**
-     * `WhcgChart`
-     * 
-     * @customElement
-     * @polymer
-     */
-
-    class WhcgChart extends PolymerElement {
-        static get template() {
-            return html$1`
-        <style>
-        .thediv {
-            /* --_lumo-grid-border-color: var(--whcg-shade-20pct);
-            --_lumo-grid-secondary-border-color: var(--whcg-shade-10pct);
-            --_lumo-grid-border-width: 1px;
-            --_lumo-grid-selected-row-color: var(--parmaco-primary-color-10pct); */
-            font-size: var(--parmaco-font-size-m);
-            border: 1px solid var(--whcg-shade-20pct);
-            border-radius: 5px 5px 4px 4px;
-            background-color: var(--whcg-shade-10pct);
-        }
-
-        </style>
-    <div class="thediv">
-        <canvas id="myChart" width$="{{width}}" height$="{{height}}"></canvas>
-    </div>
-        `;
-        }
-        static get properties() {
-            return {
-                type: {
-                    type: String,
-                    notify: false,
-                    readOnly: false,
-                },
-        
-                chartjson: {
-                    type: String,
-                    notify: false,
-                    readOnly: false,
-                    observer: '_chartjsonChanged'
-                },
-                width: {
-                    type: String,
-                    notify: false,
-                    readOnly: false,
-                    value: '400px' 
-                },
-                height: {
-                    type: String,
-                    notify: false,
-                    readOnly: false,
-                    value: '400px' 
-                },
-                legendposition: {
-                    type: String,
-                    notify: false,
-                    readOnly: false,  
-                    value: 'right'
-                },
-
-                legendfontsize: {
-                    type: Number,
-                    notify: false,
-                    readOnly: false,
-                    value: 12  
-                },
-
-                legendfontfamily: {
-                    type: String,
-                    notify: false,
-                    readOnly: false,
-                    value: 'Arial' 
-                },
-
-                stacked: {
-                    type: Boolean,
-                    notify: false,
-                    readOnly: false,
-                    value: false 
-                },
-            }
-        }
-
-        _chartjsonChanged() {
-            // console.log("chartJsonChanged");
-            
-            this._chartJs(JSON.parse(this.chartjson));
-            // setInterval(function() {
-            //     console.log(this.thechart);
-            // }, 5000);
-        }
-
-        _chartJs(data) {
-            // console.log('data');
-            // console.log(data);
-            var ctx = this.$.myChart;
-            // console.log("ctx");
-            // console.log(ctx);
-            
-            //Chart.defaults.global.defaultFontColor = 'white';
-            //Chart.defaults.global.elements.rectangle.backgroundColor = 'hsla(24, 70%, 50%, 1)';
-            //Chart.defaults.global.elements.rectangle.borderColor = '#FFFFFF';
-            //Chart.defaults.global.elements.rectangle.borderWidth = 1;
-
-
-            //ctx.style.backgroundColor = "hsla(214, 50%, 22%, 0.1)";
-
-            // console.log('this');
-            // console.log(this);
-
-            if (this.thechart != null) {
-                this.thechart.destroy();
-            }
-
-            this.thechart = new Chart(ctx, {
-                type: this.type,
-                data: data,
-
-                options: {
-                    legend: {
-                        position: this.legendposition,
-                        labels: {
-                            fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-                            fontColor: '#FFFFFF',
-                            fontSize: 14,
-                            boxWidth: 14
-                        }
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero:true
-                            }
-                        }],
-                        yAxes: [{
-                            ticks: {
-                                fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-                                fontColor: '#FFFFFF',
-                                fontSize: 14
-                            },
-                            gridLines: {
-                                // display: true,
-                                // color: '#FFFFFF'
-                            }
-                        }],
-                        xAxes: [{
-                            ticks: {
-                                fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-                                fontColor: '#FFFFFF',
-                                fontSize: 14
-                            },
-                            gridLines: {
-                                // display: true,
-                                // color: '#FFFFFF'
-                            }
-                            // scaleLabel: { fontColor: '#6E6E6E', fontSize:16 }
-                        }]
-                    },
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    // title: {
-                    //     display: true,
-                    //     text: 'Title',
-                    //     fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-                    //     fontColor: '#FFFFFF',
-                    //     fontSize: 14
-                    // },
-                    layout: {
-                        padding: {
-                            left: 15,
-                            right: 15,
-                            top: 50,
-                            bottom: 20
-                        }
-                    }
-                    //  label: { fontSize:18 }
-                    
-                    // scales: {
-                    //     xAxes: [{
-                    //         stacked: this.stacked
-                    //     }],
-                    //     yAxes: [{
-                    //         stacked: this.stacked
-                    //     }
-                    //     // {
-                    //     //     ticks: {
-                    //     //         beginAtZero: true
-                    //     //     }
-                    //     // }
-                    // ]
-                    // }
-                }
-            });
-
-            // console.log("myChart");
-            // console.log(this.thechart);
-            // console.log('this');
-            // console.log(this);
-
-            // var that = this;
-
-            
-            // // 
-            // // this.thechart.update();
-
-            // setTimeout(function () {
-            //     // console.log('that');
-            //     // console.log(that);
-            //     // console.log(that.thechart);
-            //     that.thechart = new Chart(ctx, {
-            //         type: that.type,
-            //         data: data,
-
-            //         options: {
-            //             legend: {
-            //                 position: that.legendposition,
-            //                 labels: {
-            //                     fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-            //                     fontColor: '#FFFFFF',
-            //                     fontSize: 14,
-            //                     boxWidth: 14
-            //                 }
-            //             },
-            //             scales: {
-            //                 yAxes: [{
-            //                     ticks: {
-            //                         beginAtZero: true
-            //                     }
-            //                 }],
-            //                 yAxes: [{
-            //                     ticks: {
-            //                         fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-            //                         fontColor: '#FFFFFF',
-            //                         fontSize: 14
-            //                     },
-            //                     gridLines: {
-            //                         // display: true,
-            //                         // color: '#FFFFFF'
-            //                     }
-            //                 }],
-            //                 xAxes: [{
-            //                     ticks: {
-            //                         fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-            //                         fontColor: '#FFFFFF',
-            //                         fontSize: 14
-            //                     },
-            //                     gridLines: {
-            //                         // display: true,
-            //                         // color: '#FFFFFF'
-            //                     }
-            //                     // scaleLabel: { fontColor: '#6E6E6E', fontSize:16 }
-            //                 }]
-            //             },
-            //             // responsive: true,
-            //             // maintainAspectRatio: false,
-            //             // title: {
-            //             //     display: true,
-            //             //     text: 'Title',
-            //             //     fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-            //             //     fontColor: '#FFFFFF',
-            //             //     fontSize: 14
-            //             // },
-            //             layout: {
-            //                 padding: {
-            //                     left: 15,
-            //                     right: 15,
-            //                     top: 50,
-            //                     bottom: 20
-            //                 }
-            //             }
-            //             //  label: { fontSize:18 }
-
-            //             // scales: {
-            //             //     xAxes: [{
-            //             //         stacked: this.stacked
-            //             //     }],
-            //             //     yAxes: [{
-            //             //         stacked: this.stacked
-            //             //     }
-            //             //     // {
-            //             //     //     ticks: {
-            //             //     //         beginAtZero: true
-            //             //     //     }
-            //             //     // }
-            //             // ]
-            //             // }
-            //         }
-            //     });
-            // }, 1000);
-
-
-
-        }
-
-        // constructor() {
-        //     super();
-
-        // }
-
-        // connectedCallback() {
-        //     super.connectedCallback();
-        //    // this._chartJs(JSON.parse(this.chartjson));
-
-           
-        // }
-    }
-
-    window.customElements.define('whcg-chart', WhcgChart);
-
     const $_documentContainer$r = document.createElement('template');
 
     $_documentContainer$r.innerHTML = `<dom-module id="whcg-number-field-styles" theme-for="vaadin-text-field">
@@ -32946,13 +32687,467 @@ var MyModule = (function (exports) {
         //     this.dispatchEvent(event);
         // }
 
+    class WhcgChart extends LitElement {
+
+        render() {
+            console.log('Chart render: value');
+            console.log(this.value);
+            let canvas;
+
+            if (this.value) {
+                canvas = html`<canvas id="myChart" width="400px" height="400px"></canvas>`;
+              } else {
+                canvas = html``;
+              }
+
+            return html`
+        <style>
+            .thediv {
+                font-size: var(--parmaco-font-size-m);
+                border: 1px solid var(--whcg-shade-20pct);
+                border-radius: 5px 5px 4px 4px;
+                background-color: var(--whcg-shade-10pct);
+            }
+
+        </style>
+        <div class="thediv">
+            ${canvas}
+        </div>
+        `;
+        }
+        static get properties() {
+            return {
+                type: {
+                    type: String
+                },
+                value: {
+                    type: Object
+                },
+                width: {
+                    type: String
+                },
+                height: {
+                    type: String
+                },
+                legendposition: {
+                    type: String 
+                },
+
+                legendfontsize: {
+                    type: Number
+                },
+
+                legendfontfamily: {
+                    type: String
+                },
+
+                stacked: {
+                    type: Boolean
+                }
+            }
+        }
+
+
+        constructor() {
+            super();
+            this.width = '400px';
+            this.height = '400px';
+            this.legendposition = 'right';
+            this.legendfontsize = 12;
+            this.legendfontfamily = 'Arial';
+            this.stacked = false;
+        }
+
+        updated(changedProps) {
+            super.updated(changedProps);
+            if (changedProps.has('value')) {
+                console.log('Chart updated: value');
+                console.log(this.value);
+                this._chartJs(this.value);
+                // if(this.value) {
+                //     console.log('chart value');
+                //     console.log(this.value);
+                //     try {
+                //         this._chartJs(JSON.parse(this.value));
+                //     } catch(error) {
+                //         console.log(error);
+                //     }
+                // }  
+            }
+        }
+
+        // firstUpdated(changedProps) {
+        //     super.firstUpdated(changedProps);
+        //     if (changedProps.has('value')) {
+        //         console.log('Chart firstupdated: value')
+        //         console.log(this.value)
+        //         this._chartJs(this.value);
+        //         // if(this.value) {
+        //         //     console.log('chart value');
+        //         //     console.log(this.value);
+        //         //     try {
+        //         //         this._chartJs(JSON.parse(this.value));
+        //         //     } catch(error) {
+        //         //         console.log(error);
+        //         //     }
+        //         // }  
+        //     }
+        // }
+
+
+        _chartJs(data) {
+            console.log('_chartJS');
+            var ctx = this.shadowRoot.querySelector('#myChart');
+
+            if (this.thechart != null) {
+                this.thechart.destroy();
+            }
+
+            this.thechart = new Chart(ctx, {
+                type: this.type,
+                data: data,
+
+                options: {
+                    legend: {
+                        position: this.legendposition,
+                        labels: {
+                            fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                            fontColor: '#FFFFFF',
+                            fontSize: 14,
+                            boxWidth: 14
+                        }
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                                fontColor: '#FFFFFF',
+                                fontSize: 14
+                            },
+                            gridLines: {
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                                fontColor: '#FFFFFF',
+                                fontSize: 14
+                            },
+                            gridLines: {
+                            }
+                        }]
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: 15,
+                            right: 15,
+                            top: 50,
+                            bottom: 20
+                        }
+                    }
+                }
+            });
+
+
+
+        }
+
+
+    }
+
+    window.customElements.define('whcg-chart', WhcgChart);
+
+    function whcgJsonMaker(name, newValue, period, datapackage, label, key, fill) {
+        function resultElementObjFactory(name, data) {
+            // console.log('data');
+            // console.log(data);
+            // console.log('name');
+            // console.log(name);
+        
+            return {
+                object: name,
+                data: data
+            };
+        }
+        
+        function dataFactory(newValue, period, datapackage, label, key, fill) {
+
+            // console.log('newValue in DF');
+            // console.log(newValue);
+            let data = {};
+            let set = {};
+            
+            let defaultValue = fill ? newValue : 0;
+        
+            for (let i = 0; i < period; i++) {
+                set[i] = defaultValue;
+            }
+        
+            set[key] = newValue;
+        
+            data = {...data, [datapackage]: {
+                label: label,
+                set: set
+            }};
+        
+            return data;
+        }
+                
+        let resultItem = resultElementObjFactory(name, dataFactory(Number(newValue), period, datapackage, label, key, fill));
+        
+        // console.log('resultItem');
+        // console.log(resultItem);
+
+        let result = [];
+
+        result = [...result, resultItem];
+
+        let whcgObj = {};
+        return {...whcgObj, result: result };
+    }
+
+
+
+
+
+    function whcgObjMerger(whcgObjs) {
+
+        let resultsArr = whcgObjs.map(item => item.result);
+
+        let result = resultsArr.reduce((acc, results) => {
+            return acc.concat(results);
+        }, []);
+
+        let whcgObj = {result: result};
+
+        return whcgObj;
+
+    }
+
+
+
+
+
+
+    function whcgPeriodOperator(whcgObjs, mode, name, label, datapackage) {
+
+        let acc = 0;
+
+        if (mode === 'multiply') {
+            acc = 1;
+        }
+
+        let setKeys = Object.keys(whcgObjs.result[0].data.yearlyamounts.set);
+
+        let setValues = setKeys.map(setKey => {
+            return whcgObjs.result.reduce((acc, item, index) => {
+                if (isNaN(Number(item.data.yearlyamounts.set[setKey]))) {
+                    return acc;
+                } else {
+
+                    if(mode === 'subtract' && index > 0) {
+                        return acc = acc - Number(item.data.yearlyamounts.set[setKey]);
+                    } else if (mode === 'multiply') {
+                        return acc = acc * Number(item.data.yearlyamounts.set[setKey]);
+                    } else {
+                        return acc = acc + Number(item.data.yearlyamounts.set[setKey]);
+                    } 
+                }
+                
+            }, acc);
+        });
+
+        let whcgObj = {};
+        let result = [];
+
+        whcgObj.result = [];
+
+        let element = resultElementObjMaker(name, dataPackageObjMaker(datapackage, label, keyValueMerger(setKeys, setValues)));
+        // console.log(element);
+        result = [...result, element];
+        console.log(result);
+        whcgObj = {...whcgObj, result: result};
+        // console.log(whcgObj);
+        return whcgObj;
+    }
+
+
+    function keyValueMerger(keys, values) {
+        let tmpObj = {};
+        keys.forEach((key, i) => tmpObj[key] = values[i]);
+        return tmpObj;
+    }
+
+    function dataPackageObjMaker(datapackage, label, set) {
+        return {
+            [datapackage]: {
+                label: label,
+                set: set
+            }
+        };
+    }
+
+    function resultElementObjMaker(name, data) {
+        return {
+            object: name,
+            data: data
+        }
+    }
+
+
+    function whcgChartJsTransformer(data) {
+
+
+            let result = data.whcgObj.result;
+
+            let columnNames = Object.keys(result[0].data[data.datapackage].set);
+
+            let sets = result.map((item) => {
+                let obj = {};
+
+                obj.label = item.object;
+                //obj.backgroundColor = getRandomColor();
+                obj.backgroundColor = 'hsla(24, 70%, 50%, 1)';
+                obj.data = Object.values(item.data[data.datapackage].set);
+                obj.borderColor = '#FFFFFF';
+                obj.borderWidth = 1;
+                return obj;
+            });
+
+            let chartJsData = {};
+            chartJsData.labels = columnNames;
+            chartJsData.datasets = sets;
+
+
+            // console.log('chartJsData');
+            // console.log(chartJsData);
+
+            return chartJsData;
+    }
+
+
+    function whcgMultiplier(values) {
+        return values.reduce((acc, item) => {
+            return acc * Number(item);
+        }, 1);
+    }
+
+    function whcgCompounder(whcgObj, growthRate) {
+         return Object.values(whcgObj.result[0].data['yearlyamounts'].set).map((value, index) => {
+             return value * Math.pow((1 + Number(growthRate)), (index + 1));
+         });
+     }
+
     class XTwo extends LitElement {
+
+        updated(changedProps) {
+            super.updated(changedProps);
+            if (changedProps.has('kwhOwn')) {
+                if(this.krPerKwhOwn) {
+                    let data = {
+                        updatedProp: whcgMultiplier([this.kwhOwn, this.krPerKwhOwn]),
+                        period: '10',
+                        fill: true,
+                        key: '0',
+                        datapackage: 'yearlyamounts',
+                        label: 'kr/kvm',
+                        name: 'Värmekostnader per kvm (ej uppräknade)',
+                    };
+        
+                    this.whcgCompoundedHeatCostsPerSqmOwnObj = whcgCompounder(whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill), 0.03);
+                } 
+            }
+
+            if (changedProps.has('krPerKwhOwn')) {
+                if(this.kwhOwn) {
+                    let data = {
+                        updatedProp: whcgMultiplier([this.kwhOwn, this.krPerKwhOwn]),
+                        period: '10',
+                        fill: true,
+                        key: '0',
+                        datapackage: 'yearlyamounts',
+                        label: 'kr/kvm',
+                        name: 'Värmekostnader per kvm (ej uppräknade)',
+                    };
+        
+                    this.whcgCompoundedHeatCostsPerSqmOwnObj = whcgCompounder(whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill), 0.03);
+                } 
+            }
+
+            if (changedProps.has('whcgCompoundedHeatCostsPerSqmOwnObj')) {
+                console.log('COMPOUNDER!!!!');
+                console.log(this.whcgCompoundedHeatCostsPerSqmOwnObj);
+
+
+                //YTA NEXT
+
+                //PUT YTA IN COMMON TO STORE IN ORDER TO SHARE PROPERTIES
+            }
+
+
+
+
+            if (changedProps.has('initialAreaAmountOwn')) {
+                let data = {
+                    updatedProp: this.initialAreaAmountOwn,
+                    period: '10',
+                    fill: false,
+                    key: '0',
+                    datapackage: 'yearlyamounts',
+                    label: 'kvm',
+                    name: 'Initialt etablerad yta',
+                };
+
+                this.whcgNonCompoundedAreaAmountsOwnObj = whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill);
+            }
+
+            if (changedProps.has('initialEstablishCostPerSqmOwn')) {
+                let data = {
+                    updatedProp: this.initialEstablishCostPerSqmOwn,
+                    period: '10',
+                    fill: false,
+                    key: '0',
+                    datapackage: 'yearlyamounts',
+                    label: 'kr',
+                    name: 'Etableringskostnader per kvm',
+                };
+
+                this.whcgInitialEstablishCostPerSqmOwnObj = whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill);
+            }
+
+            if (changedProps.has('whcgNonCompoundedAreaAmountsOwnObj')) {
+                if(this.whcgInitialEstablishCostPerSqmOwnObj) {
+                    this.whcgInitialEstablishCostOwnObj = whcgPeriodOperator(whcgObjMerger([this.whcgNonCompoundedAreaAmountsOwnObj, this.whcgInitialEstablishCostPerSqmOwnObj]), 'multiply', 'Etableringskostnader', 'kr', 'yearlyamounts');
+                }
+            }
+
+            if (changedProps.has('whcgInitialEstablishCostPerSqmOwnObj')) {
+                if(this.whcgNonCompoundedAreaAmountsOwnObj) {
+                    this.whcgInitialEstablishCostOwnObj = whcgPeriodOperator(whcgObjMerger([this.whcgInitialEstablishCostPerSqmOwnObj, this.whcgNonCompoundedAreaAmountsOwnObj]), 'multiply', 'Etableringskostnader', 'kr', 'yearlyamounts');
+                }
+            }
+
+            if (changedProps.has('whcgInitialEstablishCostOwnObj')) {
+                this.chartJsInitialEstablishCostOwnObj = whcgChartJsTransformer({whcgObj: this.whcgInitialEstablishCostOwnObj, datapackage: 'yearlyamounts'});
+            } 
+        }
 
         static get properties() {
             return {
                 storeHolder: {type: Object},
-                initialsqm: {type: String},
+                initialAreaAmountOwn: {type: String},
                 initialEstablishCostPerSqmOwn: {type: String},
+                whcgNonCompoundedAreaAmountsOwnObj: {type: Object},
+                whcgInitialEstablishCostPerSqmOwnObj: {type: Object},
+                whcgInitialEstablishCostOwnObj: {type: Object},
+                chartJsInitialEstablishCostOwnObj: {type: Object},
                 kwhOwn: {type: String},
                 krPerkwhOwn: {type: String},
                 maint1yearOwn: {type: String},
@@ -32964,8 +33159,13 @@ var MyModule = (function (exports) {
                 maint3costOwn: {type: String},
                 maint4costOwn: {type: String},
                 compoundrateRepairOwn: {type: String},
-                initialRepairCostPerSqmOwn: {type: String}     
+                initialRepairCostPerSqmOwn: {type: String},
+                whcgCompoundedHeatCostsPerSqmOwnObj: {type: Object}
             };
+        }
+
+        constructor() {
+            super();
         }
 
         render() {
@@ -32979,7 +33179,7 @@ var MyModule = (function (exports) {
                 <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
                 </span>
                 <whcg-number-field-box slot="input" column name="">
-                    <whcg-number-field label="Antal kvm" @valueChanged=${this.initialsqmChanged.bind(this)} value=${this.initialsqm} suffix="kvm" placeholder="...antal"></whcg-number-field>
+                    <whcg-number-field label="Antal kvm" @valueChanged=${this.initialAreaAmountOwnChanged.bind(this)} value=${this.initialAreaAmountOwn} suffix="kvm" placeholder="...antal"></whcg-number-field>
                 </whcg-number-field-box>
             </whcg-section-text-input>
 
@@ -32991,9 +33191,8 @@ var MyModule = (function (exports) {
                 <whcg-number-field-box slot="input" name="Inflation">
                     <whcg-number-field label="Etableringskostnad per kvm" @valueChanged=${this.initialEstablishCostPerSqmOwnChanged.bind(this)} value=${this.initialEstablishCostPerSqmOwn} suffix="kr" placeholder="...antal kr"></whcg-number-field>
                 </whcg-number-field-box>
-                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsInitialEstablishCostOwn}}"></whcg-chart>
+                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" .value=${this.chartJsInitialEstablishCostOwnObj}></whcg-chart>
             </whcg-section-textlong-input-chart>
-
 
             <whcg-section-textlong-input-chart class="col1span12">
                 <span slot="title">VÄRMEKOSTNADER</span>
@@ -33003,87 +33202,24 @@ var MyModule = (function (exports) {
                     <whcg-number-field label="Antal kWh/kvm/år" @valueChanged=${this.kwhOwnChanged.bind(this)} value=${this.kwhOwn} placeholder="...antal" kind="amount" suffix="kWh"></whcg-number-field>
                     <whcg-number-field label="Kostnad per kWh" @valueChanged=${this.krPerKwhOwnChanged.bind(this)} value=${this.krPerKwhOwn} placeholder="... antal" kind="price" suffix="kr"></whcg-number-field>
                 </whcg-number-field-box>
-                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
                     chartjson="{{chartJsCompoundedHeatCostsOwnJson}}">
-                </whcg-chart> 
+                </whcg-chart>  -->
             </whcg-section-textlong-input-chart>
 
-
-            <whcg-section-chart-text-inputlong class="col1span12">
-                <span slot="title">PLANNERAT UNDERHÅLL</span>
-                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumMaintenanceAllJson}}">
-                </whcg-chart>
-                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-                </span>
-                <whcg-box-container slot="input" name="Underhållsinsatser">
-                    <whcg-number-field-box column name="Underhållsinsats 1">
-                        <whcg-number-field label="År" @valueChanged=${this.maint1yearOwnChanged.bind(this)} value=${this.maint1yearOwn} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint1costOwnChanged.bind(this)} value=${this.maint1costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Underhållsinsats 2">
-                        <whcg-number-field label="År" @valueChanged=${this.maint2yearOwnChanged.bind(this)} value=${this.maint2yearOwn} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint2costOwnChanged.bind(this)} value=${this.maint2costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Underhållsinsats 3">
-                        <whcg-number-field label="År" @valueChanged=${this.maint3yearOwnChanged.bind(this)} value=${this.maint3yearOwn} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint3costOwnChanged.bind(this)} value=${this.maint3costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Underhållsinsats 4">
-                        <whcg-number-field label="År" @valueChanged=${this.maint4yearOwnChanged.bind(this)} value=${this.maint4yearOwn} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint4costOwnChanged.bind(this)} value=${this.maint4costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                </whcg-box-container>
-            </whcg-section-chart-text-inputlong>
-
-            <whcg-section-textlong-chart-input class="col1span12">
-                <span slot="title">KOSTNADER FÖR REPARATIONER OCH LÖPANDE UNDERHÅLL</span>
-                <span slot="text">Selectedpage sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-                </span>
-                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
-                    chartjson="{{chartJsCompoundedRepairCostsOwnJson}}">
-                </whcg-chart> 
-                <whcg-number-field-box slot="input" column name="" mode="none">
-                    <whcg-select label="Kostnadsutveckling" suffix="%" @valueChanged=${this.compoundrateRepairOwnChanged.bind(this)} value=${this.compoundrateRepairOwn} placeholder="...antal procent" jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
-                    <whcg-number-field label="Kostnad per kvm" @valueChanged=${this.initialRepairCostPerSqmOwnChanged.bind(this)} value=${this.initialRepairCostPerSqmOwn} placeholder="... antal" kind="price" suffix="kr"></whcg-number-field>
-                </whcg-number-field-box>
-            </whcg-section-textlong-input-chart>
-
-        </div>  `
+        </div>
+        `
         }
 
 
-        adder(values) {
-            return values.reduce((acc, value) => acc+value, 0);
-        }
-
-        valueChanged(e) {
-            let newValue = this.$.vdm.__data.value;
-            this.dispatchEvent(new CustomEvent('valueChanged', { bubbles: true, composed: true, detail: { value: newValue } }));
-          }
-
-        initialsqmChanged(e) {
-            this.storeHolder.store.dispatch(action.initialsqmvalue(e.detail.value));
+        initialAreaAmountOwnChanged(e) {
+            console.log('initialAreaAmountOwnChanged');
+            this.storeHolder.store.dispatch(action.initialAreaAmountOwnValue(e.detail.value));
         }
 
         initialEstablishCostPerSqmOwnChanged(e) {
+            console.log('initialEstablishCostPerSqmOwnChanged');
             this.storeHolder.store.dispatch(action.initialEstablishCostPerSqmOwnValue(e.detail.value));
-        }
-
-        _stateChanged(state) {
-            this.initialsqm = state.initialsqm;
-            this.initialEstablishCostPerSqmOwn = state.initialEstablishCostPerSqmOwn;
-            this.kwhOwn = state.kwhOwn;
-            this.krPerKwhOwn = state.krPerKwhOwn;
-            this.maint1yearOwn = state.maint1yearOwn;
-            this.maint2yearOwn = state.maint2yearOwn;
-            this.maint3yearOwn = state.maint3yearOwn;
-            this.maint4yearOwn = state.maint4yearOwn;
-            this.maint1costOwn = state.maint1costOwn;
-            this.maint2costOwn = state.maint2costOwn;
-            this.maint3costOwn = state.maint3costOwn;
-            this.maint4costOwn = state.maint4costOwn;
-            this.initialRepairCostPerSqmOwn = state.initialRepairCostPerSqmOwn;
-            this.compoundrateRepairOwn = state.compoundrateRepairOwn;
         }
 
         kwhOwnChanged(e) {
@@ -33133,6 +33269,67 @@ var MyModule = (function (exports) {
         initialRepairCostPerSqmOwnChanged(e) {
             this.storeHolder.store.dispatch(action.initialRepairCostPerSqmOwnValue(e.detail.value));
         } 
+
+
+        _stateChanged(state) {
+            console.log('stateChanged');
+            if (this.initialAreaAmountOwn !== state.initialAreaAmountOwn) {
+                this.initialAreaAmountOwn = state.initialAreaAmountOwn;
+            }
+
+            if (this.initialEstablishCostPerSqmOwn !== state.initialEstablishCostPerSqmOwn) {
+                this.initialEstablishCostPerSqmOwn = state.initialEstablishCostPerSqmOwn;
+            }
+
+            if (this.kwhOwn !== state.kwhOwn) {
+                this.kwhOwn = state.kwhOwn;
+            }
+
+            if (this.krPerKwhOwn !== state.krPerKwhOwn) {
+                this.krPerKwhOwn = state.krPerKwhOwn;
+            }
+
+            if (this.maint1yearOwn !== state.maint1yearOwn) {
+                this.maint1yearOwn = state.maint1yearOwn;
+            }
+
+            if (this.maint2yearOwn !== state.maint2yearOwn) {
+                this.maint2yearOwn = state.maint2yearOwn;
+            }
+
+            if (this.maint3yearOwn !== state.maint3yearOwn) {
+                this.maint3yearOwn = state.maint3yearOwn;
+            }
+
+            if (this.maint4yearOwn !== state.maint4yearOwn) {
+                this.maint4yearOwn = state.maint4yearOwn;
+            }
+
+            if (this.maint1costOwn !== state.maint1costOwn) {
+                this.maint1costOwn = state.maint1costOwn;
+            }
+
+            if (this.maint2costOwn !== state.maint2costOwn) {
+                this.maint2costOwn = state.maint2costOwn;
+            }
+
+            if (this.maint3costOwn !== state.maint3costOwn) {
+                this.maint3costOwn = state.maint3costOwn;
+            }
+
+            if (this.maint4costOwn !== state.maint4costOwn) {
+                this.maint4costOwn = state.maint4costOwn;
+            }
+
+            if (this.initialRepairCostPerSqmOwn !== state.initialRepairCostPerSqmOwn) {
+                this.initialRepairCostPerSqmOwn = state.initialRepairCostPerSqmOwn;
+            }
+
+            if (this.compoundrateRepairOwn !== state.compoundrateRepairOwn) {
+                this.compoundrateRepairOwn = state.compoundrateRepairOwn;
+            }
+        }
+
     }
 
     customElements.define('x-two', XTwo);
@@ -33158,7 +33355,11 @@ var MyModule = (function (exports) {
                 dec1area: {type: String},
                 dec2area: {type: String},
                 dec3area: {type: String},
-                dec4area: {type: String} 
+                dec4area: {type: String},
+                rentincrease: {type: String},
+                initialRentCostPerSqm: {type: String},
+                krperkwh: {type: String},
+                kwh: {type: String} 
             };
         }
 
@@ -33179,8 +33380,8 @@ var MyModule = (function (exports) {
 
             <whcg-section-chart-text-inputlong class="col1span12">
                 <span slot="title">EXPANSION</span>
-                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumExpansionAreasJson}}">
-                </whcg-chart>
+                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumExpansionAreasJson}}">
+                </whcg-chart> -->
                 <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
                 </span>
                 <whcg-box-container slot="input" name="Expansionsfaser">
@@ -33209,8 +33410,8 @@ var MyModule = (function (exports) {
                 <span slot="title">AVVECKLING</span>
                 <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
                 </span>
-                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumDeclineAreasJson}}">
-                </whcg-chart>
+                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumDeclineAreasJson}}">
+                </whcg-chart> -->
                 <whcg-box-container slot="input" name="Avvecklingsfaser">
                     <whcg-number-field-box column name="Avvecklingsfas 1" mode="none">
                         <whcg-number-field label="År" @valueChanged=${this.dec1yearChanged.bind(this)} value=${this.dec1year} placeholder="...antal"></whcg-number-field>
@@ -33230,6 +33431,35 @@ var MyModule = (function (exports) {
                     </whcg-number-field-box>
                 </whcg-box-container>
             </whcg-section-chart-text-inputlong>
+
+
+            <whcg-section-textlong-chart-input class="col1span12">
+                <span slot="title">HYRESNIVÅ OCH HYRESUTVECKLING</span>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <!-- <whcg-lit-grid slot="chart"></whcg-lit-grid> -->
+                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+                    chartjson="{{chartJsCompoundedRentCostsJson}}">
+                </whcg-chart> -->
+                <whcg-number-field-box slot="input" column name="" mode="none">
+                    <whcg-number-field label="Hyreskostnad per kvm" @valueChanged=${this.initialRentCostPerSqmChanged.bind(this)} value=${this.initialRentCostPerSqm} suffix="kr" placeholder="...antal" kind="amount"></whcg-number-field>
+                    <whcg-select label="Hyreshöjningstakt" suffix="%" @valueChanged=${this.rentincreaseChanged.bind(this)} value=${this.rentincrease} placeholder="...antal procent"
+                        jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
+                </whcg-number-field-box>
+            </whcg-section-textlong-chart-input>
+
+            <whcg-section-textlong-input-chart class="col1span12">
+                <span slot="title">Värmekostnader</span>
+                <span slot="text">Selectedpage sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-number-field-box slot="input" column name="" mode="none">
+                    <whcg-number-field label="Antal kWh/kvm/år" @valueChanged=${this.kwhChanged.bind(this)} value=${this.kwh} placeholder="...antal" kind="amount" suffix="kWh" valueoutput="{{kwh}}"></whcg-number-field>
+                    <whcg-number-field label="Kostnad per kWh" @valueChanged=${this.krperkwhChanged.bind(this)} value=${this.krperkwh} placeholder="... antal" kind="price" suffix="kr" valueoutput="{{krperkwh}}"></whcg-number-field>
+                </whcg-number-field-box>
+                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="450px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+                    chartjson="{{chartJsCompoundedHeatCostsJson}}">
+                </whcg-chart>  -->
+            </whcg-section-textlong-input-chart>
 
         </div>  `
         }
@@ -33306,6 +33536,27 @@ var MyModule = (function (exports) {
 
 
 
+
+
+        initialRentCostPerSqmChanged(e) {
+            this.storeHolder.store.dispatch(action.initialRentCostPerSqmValue(e.detail.value));
+        }
+
+        rentincreaseChanged(e) {
+            this.storeHolder.store.dispatch(action.rentincreaseValue(e.detail.value));
+        }
+
+
+        krperkwhChanged(e) {
+            this.storeHolder.store.dispatch(action.krperkwhValue(e.detail.value));
+        }
+
+        kwhChanged(e) {
+            this.storeHolder.store.dispatch(action.kwhValue(e.detail.value));
+        }
+
+
+
         _stateChanged(state) {
             this.initialAreaAmount = state.initialAreaAmount;
             this.exp1year = state.exp1year;
@@ -33325,32 +33576,214 @@ var MyModule = (function (exports) {
             this.dec2area = state.dec2area;
             this.dec3area = state.dec3area;
             this.dec4area = state.dec4area;
+            this.initialRentCostPerSqm = state.initialRentCostPerSqm;
+            this.rentincrease = state.rentincrease;
+            this.kwh = state.kwh;
+            this.krperkwh = state.krperkwh;
+
         }
     }
 
     customElements.define('x-three', XThree);
 
+    class WhcgSectionTextlongChartlong extends PolymerElement {
+      static get template() {
+        return html$1`
+    <style include = "style-element-grid">
+      
+        .section {
+            padding-top: 130px;
+        }
+
+        .headline {
+            padding-top: 32px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-xl);
+            color: var(--parmaco-base-color-100pct);  
+        }
+
+        .content-text{
+            padding-top: 33px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-s);
+            font-weight: var(--parmaco-font-weight-normal);
+            color: var(--parmaco-base-color-100pct);
+        }
+
+        .content-chart {
+            padding-top: 33px;
+        }
+
+    </style>
+
+
+
+    <div class="col1span12 grid-12 section">
+        <div class="col2span2 headline"><slot name="title"></div>
+        <div class="col4span8 content-text">
+            <slot name="text"></slot>
+        </div>
+        <div class="col4span8 content-chart">
+            <slot name="chart"></slot>
+        </div>
+    </div>
+  `;
+      }
+    }
+
+    window.customElements.define('whcg-section-textlong-chartlong', WhcgSectionTextlongChartlong);
+
     class XFour extends LitElement {
 
-        render() {
-            console.log('new render');
+        static get properties() {
+            return {
+                storeHolder: {type: Object},
+            };
+        }
 
+        render() {
             return html`
+        ${grid}
         <style>
-            .bg {
-                background-color: lime;
-                width: 80vw;
-                height: 90vh;
-                display: flex;
-                /* align-items: center;
-                justify-content: center; */
-            }
-           
         </style>
-        <div class="bg">
-        </div>
-        `
-        }  
+        <div class="grid-12">
+            <whcg-section-textlong-chartlong class="col1span12">
+                <span slot="title">SAMLADE KOSTNADER</span>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <!-- <whcg-lit-grid slot="chart"></whcg-lit-grid> -->
+                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+                    chartjson="{{chartJsMergedCompoundedCostsJson}}">
+                </whcg-chart> -->
+            </whcg-section-textlong-chartlong>
+
+            <whcg-section-textlong-chartlong class="col1span12">
+                <span slot="title">KOSTNADSTABELL</span>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <!-- <whcg-lit-grid slot="chart"></whcg-lit-grid> -->
+            </whcg-section-textlong-chartlong>
+        </div>  `
+        }
+
+
+        initialAreaAmountChanged(e) {
+            this.storeHolder.store.dispatch(action.initialAreaAmountValue(e.detail.value));
+        }
+
+        exp1yearChanged(e) {
+            this.storeHolder.store.dispatch(action.exp1yearValue(e.detail.value));
+        }
+
+        exp2yearChanged(e) {
+            this.storeHolder.store.dispatch(action.exp2yearValue(e.detail.value));
+        }
+
+        exp3yearChanged(e) {
+            this.storeHolder.store.dispatch(action.exp3yearValue(e.detail.value));
+        }
+
+        exp4yearChanged(e) {
+            this.storeHolder.store.dispatch(action.exp4yearValue(e.detail.value));
+        }
+
+        exp1areaChanged(e) {
+            this.storeHolder.store.dispatch(action.exp1areaValue(e.detail.value));
+        }
+
+        exp2areaChanged(e) {
+            this.storeHolder.store.dispatch(action.exp2areaValue(e.detail.value));
+        }
+
+        exp3areaChanged(e) {
+            this.storeHolder.store.dispatch(action.exp3areaValue(e.detail.value));
+        }
+
+        exp4areaChanged(e) {
+            this.storeHolder.store.dispatch(action.exp4areaValue(e.detail.value));
+        }
+
+
+        dec1yearChanged(e) {
+            this.storeHolder.store.dispatch(action.dec1yearValue(e.detail.value));
+        }
+
+        dec2yearChanged(e) {
+            this.storeHolder.store.dispatch(action.dec2yearValue(e.detail.value));
+        }
+
+        dec3yearChanged(e) {
+            this.storeHolder.store.dispatch(action.dec3yearValue(e.detail.value));
+        }
+
+        dec4yearChanged(e) {
+            this.storeHolder.store.dispatch(action.dec4yearValue(e.detail.value));
+        }
+
+        dec1areaChanged(e) {
+            this.storeHolder.store.dispatch(action.dec1areaValue(e.detail.value));
+        }
+
+        dec2areaChanged(e) {
+            this.storeHolder.store.dispatch(action.dec2areaValue(e.detail.value));
+        }
+
+        dec3areaChanged(e) {
+            this.storeHolder.store.dispatch(action.dec3areaValue(e.detail.value));
+        }
+
+        dec4areaChanged(e) {
+            this.storeHolder.store.dispatch(action.dec4areaValue(e.detail.value));
+        }
+
+
+
+
+
+        initialRentCostPerSqmChanged(e) {
+            this.storeHolder.store.dispatch(action.initialRentCostPerSqmValue(e.detail.value));
+        }
+
+        rentincreaseChanged(e) {
+            this.storeHolder.store.dispatch(action.rentincreaseValue(e.detail.value));
+        }
+
+
+        krperkwhChanged(e) {
+            this.storeHolder.store.dispatch(action.krperkwhValue(e.detail.value));
+        }
+
+        kwhChanged(e) {
+            this.storeHolder.store.dispatch(action.kwhValue(e.detail.value));
+        }
+
+
+
+        _stateChanged(state) {
+            this.initialAreaAmount = state.initialAreaAmount;
+            this.exp1year = state.exp1year;
+            this.exp2year = state.exp2year;
+            this.exp3year = state.exp3year;
+            this.exp4year = state.exp4year;
+            this.exp1area = state.exp1area;
+            this.exp2area = state.exp2area;
+            this.exp3area = state.exp3area;
+            this.exp4area = state.exp4area;
+
+            this.dec1year = state.dec1year;
+            this.dec2year = state.dec2year;
+            this.dec3year = state.dec3year;
+            this.dec4year = state.dec4year;
+            this.dec1area = state.dec1area;
+            this.dec2area = state.dec2area;
+            this.dec3area = state.dec3area;
+            this.dec4area = state.dec4area;
+            this.initialRentCostPerSqm = state.initialRentCostPerSqm;
+            this.rentincrease = state.rentincrease;
+            this.kwh = state.kwh;
+            this.krperkwh = state.krperkwh;
+
+        }
     }
 
     customElements.define('x-four', XFour);
