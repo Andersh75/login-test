@@ -6,6 +6,8 @@ export const initState = {
     initialAmountHeatOwn: 14,
     initialPriceHeatOwn: 10,
     initialAmountAreaRent: 3000,
+    initialAmountHeatRent: 10,
+    initialPriceHeatRent: 10,
 
     one: 74,
     two: 47,

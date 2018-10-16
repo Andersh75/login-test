@@ -14,6 +14,10 @@ export function reducer(state, action) {
         return {...state, initialPriceRepairOwn: action.payload}
     case 'INITIALAMOUNTAREARENT_VALUE':
         return {...state, initialAmountAreaRent: action.payload}
+    case 'INITIALAMOUNTHEATRENT_VALUE':
+        return {...state, initialAmountHeatRent: action.payload}
+    case 'INITIALPRICEHEATRENT_VALUE':
+        return {...state, initialPriceHeatRent: action.payload}
 
     case 'ONE_INCREMENT':
         return {...state, one: state.one + 1}

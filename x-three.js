@@ -22,17 +22,122 @@ export class XThree extends LitElement {
         if (changedProps.has('initialAmountAreaRent')) {
             this.initialAmountAreaRent$.next(this.initialAmountAreaRent);
         }
+
+        if (changedProps.has('initialPriceHeatRent')) {
+            this.initialPriceHeatRent$.next(this.initialPriceHeatRent);
+        }
+
+        if (changedProps.has('initialAmountHeatRent')) {
+            this.initialAmountHeatRent$.next(this.initialAmountHeatRent);
+        }
+
+        if (changedProps.has('initialCostHeatRent')) {
+            this.initialCostHeatRent$.next(this.initialCostHeatRent);
+        }
+
+        if (changedProps.has('costHeatRentSet')) {
+            this.costHeatRentSet$.next(this.costHeatRentSet);
+        }
+
+        if (changedProps.has('initialAmountAreaRentSet')) {
+            this.initialAmountAreaRentSet$.next(this.initialAmountAreaRentSet);
+        }
+
+        if (changedProps.has('compondedCostHeatRentSet')) {
+            this.compondedCostHeatRentSet$.next(this.compondedCostHeatRentSet);
+        }
+
+        if (changedProps.has('numberofyears')) {
+            this.numberofyears$.next(this.numberofyears);
+        }
+
+        if (changedProps.has('inflationrate')) {
+            this.inflationrate$.next(this.inflationrate);
+        }
     }
 
     constructor() {
         super();
         this.initialAmountAreaRent$ = new rxjs.BehaviorSubject(0);
+        this.initialPriceHeatRent$ = new rxjs.BehaviorSubject(0);
+        this.initialAmountHeatRent$ = new rxjs.BehaviorSubject(0);
+        this.initialCostHeatRent$ = new rxjs.BehaviorSubject(0);
+        this.costHeatRentSet$ = new rxjs.BehaviorSubject(0);
+        this.initialAmountAreaRentSet$ = new rxjs.BehaviorSubject(0);
+        this.compondedCostHeatRentSet$ = new rxjs.BehaviorSubject(0);
+        this.numberofyears$ = new rxjs.BehaviorSubject(0);
+        this.inflationrate$ = new rxjs.BehaviorSubject(0);
+
+        rxjs.combineLatest(this.initialPriceHeatRent$, this.initialAmountHeatRent$).subscribe(([initialPriceHeatRent, initialAmountHeatRent]) => this.initialCostHeatRent = singleMultiplier([initialPriceHeatRent, initialAmountHeatRent]));
+        rxjs.combineLatest(this.initialCostHeatRent$, this.numberofyears$, this.inflationrate$).subscribe(([initialCostHeatRent, numberofyears, inflationrate]) => this.costHeatRentSet = this.setCostHeatRentSet(initialCostHeatRent, numberofyears, inflationrate));
+        rxjs.combineLatest(this.initialAmountAreaRent$, this.numberofyears$).subscribe(([initialAmountAreaRent, numberofyears]) => this.initialAmountAreaRentSet = this.setInitialAmountAreaRentSet(initialAmountAreaRent, numberofyears));
+        rxjs.combineLatest(this.costHeatRentSet$, this.initialAmountAreaRentSet$).subscribe(([costHeatRentSet, initialAmountAreaRentSet]) => this.compondedCostHeatRentSet = this.setCompondedCostHeatRentSet(initialAmountAreaRentSet, costHeatRentSet));
+        rxjs.combineLatest(this.compondedCostHeatRentSet$).subscribe(([compondedCostHeatRentSet]) => this.chartJsCompondedCostHeatRentObj = this.setChartJsCompondedCostHeatRentObj(compondedCostHeatRentSet));   
+    }
+
+    setCostHeatRentSet(initialCostHeatRent, numberofyears, inflationrate) {
+        let setFactoryData = {
+            value: initialCostHeatRent,
+            period: numberofyears,
+            key: 'fill'
+        }
+
+        let setCompounderdata = {
+            set: setFactory(setFactoryData),
+            growthRate: inflationrate
+        }
+        return setCompounder(setCompounderdata)
+    }
+
+    setInitialAmountAreaRentSet(initialAmountAreaRent, numberofyears) {
+        let setFactoryData = {
+            value: initialAmountAreaRent,
+            period: numberofyears,
+            key: 'fill'
+        }
+        return setFactory(setFactoryData)
+    }
+
+    setCompondedCostHeatRentSet(initialAmountAreaRentSet, costHeatRentSet) {
+        let setsPeriodOperatorData = {
+            sets: [costHeatRentSet, initialAmountAreaRentSet],
+            mode: 'multiply'
+        }
+    
+        return setsPeriodOperator(setsPeriodOperatorData);
+    }
+
+    setChartJsCompondedCostHeatRentObj(compondedCostHeatRentSet) {
+
+        let whcgObjMakerData = {
+            set: compondedCostHeatRentSet,
+            name: 'Värmekostnader',
+            label: 'kr',
+            datapackage: 'yearlyamounts'
+        }
+
+        let whcgChartJsTransformerData = {
+            whcgObj: whcgObjMaker(whcgObjMakerData), 
+            datapackage: 'yearlyamounts'
+        }
+        
+        return whcgChartJsTransformer(whcgChartJsTransformerData)
     }
 
     static get properties() {
         return {
             storeHolder: {type: Object},
             initialAmountAreaRent: {type: String},
+            initialAmountHeatRent: {type: String},
+            initialPriceHeatRent: {type: String},
+            initialCostHeatRent: {type: String},
+            costHeatRentSet: {type: Object},
+            initialAmountAreaRentSet: {type: Object},
+            compondedCostHeatRentSet: {type: Object},
+            chartJsCompondedCostHeatRentObj: {type: Object},
+            numberofyears: {type: String},
+            inflationrate: {type: String},
+            
             // exp1year: {type: String},
             // exp2year: {type: String},
             // exp3year: {type: String},
@@ -71,6 +176,19 @@ export class XThree extends LitElement {
                 </whcg-number-field-box>
             </whcg-section-text-input>
 
+            <whcg-section-textlong-input-chart class="col1span12">
+                <span slot="title">Värmekostnader</span>
+                <span slot="text">Selectedpage sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-number-field-box slot="input" column name="" mode="none">
+                    <whcg-number-field label="Antal kWh/kvm/år" @valueChanged=${this.initialAmountHeatRentChanged.bind(this)} value=${this.initialAmountHeatRent} placeholder="...antal" kind="amount" suffix="kWh" valueoutput="{{kwh}}"></whcg-number-field>
+                    <whcg-number-field label="Kostnad per kWh" @valueChanged=${this.initialPriceHeatRentChanged.bind(this)} value=${this.initialPriceHeatRent} placeholder="... antal" kind="price" suffix="kr" valueoutput="{{krperkwh}}"></whcg-number-field>
+                </whcg-number-field-box>
+                <whcg-chart slot="chart" type="bar" width="800px" height="450px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+                .value=${this.chartJsCompondedCostHeatRentObj}>
+                </whcg-chart> 
+            </whcg-section-textlong-input-chart>
+
 
         </div>  `
     }
@@ -79,6 +197,16 @@ export class XThree extends LitElement {
     initialAmountAreaRentChanged(e) {
         this.storeHolder.store.dispatch(action.initialAmountAreaRentValue(e.detail.value));
     }
+
+    initialAmountHeatRentChanged(e) {
+        this.storeHolder.store.dispatch(action.initialAmountHeatRentValue(e.detail.value));
+    }
+
+    initialPriceHeatRentChanged(e) {
+        this.storeHolder.store.dispatch(action.initialPriceHeatRentValue(e.detail.value));
+    }
+
+
 
     // exp1yearChanged(e) {
     //     this.storeHolder.store.dispatch(action.exp1yearValue(e.detail.value));
@@ -158,19 +286,29 @@ export class XThree extends LitElement {
     // }
 
 
-    // krperkwhChanged(e) {
-    //     this.storeHolder.store.dispatch(action.krperkwhValue(e.detail.value));
-    // }
 
-    // kwhChanged(e) {
-    //     this.storeHolder.store.dispatch(action.kwhValue(e.detail.value));
-    // }
 
 
 
     _stateChanged(state) {
         if (this.initialAmountAreaRent !== state.initialAmountAreaRent) {
             this.initialAmountAreaRent = state.initialAmountAreaRent;
+        }
+
+        if (this.initialAmountHeatRent !== state.initialAmountHeatRent) {
+            this.initialAmountHeatRent = state.initialAmountHeatRent;
+        }
+
+        if (this.initialPriceHeatRent !== state.initialPriceHeatRent) {
+            this.initialPriceHeatRent = state.initialPriceHeatRent;
+        }
+
+        if (this.numberofyears !== state.numberofyears) {
+            this.numberofyears = state.numberofyears;
+        }
+
+        if (this.inflationrate !== state.inflationrate) {
+            this.inflationrate = state.inflationrate;
         }
 
 
@@ -193,8 +331,7 @@ export class XThree extends LitElement {
         // this.dec4area = state.dec4area;
         // this.initialRentCostPerSqm = state.initialRentCostPerSqm;
         // this.rentincrease = state.rentincrease;
-        // this.kwh = state.kwh;
-        // this.krperkwh = state.krperkwh;
+
 
     }
 }
@@ -274,15 +411,3 @@ customElements.define('x-three', XThree);
 // </whcg-number-field-box>
 // </whcg-section-textlong-chart-input>
 
-// <whcg-section-textlong-input-chart class="col1span12">
-// <span slot="title">Värmekostnader</span>
-// <span slot="text">Selectedpage sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-// </span>
-// <whcg-number-field-box slot="input" column name="" mode="none">
-//     <whcg-number-field label="Antal kWh/kvm/år" @valueChanged=${this.kwhChanged.bind(this)} value=${this.kwh} placeholder="...antal" kind="amount" suffix="kWh" valueoutput="{{kwh}}"></whcg-number-field>
-//     <whcg-number-field label="Kostnad per kWh" @valueChanged=${this.krperkwhChanged.bind(this)} value=${this.krperkwh} placeholder="... antal" kind="price" suffix="kr" valueoutput="{{krperkwh}}"></whcg-number-field>
-// </whcg-number-field-box>
-// <!-- <whcg-chart slot="chart" type="bar" width="800px" height="450px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
-//     chartjson="{{chartJsCompoundedHeatCostsJson}}">
-// </whcg-chart>  -->
-// </whcg-section-textlong-input-chart>
