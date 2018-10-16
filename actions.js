@@ -4,7 +4,7 @@ const INITIALPRICEHEATOWN_VALUE = 'INITIALPRICEHEATOWN_VALUE';
 const INITIALPRICEAREAOWN_VALUE = 'INITIALPRICEAREAOWN_VALUE';
 const COMPOUNDRATEREPAIROWN_VALUE = 'COMPOUNDRATEREPAIROWN_VALUE';
 const INITIALPRICEREPAIROWN_VALUE = 'INITIALPRICEREPAIROWN_VALUE';
-
+const INITIALAMOUNTAREARENT_VALUE = 'INITIALAMOUNTAREARENT_VALUE';
 
 
 const THREE_VALUE = 'THREE_VALUE';
@@ -15,7 +15,7 @@ const DISCOUNTRATE_VALUE = 'DISCOUNTRATE_VALUE';
 const INFLATIONRATE_VALUE = 'INFLATIONRATE_VALUE';
 const STARTYEAR_VALUE = 'STARTYEAR_VALUE';
 const NUMBEROFYEARS_VALUE = 'NUMBEROFYEARS_VALUE';
-const INITIALAREAAMOUNTOWN_VALUE = 'INITIALAREAAMOUNTOWN_VALUE';
+
 const INITIALESTABLISHCOSTPERSQMOWN_VALUE = 'INITIALESTABLISHCOSTPERSQMOWN_VALUE';
 const KWHOWN_VALUE = 'KWHOWN_VALUE';
 const KRPERKWHOWN_VALUE = 'KRPERKWHOWN_VALUE';
@@ -54,6 +54,12 @@ const INITIALRENTCOSTPERSQM_VALUE = 'INITIALRENTCOSTPERSQM_VALUE';
 
 
 export const action = {
+  initialAmountAreaRentValue: (payload) => {
+      return {
+        type: INITIALAMOUNTAREARENT_VALUE,
+        payload: payload
+      };
+    },
     initialPriceRepairOwnValue: (payload) => {
       return {
         type: INITIALPRICEREPAIROWN_VALUE,
@@ -138,12 +144,7 @@ export const action = {
           payload: payload
         };
       },
-      initialAreaAmountOwnValue: (payload) => {
-        return {
-          type: INITIALAREAAMOUNTOWN_VALUE,
-          payload: payload
-        };
-      },
+
       maint1costOwnValue: (payload) => {
         return {
           type: MAIN1COSTOWN_VALUE,

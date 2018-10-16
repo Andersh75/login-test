@@ -25232,6 +25232,8 @@ var MyModule = (function (exports) {
             return {...state, compoundrateRepairOwn: action.payload}
         case 'INITIALPRICEREPAIROWN_VALUE':
             return {...state, initialPriceRepairOwn: action.payload}
+        case 'INITIALAMOUNTAREARENT_VALUE':
+            return {...state, initialAmountAreaRent: action.payload}
 
         case 'ONE_INCREMENT':
             return {...state, one: state.one + 1}
@@ -25253,8 +25255,7 @@ var MyModule = (function (exports) {
             return {...state, startyear: action.payload}
         case 'NUMBEROFYEARS_VALUE':
             return {...state, numberofyears: action.payload}
-        case 'INITIALAREAAMOUNTOWN_VALUE':
-            return {...state, initialAreaAmountOwn: action.payload}
+
         case 'MAIN1COSTOWN_VALUE':
             return {...state, maint1costOwn: action.payload}
         case 'MAIN2COSTOWN_VALUE':
@@ -25343,7 +25344,8 @@ var MyModule = (function (exports) {
         initialAmountAreaOwn: 10,
         initialAmountHeatOwn: 14,
         initialPriceHeatOwn: 10,
-        
+        initialAmountAreaRent: 3000,
+
         one: 74,
         two: 47,
         three: 7,
@@ -25354,7 +25356,7 @@ var MyModule = (function (exports) {
         inflationrate: '0.04',
         startyear: 2018,
         numberofyears: 10,
-        initialAreaAmountOwn: 3000,
+
         initialEstablishCostPerSqmOwn: 70,
         krPerKwhOwn: 10,
         maint1yearOwn: 10,
@@ -27977,7 +27979,7 @@ var MyModule = (function (exports) {
     const INITIALPRICEAREAOWN_VALUE = 'INITIALPRICEAREAOWN_VALUE';
     const COMPOUNDRATEREPAIROWN_VALUE = 'COMPOUNDRATEREPAIROWN_VALUE';
     const INITIALPRICEREPAIROWN_VALUE = 'INITIALPRICEREPAIROWN_VALUE';
-
+    const INITIALAMOUNTAREARENT_VALUE = 'INITIALAMOUNTAREARENT_VALUE';
 
 
     const THREE_VALUE = 'THREE_VALUE';
@@ -27988,7 +27990,6 @@ var MyModule = (function (exports) {
     const INFLATIONRATE_VALUE = 'INFLATIONRATE_VALUE';
     const STARTYEAR_VALUE = 'STARTYEAR_VALUE';
     const NUMBEROFYEARS_VALUE = 'NUMBEROFYEARS_VALUE';
-    const INITIALAREAAMOUNTOWN_VALUE = 'INITIALAREAAMOUNTOWN_VALUE';
     const MAIN1COSTOWN_VALUE = 'MAIN1COSTOWN_VALUE';
     const MAIN2COSTOWN_VALUE = 'MAIN2COSTOWN_VALUE';
     const MAIN3COSTOWN_VALUE = 'MAIN3COSTOWN_VALUE';
@@ -28024,6 +28025,12 @@ var MyModule = (function (exports) {
 
 
     const action = {
+      initialAmountAreaRentValue: (payload) => {
+          return {
+            type: INITIALAMOUNTAREARENT_VALUE,
+            payload: payload
+          };
+        },
         initialPriceRepairOwnValue: (payload) => {
           return {
             type: INITIALPRICEREPAIROWN_VALUE,
@@ -28108,12 +28115,7 @@ var MyModule = (function (exports) {
               payload: payload
             };
           },
-          initialAreaAmountOwnValue: (payload) => {
-            return {
-              type: INITIALAREAAMOUNTOWN_VALUE,
-              payload: payload
-            };
-          },
+
           maint1costOwnValue: (payload) => {
             return {
               type: MAIN1COSTOWN_VALUE,
@@ -35888,61 +35890,11 @@ var MyModule = (function (exports) {
             if (changedProps.has('maintAllOwnSet')) {
                 this.maintAllOwnSet$.next(this.maintAllOwnSet);
             }
-
-
-            // }
-
-            // if (changedProps.has('whcgNonCompoundedAreaAmountsOwnObj')) {
-            //     if(this.whcgInitialEstablishCostPerSqmOwnObj) {
-            //         this.whcgInitialEstablishCostOwnObj = whcgPeriodOperator(whcgObjMerger([this.whcgNonCompoundedAreaAmountsOwnObj, this.whcgInitialEstablishCostPerSqmOwnObj]), 'multiply', 'Etableringskostnader', 'kr', 'yearlyamounts');
-            //     }
-            // }
-
-            // if (changedProps.has('whcgInitialEstablishCostPerSqmOwnObj')) {
-            //     if(this.whcgNonCompoundedAreaAmountsOwnObj) {
-            //         this.whcgInitialEstablishCostOwnObj = whcgPeriodOperator(whcgObjMerger([this.whcgInitialEstablishCostPerSqmOwnObj, this.whcgNonCompoundedAreaAmountsOwnObj]), 'multiply', 'Etableringskostnader', 'kr', 'yearlyamounts')
-            //     }
-            // }
-
-            // if (changedProps.has('whcgInitialEstablishCostOwnObj')) {
-            //     this.chartJsInitialEstablishCostOwnObj = whcgChartJsTransformer({whcgObj: this.whcgInitialEstablishCostOwnObj, datapackage: 'yearlyamounts'})
-            // } 
-
-            // if (changedProps.has('whcgCompoundedHeatCostsPerSqmOwnSet')) {
-            //     console.log('COMPOUNDER!!!!');
-            //     console.log(this.whcgCompoundedHeatCostsPerSqmOwnSet);
-            //     console.log('!!numberofyears')
-            //     console.log(this.numberofyears);
-            //     console.log('setFactory');
-            //     console.log(setFactory(this.numberofyears, this.initialAreaAmountOwn, 'fill'));
-            //     this.sumAreasOwnSet = setFactory(this.numberofyears, this.initialAreaAmountOwn, 'fill')
-
-            //     setsPeriodOperator([this.whcgCompoundedHeatCostsPerSqmOwnSet, this.whcgSumAreasOwnSet], 'multiply')
-
-            //     //YTA NEXT
-
-            //     //PUT YTA IN COMMON TO STORE IN ORDER TO SHARE PROPERTIES
-            // }
         }
 
         static get properties() {
             return {
                 storeHolder: {type: Object},
-                // initialAreaAmountOwn: {type: String},
-                // initialEstablishCostPerSqmOwn: {type: String},
-                
-                // whcgNonCompoundedAreaAmountsOwnObj: {type: Object},
-                // whcgInitialEstablishCostPerSqmOwnObj: {type: Object},
-                // whcgInitialEstablishCostOwnObj: {type: Object},
-                // chartJsInitialEstablishCostOwnObj: {type: Object},
-                // kwhOwn: {type: String},
-                // krPerkwhOwn: {type: String},
-
-                // compoundrateRepairOwn: {type: String},
-                // initialRepairCostPerSqmOwn: {type: String},
-                // whcgCompoundedHeatCostsPerSqmOwnObj: {type: Object},
-
-
                 costAreaOwnSet: {type: Object},
                 initialCostAreaOwn: {type: String},
                 chartJsCostAreaOwnObj: {type: Object},
@@ -35976,15 +35928,7 @@ var MyModule = (function (exports) {
                 maint3OwnSet: {type: Object},
                 maint4OwnSet: {type: Object},
                 maintAllOwnSet: {type: Object},
-                chartJsMaintAllOwnObj: {type: Object},
-                
-
-                
-                
-
-
-
-                
+                chartJsMaintAllOwnObj: {type: Object} 
             };
         }
 
@@ -36450,84 +36394,44 @@ var MyModule = (function (exports) {
 
     customElements.define('x-two', XTwo);
 
-
-
-                     // let data = {
-                    //     updatedProp: whcgMultiplier([this.kwhOwn, this.krPerKwhOwn]),
-                    //     period: this.numberofyears,
-                    //     fill: true,
-                    //     key: '0',
-                    //     datapackage: 'yearlyamounts',
-                    //     label: 'kr/kvm',
-                    //     name: 'Värmekostnader per kvm (ej uppräknade)',
-                    // }
-        
-                    // this.whcgCompoundedHeatCostsPerSqmOwnObj = whcgCompounder(whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill), this.inflationrate)
-
-                    // let data = {
-                    //     updatedProp: whcgMultiplier([this.kwhOwn, this.krPerKwhOwn]),
-                    //     period: this.numberofyears,
-                    //     fill: true,
-                    //     key: '0',
-                    //     datapackage: 'yearlyamounts',
-                    //     label: 'kr/kvm',
-                    //     name: 'Värmekostnader per kvm (ej uppräknade)',
-                    // }
-
-                    // this.whcgCompoundedHeatCostsPerSqmOwnSet = setCompounder(setFactory(whcgMultiplier([this.kwhOwn, this.krPerKwhOwn]), this.numberofyears, 'fill'), this.inflationrate);
-        
-                    //this.whcgCompoundedHeatCostsPerSqmOwnSet = whcgCompounder(whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill), this.inflationrate)
-
-                // let data = {
-                //     updatedProp: this.initialAreaAmountOwn,
-                //     period: this.numberofyears,
-                //     fill: false,
-                //     key: '0',
-                //     datapackage: 'yearlyamounts',
-                //     label: 'kvm',
-                //     name: 'Initialt etablerad yta',
-                // }
-
-                // this.whcgNonCompoundedAreaAmountsOwnObj = whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill)
-                // this.initialCostEstablishOwn = setFactory(this.numberofyears, this.initialAmountAreaOwn, 'fill')
-                // let data = {
-                //     updatedProp: this.initialEstablishCostPerSqmOwn,
-                //     period: this.numberofyears,
-                //     fill: false,
-                //     key: '0',
-                //     datapackage: 'yearlyamounts',
-                //     label: 'kr',
-                //     name: 'Etableringskostnader per kvm',
-                // }
-
-                // this.whcgInitialEstablishCostPerSqmOwnObj = whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill)
-
     class XThree extends LitElement {
+
+        updated(changedProps) {
+            super.updated(changedProps);
+            if (changedProps.has('initialAmountAreaRent')) {
+                this.initialAmountAreaRent$.next(this.initialAmountAreaRent);
+            }
+        }
+
+        constructor() {
+            super();
+            this.initialAmountAreaRent$ = new BehaviorSubject(0);
+        }
 
         static get properties() {
             return {
                 storeHolder: {type: Object},
-                initialAreaAmount: {type: String},
-                exp1year: {type: String},
-                exp2year: {type: String},
-                exp3year: {type: String},
-                exp4year: {type: String},
-                exp1area: {type: String},
-                exp2area: {type: String},
-                exp3area: {type: String},
-                exp4area: {type: String},
-                dec1year: {type: String},
-                dec2year: {type: String},
-                dec3year: {type: String},
-                dec4year: {type: String},
-                dec1area: {type: String},
-                dec2area: {type: String},
-                dec3area: {type: String},
-                dec4area: {type: String},
-                rentincrease: {type: String},
-                initialRentCostPerSqm: {type: String},
-                krperkwh: {type: String},
-                kwh: {type: String} 
+                initialAmountAreaRent: {type: String},
+                // exp1year: {type: String},
+                // exp2year: {type: String},
+                // exp3year: {type: String},
+                // exp4year: {type: String},
+                // exp1area: {type: String},
+                // exp2area: {type: String},
+                // exp3area: {type: String},
+                // exp4area: {type: String},
+                // dec1year: {type: String},
+                // dec2year: {type: String},
+                // dec3year: {type: String},
+                // dec4year: {type: String},
+                // dec1area: {type: String},
+                // dec2area: {type: String},
+                // dec3area: {type: String},
+                // dec4area: {type: String},
+                // rentincrease: {type: String},
+                // initialRentCostPerSqm: {type: String},
+                // krperkwh: {type: String},
+                // kwh: {type: String} 
             };
         }
 
@@ -36542,217 +36446,225 @@ var MyModule = (function (exports) {
                 <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
                 </span>
                 <whcg-number-field-box slot="input" column name="" mode="none">
-                    <whcg-number-field label="Antal kvm" @valueChanged=${this.initialAreaAmountChanged.bind(this)} value=${this.initialAreaAmount} suffix="kvm" placeholder="...antal"></whcg-number-field>
+                    <whcg-number-field label="Antal kvm" @valueChanged=${this.initialAmountAreaRentChanged.bind(this)} value=${this.initialAmountAreaRent} suffix="kvm" placeholder="...antal"></whcg-number-field>
                 </whcg-number-field-box>
             </whcg-section-text-input>
 
-            <whcg-section-chart-text-inputlong class="col1span12">
-                <span slot="title">EXPANSION</span>
-                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumExpansionAreasJson}}">
-                </whcg-chart> -->
-                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-                </span>
-                <whcg-box-container slot="input" name="Expansionsfaser">
-                    <whcg-number-field-box column name="Expansionsfas 1" mode="none">
-                        <whcg-number-field label="År" @valueChanged=${this.exp1yearChanged.bind(this)} value=${this.exp1year} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Tillfört antal kvm" @valueChanged=${this.exp1areaChanged.bind(this)} value=${this.exp1area} suffix="kvm" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Expansionsfas 2" mode="none">
-                        <whcg-number-field label="År" @valueChanged=${this.exp2yearChanged.bind(this)} value=${this.exp2year} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Tillfört antal kvm" @valueChanged=${this.exp2areaChanged.bind(this)} value=${this.exp2area} suffix="kvm" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Expansionsfas 3" mode="none">
-                        <whcg-number-field label="År" @valueChanged=${this.exp3yearChanged.bind(this)} value=${this.exp3year} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Tillfört antal kvm" @valueChanged=${this.exp3areaChanged.bind(this)} value=${this.exp3area} suffix="kvm" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Expansionsfas 4" mode="none">
-                        <whcg-number-field label="År" @valueChanged=${this.exp4yearChanged.bind(this)} value=${this.exp4year} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Tillfört antal kvm" @valueChanged=${this.exp4areaChanged.bind(this)} value=${this.exp4area} suffix="kvm" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                </whcg-box-container>
-            </whcg-section-chart-text-inputlong>
-
-
-
-            <whcg-section-chart-text-inputlong class="col1span12">
-                <span slot="title">AVVECKLING</span>
-                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-                </span>
-                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumDeclineAreasJson}}">
-                </whcg-chart> -->
-                <whcg-box-container slot="input" name="Avvecklingsfaser">
-                    <whcg-number-field-box column name="Avvecklingsfas 1" mode="none">
-                        <whcg-number-field label="År" @valueChanged=${this.dec1yearChanged.bind(this)} value=${this.dec1year} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Avvecklat antal kvm" @valueChanged=${this.dec1areaChanged.bind(this)} value=${this.dec1area} suffix="kvm" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Avvecklingsfas 2" mode="none">
-                        <whcg-number-field label="År" @valueChanged=${this.dec2yearChanged.bind(this)} value=${this.dec2year} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Avvecklat antal kvm" @valueChanged=${this.dec2areaChanged.bind(this)} value=${this.dec2area} suffix="kvm" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Avvecklingsfas 3" mode="none">
-                        <whcg-number-field label="År" @valueChanged=${this.dec3yearChanged.bind(this)} value=${this.dec3year} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Avvecklat antal kvm" @valueChanged=${this.dec3areaChanged.bind(this)} value=${this.dec3area} suffix="kvm" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Avvecklingsfas 4" mode="none">
-                        <whcg-number-field label="År" @valueChanged=${this.dec4yearChanged.bind(this)} value=${this.dec4year} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Avvecklat antal kvm" @valueChanged=${this.dec4areaChanged.bind(this)} value=${this.dec4area} suffix="kvm" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                </whcg-box-container>
-            </whcg-section-chart-text-inputlong>
-
-
-            <whcg-section-textlong-chart-input class="col1span12">
-                <span slot="title">HYRESNIVÅ OCH HYRESUTVECKLING</span>
-                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-                </span>
-                <!-- <whcg-lit-grid slot="chart"></whcg-lit-grid> -->
-                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
-                    chartjson="{{chartJsCompoundedRentCostsJson}}">
-                </whcg-chart> -->
-                <whcg-number-field-box slot="input" column name="" mode="none">
-                    <whcg-number-field label="Hyreskostnad per kvm" @valueChanged=${this.initialRentCostPerSqmChanged.bind(this)} value=${this.initialRentCostPerSqm} suffix="kr" placeholder="...antal" kind="amount"></whcg-number-field>
-                    <whcg-select label="Hyreshöjningstakt" suffix="%" @valueChanged=${this.rentincreaseChanged.bind(this)} value=${this.rentincrease} placeholder="...antal procent"
-                        jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
-                </whcg-number-field-box>
-            </whcg-section-textlong-chart-input>
-
-            <whcg-section-textlong-input-chart class="col1span12">
-                <span slot="title">Värmekostnader</span>
-                <span slot="text">Selectedpage sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-                </span>
-                <whcg-number-field-box slot="input" column name="" mode="none">
-                    <whcg-number-field label="Antal kWh/kvm/år" @valueChanged=${this.kwhChanged.bind(this)} value=${this.kwh} placeholder="...antal" kind="amount" suffix="kWh" valueoutput="{{kwh}}"></whcg-number-field>
-                    <whcg-number-field label="Kostnad per kWh" @valueChanged=${this.krperkwhChanged.bind(this)} value=${this.krperkwh} placeholder="... antal" kind="price" suffix="kr" valueoutput="{{krperkwh}}"></whcg-number-field>
-                </whcg-number-field-box>
-                <!-- <whcg-chart slot="chart" type="bar" width="800px" height="450px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
-                    chartjson="{{chartJsCompoundedHeatCostsJson}}">
-                </whcg-chart>  -->
-            </whcg-section-textlong-input-chart>
 
         </div>  `
         }
 
 
-        initialAreaAmountChanged(e) {
-            this.storeHolder.store.dispatch(action.initialAreaAmountValue(e.detail.value));
+        initialAmountAreaRentChanged(e) {
+            this.storeHolder.store.dispatch(action.initialAmountAreaRentValue(e.detail.value));
         }
 
-        exp1yearChanged(e) {
-            this.storeHolder.store.dispatch(action.exp1yearValue(e.detail.value));
-        }
+        // exp1yearChanged(e) {
+        //     this.storeHolder.store.dispatch(action.exp1yearValue(e.detail.value));
+        // }
 
-        exp2yearChanged(e) {
-            this.storeHolder.store.dispatch(action.exp2yearValue(e.detail.value));
-        }
+        // exp2yearChanged(e) {
+        //     this.storeHolder.store.dispatch(action.exp2yearValue(e.detail.value));
+        // }
 
-        exp3yearChanged(e) {
-            this.storeHolder.store.dispatch(action.exp3yearValue(e.detail.value));
-        }
+        // exp3yearChanged(e) {
+        //     this.storeHolder.store.dispatch(action.exp3yearValue(e.detail.value));
+        // }
 
-        exp4yearChanged(e) {
-            this.storeHolder.store.dispatch(action.exp4yearValue(e.detail.value));
-        }
+        // exp4yearChanged(e) {
+        //     this.storeHolder.store.dispatch(action.exp4yearValue(e.detail.value));
+        // }
 
-        exp1areaChanged(e) {
-            this.storeHolder.store.dispatch(action.exp1areaValue(e.detail.value));
-        }
+        // exp1areaChanged(e) {
+        //     this.storeHolder.store.dispatch(action.exp1areaValue(e.detail.value));
+        // }
 
-        exp2areaChanged(e) {
-            this.storeHolder.store.dispatch(action.exp2areaValue(e.detail.value));
-        }
+        // exp2areaChanged(e) {
+        //     this.storeHolder.store.dispatch(action.exp2areaValue(e.detail.value));
+        // }
 
-        exp3areaChanged(e) {
-            this.storeHolder.store.dispatch(action.exp3areaValue(e.detail.value));
-        }
+        // exp3areaChanged(e) {
+        //     this.storeHolder.store.dispatch(action.exp3areaValue(e.detail.value));
+        // }
 
-        exp4areaChanged(e) {
-            this.storeHolder.store.dispatch(action.exp4areaValue(e.detail.value));
-        }
-
-
-        dec1yearChanged(e) {
-            this.storeHolder.store.dispatch(action.dec1yearValue(e.detail.value));
-        }
-
-        dec2yearChanged(e) {
-            this.storeHolder.store.dispatch(action.dec2yearValue(e.detail.value));
-        }
-
-        dec3yearChanged(e) {
-            this.storeHolder.store.dispatch(action.dec3yearValue(e.detail.value));
-        }
-
-        dec4yearChanged(e) {
-            this.storeHolder.store.dispatch(action.dec4yearValue(e.detail.value));
-        }
-
-        dec1areaChanged(e) {
-            this.storeHolder.store.dispatch(action.dec1areaValue(e.detail.value));
-        }
-
-        dec2areaChanged(e) {
-            this.storeHolder.store.dispatch(action.dec2areaValue(e.detail.value));
-        }
-
-        dec3areaChanged(e) {
-            this.storeHolder.store.dispatch(action.dec3areaValue(e.detail.value));
-        }
-
-        dec4areaChanged(e) {
-            this.storeHolder.store.dispatch(action.dec4areaValue(e.detail.value));
-        }
+        // exp4areaChanged(e) {
+        //     this.storeHolder.store.dispatch(action.exp4areaValue(e.detail.value));
+        // }
 
 
+        // dec1yearChanged(e) {
+        //     this.storeHolder.store.dispatch(action.dec1yearValue(e.detail.value));
+        // }
+
+        // dec2yearChanged(e) {
+        //     this.storeHolder.store.dispatch(action.dec2yearValue(e.detail.value));
+        // }
+
+        // dec3yearChanged(e) {
+        //     this.storeHolder.store.dispatch(action.dec3yearValue(e.detail.value));
+        // }
+
+        // dec4yearChanged(e) {
+        //     this.storeHolder.store.dispatch(action.dec4yearValue(e.detail.value));
+        // }
+
+        // dec1areaChanged(e) {
+        //     this.storeHolder.store.dispatch(action.dec1areaValue(e.detail.value));
+        // }
+
+        // dec2areaChanged(e) {
+        //     this.storeHolder.store.dispatch(action.dec2areaValue(e.detail.value));
+        // }
+
+        // dec3areaChanged(e) {
+        //     this.storeHolder.store.dispatch(action.dec3areaValue(e.detail.value));
+        // }
+
+        // dec4areaChanged(e) {
+        //     this.storeHolder.store.dispatch(action.dec4areaValue(e.detail.value));
+        // }
 
 
 
-        initialRentCostPerSqmChanged(e) {
-            this.storeHolder.store.dispatch(action.initialRentCostPerSqmValue(e.detail.value));
-        }
-
-        rentincreaseChanged(e) {
-            this.storeHolder.store.dispatch(action.rentincreaseValue(e.detail.value));
-        }
 
 
-        krperkwhChanged(e) {
-            this.storeHolder.store.dispatch(action.krperkwhValue(e.detail.value));
-        }
+        // initialRentCostPerSqmChanged(e) {
+        //     this.storeHolder.store.dispatch(action.initialRentCostPerSqmValue(e.detail.value));
+        // }
 
-        kwhChanged(e) {
-            this.storeHolder.store.dispatch(action.kwhValue(e.detail.value));
-        }
+        // rentincreaseChanged(e) {
+        //     this.storeHolder.store.dispatch(action.rentincreaseValue(e.detail.value));
+        // }
+
+
+        // krperkwhChanged(e) {
+        //     this.storeHolder.store.dispatch(action.krperkwhValue(e.detail.value));
+        // }
+
+        // kwhChanged(e) {
+        //     this.storeHolder.store.dispatch(action.kwhValue(e.detail.value));
+        // }
 
 
 
         _stateChanged(state) {
-            this.initialAreaAmount = state.initialAreaAmount;
-            this.exp1year = state.exp1year;
-            this.exp2year = state.exp2year;
-            this.exp3year = state.exp3year;
-            this.exp4year = state.exp4year;
-            this.exp1area = state.exp1area;
-            this.exp2area = state.exp2area;
-            this.exp3area = state.exp3area;
-            this.exp4area = state.exp4area;
+            if (this.initialAmountAreaRent !== state.initialAmountAreaRent) {
+                this.initialAmountAreaRent = state.initialAmountAreaRent;
+            }
 
-            this.dec1year = state.dec1year;
-            this.dec2year = state.dec2year;
-            this.dec3year = state.dec3year;
-            this.dec4year = state.dec4year;
-            this.dec1area = state.dec1area;
-            this.dec2area = state.dec2area;
-            this.dec3area = state.dec3area;
-            this.dec4area = state.dec4area;
-            this.initialRentCostPerSqm = state.initialRentCostPerSqm;
-            this.rentincrease = state.rentincrease;
-            this.kwh = state.kwh;
-            this.krperkwh = state.krperkwh;
+
+            // this.exp1year = state.exp1year;
+            // this.exp2year = state.exp2year;
+            // this.exp3year = state.exp3year;
+            // this.exp4year = state.exp4year;
+            // this.exp1area = state.exp1area;
+            // this.exp2area = state.exp2area;
+            // this.exp3area = state.exp3area;
+            // this.exp4area = state.exp4area;
+
+            // this.dec1year = state.dec1year;
+            // this.dec2year = state.dec2year;
+            // this.dec3year = state.dec3year;
+            // this.dec4year = state.dec4year;
+            // this.dec1area = state.dec1area;
+            // this.dec2area = state.dec2area;
+            // this.dec3area = state.dec3area;
+            // this.dec4area = state.dec4area;
+            // this.initialRentCostPerSqm = state.initialRentCostPerSqm;
+            // this.rentincrease = state.rentincrease;
+            // this.kwh = state.kwh;
+            // this.krperkwh = state.krperkwh;
 
         }
     }
 
     customElements.define('x-three', XThree);
+
+
+
+
+    // <whcg-section-chart-text-inputlong class="col1span12">
+    // <span slot="title">EXPANSION</span>
+    // <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumExpansionAreasJson}}">
+    // </whcg-chart> -->
+    // <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+    // </span>
+    // <whcg-box-container slot="input" name="Expansionsfaser">
+    //     <whcg-number-field-box column name="Expansionsfas 1" mode="none">
+    //         <whcg-number-field label="År" @valueChanged=${this.exp1yearChanged.bind(this)} value=${this.exp1year} placeholder="...antal"></whcg-number-field>
+    //         <whcg-number-field label="Tillfört antal kvm" @valueChanged=${this.exp1areaChanged.bind(this)} value=${this.exp1area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+    //     </whcg-number-field-box>
+    //     <whcg-number-field-box column name="Expansionsfas 2" mode="none">
+    //         <whcg-number-field label="År" @valueChanged=${this.exp2yearChanged.bind(this)} value=${this.exp2year} placeholder="...antal"></whcg-number-field>
+    //         <whcg-number-field label="Tillfört antal kvm" @valueChanged=${this.exp2areaChanged.bind(this)} value=${this.exp2area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+    //     </whcg-number-field-box>
+    //     <whcg-number-field-box column name="Expansionsfas 3" mode="none">
+    //         <whcg-number-field label="År" @valueChanged=${this.exp3yearChanged.bind(this)} value=${this.exp3year} placeholder="...antal"></whcg-number-field>
+    //         <whcg-number-field label="Tillfört antal kvm" @valueChanged=${this.exp3areaChanged.bind(this)} value=${this.exp3area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+    //     </whcg-number-field-box>
+    //     <whcg-number-field-box column name="Expansionsfas 4" mode="none">
+    //         <whcg-number-field label="År" @valueChanged=${this.exp4yearChanged.bind(this)} value=${this.exp4year} placeholder="...antal"></whcg-number-field>
+    //         <whcg-number-field label="Tillfört antal kvm" @valueChanged=${this.exp4areaChanged.bind(this)} value=${this.exp4area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+    //     </whcg-number-field-box>
+    // </whcg-box-container>
+    // </whcg-section-chart-text-inputlong>
+
+
+
+    // <whcg-section-chart-text-inputlong class="col1span12">
+    // <span slot="title">AVVECKLING</span>
+    // <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+    // </span>
+    // <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" chartjson="{{chartJsSumDeclineAreasJson}}">
+    // </whcg-chart> -->
+    // <whcg-box-container slot="input" name="Avvecklingsfaser">
+    //     <whcg-number-field-box column name="Avvecklingsfas 1" mode="none">
+    //         <whcg-number-field label="År" @valueChanged=${this.dec1yearChanged.bind(this)} value=${this.dec1year} placeholder="...antal"></whcg-number-field>
+    //         <whcg-number-field label="Avvecklat antal kvm" @valueChanged=${this.dec1areaChanged.bind(this)} value=${this.dec1area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+    //     </whcg-number-field-box>
+    //     <whcg-number-field-box column name="Avvecklingsfas 2" mode="none">
+    //         <whcg-number-field label="År" @valueChanged=${this.dec2yearChanged.bind(this)} value=${this.dec2year} placeholder="...antal"></whcg-number-field>
+    //         <whcg-number-field label="Avvecklat antal kvm" @valueChanged=${this.dec2areaChanged.bind(this)} value=${this.dec2area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+    //     </whcg-number-field-box>
+    //     <whcg-number-field-box column name="Avvecklingsfas 3" mode="none">
+    //         <whcg-number-field label="År" @valueChanged=${this.dec3yearChanged.bind(this)} value=${this.dec3year} placeholder="...antal"></whcg-number-field>
+    //         <whcg-number-field label="Avvecklat antal kvm" @valueChanged=${this.dec3areaChanged.bind(this)} value=${this.dec3area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+    //     </whcg-number-field-box>
+    //     <whcg-number-field-box column name="Avvecklingsfas 4" mode="none">
+    //         <whcg-number-field label="År" @valueChanged=${this.dec4yearChanged.bind(this)} value=${this.dec4year} placeholder="...antal"></whcg-number-field>
+    //         <whcg-number-field label="Avvecklat antal kvm" @valueChanged=${this.dec4areaChanged.bind(this)} value=${this.dec4area} suffix="kvm" placeholder="...antal"></whcg-number-field>
+    //     </whcg-number-field-box>
+    // </whcg-box-container>
+    // </whcg-section-chart-text-inputlong>
+
+
+    // <whcg-section-textlong-chart-input class="col1span12">
+    // <span slot="title">HYRESNIVÅ OCH HYRESUTVECKLING</span>
+    // <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+    // </span>
+    // <!-- <whcg-lit-grid slot="chart"></whcg-lit-grid> -->
+    // <!-- <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+    //     chartjson="{{chartJsCompoundedRentCostsJson}}">
+    // </whcg-chart> -->
+    // <whcg-number-field-box slot="input" column name="" mode="none">
+    //     <whcg-number-field label="Hyreskostnad per kvm" @valueChanged=${this.initialRentCostPerSqmChanged.bind(this)} value=${this.initialRentCostPerSqm} suffix="kr" placeholder="...antal" kind="amount"></whcg-number-field>
+    //     <whcg-select label="Hyreshöjningstakt" suffix="%" @valueChanged=${this.rentincreaseChanged.bind(this)} value=${this.rentincrease} placeholder="...antal procent"
+    //         jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
+    // </whcg-number-field-box>
+    // </whcg-section-textlong-chart-input>
+
+    // <whcg-section-textlong-input-chart class="col1span12">
+    // <span slot="title">Värmekostnader</span>
+    // <span slot="text">Selectedpage sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+    // </span>
+    // <whcg-number-field-box slot="input" column name="" mode="none">
+    //     <whcg-number-field label="Antal kWh/kvm/år" @valueChanged=${this.kwhChanged.bind(this)} value=${this.kwh} placeholder="...antal" kind="amount" suffix="kWh" valueoutput="{{kwh}}"></whcg-number-field>
+    //     <whcg-number-field label="Kostnad per kWh" @valueChanged=${this.krperkwhChanged.bind(this)} value=${this.krperkwh} placeholder="... antal" kind="price" suffix="kr" valueoutput="{{krperkwh}}"></whcg-number-field>
+    // </whcg-number-field-box>
+    // <!-- <whcg-chart slot="chart" type="bar" width="800px" height="450px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+    //     chartjson="{{chartJsCompoundedHeatCostsJson}}">
+    // </whcg-chart>  -->
+    // </whcg-section-textlong-input-chart>
 
     class WhcgSectionTextlongChartlong extends PolymerElement {
       static get template() {

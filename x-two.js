@@ -138,61 +138,11 @@ export class XTwo extends LitElement {
         if (changedProps.has('maintAllOwnSet')) {
             this.maintAllOwnSet$.next(this.maintAllOwnSet);
         }
-
-
-        // }
-
-        // if (changedProps.has('whcgNonCompoundedAreaAmountsOwnObj')) {
-        //     if(this.whcgInitialEstablishCostPerSqmOwnObj) {
-        //         this.whcgInitialEstablishCostOwnObj = whcgPeriodOperator(whcgObjMerger([this.whcgNonCompoundedAreaAmountsOwnObj, this.whcgInitialEstablishCostPerSqmOwnObj]), 'multiply', 'Etableringskostnader', 'kr', 'yearlyamounts');
-        //     }
-        // }
-
-        // if (changedProps.has('whcgInitialEstablishCostPerSqmOwnObj')) {
-        //     if(this.whcgNonCompoundedAreaAmountsOwnObj) {
-        //         this.whcgInitialEstablishCostOwnObj = whcgPeriodOperator(whcgObjMerger([this.whcgInitialEstablishCostPerSqmOwnObj, this.whcgNonCompoundedAreaAmountsOwnObj]), 'multiply', 'Etableringskostnader', 'kr', 'yearlyamounts')
-        //     }
-        // }
-
-        // if (changedProps.has('whcgInitialEstablishCostOwnObj')) {
-        //     this.chartJsInitialEstablishCostOwnObj = whcgChartJsTransformer({whcgObj: this.whcgInitialEstablishCostOwnObj, datapackage: 'yearlyamounts'})
-        // } 
-
-        // if (changedProps.has('whcgCompoundedHeatCostsPerSqmOwnSet')) {
-        //     console.log('COMPOUNDER!!!!');
-        //     console.log(this.whcgCompoundedHeatCostsPerSqmOwnSet);
-        //     console.log('!!numberofyears')
-        //     console.log(this.numberofyears);
-        //     console.log('setFactory');
-        //     console.log(setFactory(this.numberofyears, this.initialAreaAmountOwn, 'fill'));
-        //     this.sumAreasOwnSet = setFactory(this.numberofyears, this.initialAreaAmountOwn, 'fill')
-
-        //     setsPeriodOperator([this.whcgCompoundedHeatCostsPerSqmOwnSet, this.whcgSumAreasOwnSet], 'multiply')
-
-        //     //YTA NEXT
-
-        //     //PUT YTA IN COMMON TO STORE IN ORDER TO SHARE PROPERTIES
-        // }
     }
 
     static get properties() {
         return {
             storeHolder: {type: Object},
-            // initialAreaAmountOwn: {type: String},
-            // initialEstablishCostPerSqmOwn: {type: String},
-            
-            // whcgNonCompoundedAreaAmountsOwnObj: {type: Object},
-            // whcgInitialEstablishCostPerSqmOwnObj: {type: Object},
-            // whcgInitialEstablishCostOwnObj: {type: Object},
-            // chartJsInitialEstablishCostOwnObj: {type: Object},
-            // kwhOwn: {type: String},
-            // krPerkwhOwn: {type: String},
-
-            // compoundrateRepairOwn: {type: String},
-            // initialRepairCostPerSqmOwn: {type: String},
-            // whcgCompoundedHeatCostsPerSqmOwnObj: {type: Object},
-
-
             costAreaOwnSet: {type: Object},
             initialCostAreaOwn: {type: String},
             chartJsCostAreaOwnObj: {type: Object},
@@ -226,15 +176,7 @@ export class XTwo extends LitElement {
             maint3OwnSet: {type: Object},
             maint4OwnSet: {type: Object},
             maintAllOwnSet: {type: Object},
-            chartJsMaintAllOwnObj: {type: Object},
-            
-
-            
-            
-
-
-
-            
+            chartJsMaintAllOwnObj: {type: Object} 
         };
     }
 
@@ -699,59 +641,6 @@ export class XTwo extends LitElement {
 }
 
 customElements.define('x-two', XTwo);
-
-
-
-                 // let data = {
-                //     updatedProp: whcgMultiplier([this.kwhOwn, this.krPerKwhOwn]),
-                //     period: this.numberofyears,
-                //     fill: true,
-                //     key: '0',
-                //     datapackage: 'yearlyamounts',
-                //     label: 'kr/kvm',
-                //     name: 'Värmekostnader per kvm (ej uppräknade)',
-                // }
-    
-                // this.whcgCompoundedHeatCostsPerSqmOwnObj = whcgCompounder(whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill), this.inflationrate)
-
-                // let data = {
-                //     updatedProp: whcgMultiplier([this.kwhOwn, this.krPerKwhOwn]),
-                //     period: this.numberofyears,
-                //     fill: true,
-                //     key: '0',
-                //     datapackage: 'yearlyamounts',
-                //     label: 'kr/kvm',
-                //     name: 'Värmekostnader per kvm (ej uppräknade)',
-                // }
-
-                // this.whcgCompoundedHeatCostsPerSqmOwnSet = setCompounder(setFactory(whcgMultiplier([this.kwhOwn, this.krPerKwhOwn]), this.numberofyears, 'fill'), this.inflationrate);
-    
-                //this.whcgCompoundedHeatCostsPerSqmOwnSet = whcgCompounder(whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill), this.inflationrate)
-
-            // let data = {
-            //     updatedProp: this.initialAreaAmountOwn,
-            //     period: this.numberofyears,
-            //     fill: false,
-            //     key: '0',
-            //     datapackage: 'yearlyamounts',
-            //     label: 'kvm',
-            //     name: 'Initialt etablerad yta',
-            // }
-
-            // this.whcgNonCompoundedAreaAmountsOwnObj = whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill)
-            // this.initialCostEstablishOwn = setFactory(this.numberofyears, this.initialAmountAreaOwn, 'fill')
-            // let data = {
-            //     updatedProp: this.initialEstablishCostPerSqmOwn,
-            //     period: this.numberofyears,
-            //     fill: false,
-            //     key: '0',
-            //     datapackage: 'yearlyamounts',
-            //     label: 'kr',
-            //     name: 'Etableringskostnader per kvm',
-            // }
-
-            // this.whcgInitialEstablishCostPerSqmOwnObj = whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill)
-
 
 
 

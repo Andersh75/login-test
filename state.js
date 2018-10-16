@@ -5,7 +5,8 @@ export const initState = {
     initialAmountAreaOwn: 10,
     initialAmountHeatOwn: 14,
     initialPriceHeatOwn: 10,
-    
+    initialAmountAreaRent: 3000,
+
     one: 74,
     two: 47,
     three: 7,
@@ -16,7 +17,7 @@ export const initState = {
     inflationrate: '0.04',
     startyear: 2018,
     numberofyears: 10,
-    initialAreaAmountOwn: 3000,
+
     initialEstablishCostPerSqmOwn: 70,
     krPerKwhOwn: 10,
     maint1yearOwn: 10,
