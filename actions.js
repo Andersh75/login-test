@@ -148,25 +148,25 @@ export const action = {
           payload: payload
         };
       },
-      discountratevalue: (payload) => {
+      discountrateValue: (payload) => {
         return {
           type: DISCOUNTRATE_VALUE,
           payload: payload
         };
       },
-      inflationratevalue: (payload) => {
+      inflationrateValue: (payload) => {
         return {
           type: INFLATIONRATE_VALUE,
           payload: payload
         };
       },
-      startyearvalue: (payload) => {
+      startyearValue: (payload) => {
         return {
           type: STARTYEAR_VALUE,
           payload: payload
         };
       },
-      numberofyearsvalue: (payload) => {
+      numberofyearsValue: (payload) => {
         return {
           type: NUMBEROFYEARS_VALUE,
           payload: payload
