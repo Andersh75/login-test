@@ -5,8 +5,18 @@ import '@whcg/whcg-section-text-input';
 import './whcg-select';
 import './whcg-number-field-box';
 import { grid } from './grid.css.js';
+import { whcgJsonMaker, whcgObjMerger, whcgPeriodOperator, getRandomColor, whcgChartJsTransformer, singleMultiplier, whcgCompounder, setFactory, setsPeriodOperator, setCompounder, whcgObjMaker } from './whcg-functions.js';
+import * as rxjs from 'rxjs';
 
 export class XOne extends LitElement {
+
+    constructor() {
+        super();
+        this.discountrate$ = new rxjs.BehaviorSubject(0);
+        this.inflationrate$ = new rxjs.BehaviorSubject(0);
+        this.startyear$ = new rxjs.BehaviorSubject(0);
+        this.numberofyears$ = new rxjs.BehaviorSubject(0);
+    }
 
     static get properties() {
         return {
@@ -16,6 +26,25 @@ export class XOne extends LitElement {
             startyear: {type: String},
             numberofyears: {type: String}
         };
+    }
+
+    updated(changedProps) {
+        super.updated(changedProps);
+        if (changedProps.has('discountrate')) {
+            this.discountrate$.next(this.discountrate);
+        }
+
+        if (changedProps.has('inflationrate')) {
+            this.inflationrate$.next(this.inflationrate);
+        }
+
+        if (changedProps.has('startyear')) {
+            this.startyear$.next(this.startyear);
+        }
+
+        if (changedProps.has('numberofyears')) {
+            this.numberofyears$.next(this.numberofyears);
+        }
     }
 
     render() {
@@ -71,15 +100,26 @@ export class XOne extends LitElement {
         this.storeHolder.store.dispatch(action.startyearvalue(e.detail.value));
     }
 
-    adder(values) {
-        return values.reduce((acc, value) => acc+value, 0);
-    }
+    // adder(values) {
+    //     return values.reduce((acc, value) => acc+value, 0);
+    // }
 
     _stateChanged(state) {
-        this.discountrate = state.discountrate;
-        this.inflationrate = state.inflationrate;
-        this.startyear = state.startyear;
-        this.numberofyears = state.numberofyears;
+        if (this.discountrate !== state.discountrate) {
+            this.discountrate = state.discountrate;
+        }
+
+        if (this.inflationrate !== state.inflationrate) {
+            this.inflationrate = state.inflationrate;
+        }
+
+        if (this.startyear !== state.startyear) {
+            this.startyear = state.startyear;
+        }
+
+        if (this.numberofyears !== state.numberofyears) {
+            this.numberofyears = state.numberofyears;
+        }
     }
 }
 

@@ -32184,694 +32184,130 @@ var MyModule = (function (exports) {
     //     this.whcgjsonoutput = JSON.stringify(whcgObj);
     // };
 
-    class XOne extends LitElement {
-
-        static get properties() {
-            return {
-                storeHolder: {type: Object},
-                discountrate: {type: String},
-                inflationrate: {type: String},
-                startyear: {type: String},
-                numberofyears: {type: String}
-            };
-        }
-
-        render() {
-            return html`
-        ${grid}
-        <style>
-        </style>
-        <div class="grid-12">
-            <whcg-section-text-input class="col1span12">
-                <span slot="title">KALKYLLÄNGD</span>
-                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-                </span>
-                <whcg-number-field-box slot="input" column name="">
-                    <whcg-select label="Kalkyllängd" suffix="år" @valueChanged=${this.numberofyearsChanged.bind(this)} value=${this.numberofyears} placeholder="...antal år" valueoutput="{{period}}" jsoninput='[{"value": 1, "caption": "1"}, {"value": 2, "caption": "2"}, {"value": 3, "caption": "2"}, {"value": 4, "caption": "4"}, {"value": 5, "caption": "5"}, {"value": 6, "caption": "6"}, {"value": 7, "caption": "7"}, {"value": 8, "caption": "8"}, {"value": 9, "caption": "9"}, {"value": 10, "caption": "10"}]'></whcg-select>
-                    <whcg-select label="Startår" value=${this.startyear} placeholder="...år" @valueChanged=${this.startyearChanged.bind(this)} jsoninput='[{"value": 2018, "caption": "2018"}, {"value": 2019, "caption": "2019"}, {"value": 2020, "caption": "2020"}, {"value": 2021, "caption": "2021"}, {"value": 2022, "caption": "2022"}, {"value": 2023, "caption": "2023"}, {"value": 2024, "caption": "2024"}, {"value": 2025, "caption": "2025"}, {"value": 2026, "caption": "2026"}, {"value": 2027, "caption": "2027"}]'></whcg-select>
-                </whcg-number-field-box>
-            </whcg-section-text-input>
-
-            <whcg-section-text-input class="col1span12">
-                <span slot="title">INFLATION</span>
-                <whcg-number-field-box slot="input" name="Inflation">
-                    <whcg-select label="Inflation" suffix="%" @valueChanged=${this.inflationrateChanged.bind(this)} value=${this.inflationrate} placeholder="...antal procent" jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
-                </whcg-number-field-box>
-                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-                </span>
-            </whcg-section-text-input>
-
-
-            <whcg-section-text-input class="col1span12">
-                <span slot="title">KALKYLRÄNTA</span>
-                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-                </span>
-                <whcg-number-field-box slot="input" name="Kalkylränta">
-                    <whcg-select label="Kalkylränta" suffix="%" @valueChanged=${this.discountrateChanged.bind(this)} value=${this.discountrate} placeholder="...antal procent" jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
-                </whcg-number-field-box>
-            </whcg-section-text-input>
-        </div>  `
-        }
-
-        discountrateChanged(e) {
-            this.storeHolder.store.dispatch(action.discountratevalue(e.detail.value));
-        }
-
-        inflationrateChanged(e) {
-            this.storeHolder.store.dispatch(action.inflationratevalue(e.detail.value));
-        }
-
-        numberofyearsChanged(e) {
-            this.storeHolder.store.dispatch(action.numberofyearsvalue(e.detail.value));
-        }
-
-        startyearChanged(e) {
-            this.storeHolder.store.dispatch(action.startyearvalue(e.detail.value));
-        }
-
-        adder(values) {
-            return values.reduce((acc, value) => acc+value, 0);
-        }
-
-        _stateChanged(state) {
-            this.discountrate = state.discountrate;
-            this.inflationrate = state.inflationrate;
-            this.startyear = state.startyear;
-            this.numberofyears = state.numberofyears;
-        }
-    }
-
-    customElements.define('x-one', XOne);
-
-    class WhcgSectionTextlongInputChart extends PolymerElement {
-      static get template() {
-        return html$1`
-    <style include = "style-element-grid">
-
-        .section {
-            padding-top: 130px;
-        }
-
-        .headline {
-            padding-top: 32px;
-            font-family: var(--parmaco-font-family);
-            font-size: var(--parmaco-font-size-xl);
-            color: var(--parmaco-base-color-100pct);   
-        }
-       
-        .content {
-            grid-template-rows: auto 350px;
-        }
-
-        .content-text{
-            padding-top: 33px;
-            font-family: var(--parmaco-font-family);
-            font-size: var(--parmaco-font-size-s);
-            font-weight: var(--parmaco-font-weight-normal);
-            color: var(--parmaco-base-color-100pct);
-        }
-
-        .content-inputbox {
-        }
-
-        .content-chart {
-            padding-top: 33px;
-        }
-
-    </style>
-
-    <div class="grid-12 section">
-        <div class="col2span2 headline">
-            <slot name="title"></slot>
-        </div>
-
-        <div class="col4span8 grid-8 content">
-            <div class="col1span8 content-text">
-                <slot name="text"></slot>
-            </div>
-            <div class="col1span3 content-inputbox">
-                <slot name="input"></slot>
-            </div>
-            <div class="col4span5 content-chart">
-                <slot name="chart"></slot>
-            </div>
-        </div>
-    </div>
-  `;
-      }
-    }
-
-    window.customElements.define('whcg-section-textlong-input-chart', WhcgSectionTextlongInputChart);
-
-    class WhcgSectionChartTextInputlong extends PolymerElement {
-      static get template() {
-        return html$1`
-    <style include = "style-element-grid">
-      
-        .section {
-            padding-top: 130px;
-        }
-
-        .headline {
-            padding-top: 32px;
-            font-family: var(--parmaco-font-family);
-            font-size: var(--parmaco-font-size-xl);
-            color: var(--parmaco-base-color-100pct); 
-        }
-
-        .content {
-            grid-template-rows: 350px auto;
-        }
-
-        .content-chart {
-            padding-top: 33px;
-        }
-
-        .content-text{
-            padding-top: 33px;
-            font-family: var(--parmaco-font-family);
-            font-size: var(--parmaco-font-size-s);
-            font-weight: var(--parmaco-font-weight-normal);
-            color: var(--parmaco-base-color-100pct);
-        }
-
-        .content-inputbox {
-            padding-top: 33px;
-        }
-
-    </style>
-
-
-
-    <div class="col1span12 grid-12 section">
-        <div class="col2span2 headline">
-            <slot name="title"></slot>
-        </div>
-        <div class="col4span8 grid-8 content">
-            <div class="col1span5 content-chart">
-                <slot name="chart"></slot>
-            </div>
-            <div class="col6span3 content-text">
-                <slot name="text"></slot>
-            </div>
-            <div class="col1span8 content-inputbox">
-                <slot name="input"></slot>
-            </div>
-        </div>
-    </div>
-  `;
-      }
-    }
-
-    window.customElements.define('whcg-section-chart-text-inputlong', WhcgSectionChartTextInputlong);
-
-    class WhcgSectionTextlongChartInput extends PolymerElement {
-      static get template() {
-        return html$1`
-    <style include = "style-element-grid">
-      
-        .section {
-            padding-top: 130px;
-        }
-
-        .headline {
-            padding-top: 32px;
-            font-family: var(--parmaco-font-family);
-            font-size: var(--parmaco-font-size-xl);
-            color: var(--parmaco-base-color-100pct);    
-        }
-
-        .content {
-            grid-template-rows: auto 350px;
-        }
-
-        .content-text{
-            padding-top: 33px;
-            font-family: var(--parmaco-font-family);
-            font-size: var(--parmaco-font-size-s);
-            font-weight: var(--parmaco-font-weight-normal);
-            color: var(--parmaco-base-color-100pct);
-        }
-
-        .content-chart {
-            padding-top: 33px;
-        }
-
-        .content-inputbox {
-            justify-self: end;
-        }
-
-    </style>
-
-
-    <div class="col1span12 grid-12 section">
-        <div class="col2span2 headline"><slot name="title"></slot></div>
-        <div class="col4span8 grid-8 content">
-            <div class="col1span8 content-text">
-                <slot name="text"></slot>
-            </div>
-            <div class="col1span5 content-chart">
-                <slot name="chart"></slot> 
-            </div>
-            <div class="col6span3 content-inputbox">
-                <slot name="input"></slot> 
-            </div>
-            
-        </div>
-    </div>
-  `;
-      }
-    }
-
-    window.customElements.define('whcg-section-textlong-chart-input', WhcgSectionTextlongChartInput);
-
-    class WhcgBoxContainer extends LitElement {
-      
-      static get properties() {
-        return {
-          column: {
-            type: Boolean,
-            reflect: true
-          },
-          name: {
-            type: String,
-            reflect: true
-          }
-        };
-      }
-
-      render() {
-        return html`
-    ${flex}
-    <style>
-      .headline {
-        color: var(--whcg-box-container-headline-color);
-        font-family: var(--whcg-box-container-headline-font-family);
-        font-size: var(--whcg-box-container-headline-font-size);
-        font-weight: var(--whcg-box-container-headline-font-weight);
-      }
-
-      ::slotted(*) {
-        padding-right: var(--whcg-box-container-slotted-padding-right);
-        padding-top: var(--whcg-box-container-slotted-padding-top);
-      }
-    </style>
-    <span class="headline">${this.name}</span>
-    <div id="box" class="flex ${classMap({'flex-column': this.column, 'flex-row': !this.column})}">
-      <slot></slot>
-    </div>
-  `;
-      }
-    }
-
-    window.customElements.define('whcg-box-container', WhcgBoxContainer);
-
-    const $_documentContainer$r = document.createElement('template');
-
-    $_documentContainer$r.innerHTML = `<dom-module id="whcg-number-field-styles" theme-for="vaadin-text-field">
-  <template>
-    <style>
-
-    :host::before {
-      font-size: var(--whcg-host-before-font-size);
-      height: var(--whcg-host-before-height);
-      box-sizing: border-box;
-      display: inline-flex;
-      align-items: center;
-    }
-    
-    :host {        
-      font-size: var(--whcg-host-font-size);
-      padding-top: var(--whcg-host-padding-top);
-      padding-bottom: var(--whcg-host-padding-bottom);
-      padding-left: var(--whcg-host-padding-left);
-      padding-right: var(--whcg-host-padding-right);
-      box-sizing: border-box;
-    }
-
-    :host([has-label]) {
-      padding-top: var(--whcg-host-haslabel-padding-top);
-      padding-bottom: var(--whcg-host-haslabel-padding-bottom);
-      padding-left: var(--whcg-host-haslabel-padding-left);
-      padding-right: var(--whcg-host-haslabel-padding-right);
-    }
-
-    [part="label"] {
-      font-weight: var(--whcg-label-font-weight);
-      font-size: var(--whcg-label-font-size);
-      font-family: var(--whcg-label-font-family);
-      line-height: 1;
-      color: var(--whcg-label-color);
-      align-self: flex-start;
-      padding-top: var(--whcg-label-padding-top);
-      padding-bottom: var(--whcg-label-padding-bottom);
-      padding-right: var(--whcg-label-padding-right);
-      padding-left: var(--whcg-label-padding-left);
-
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      position: relative;
-      max-width: 100%;
-      box-sizing: border-box;
-    }
-
-    :host(.dark) [part="label"] {
-      color: var(--whcg-label-host__dark-color);
-    }
-
-    :host([focused]:not([readonly])) [part="label"] {
-      color: var(--whcg-label-host-focused-not-readonly-color);
-    }
-
-    :host(:hover:not([focused])) [part="label"] {
-      color: var(--whcg-label-host-hover-not-focused-color);
-    }
-
-    :host([focused]) [part="label"] {
-      color: var(--whcg-label-host-focused-color);
-    }
-
-    [part="input-field"] {
-      font-size: var(--whcg-input-field-font-size);
-      font-weight: var(--whcg-input-field-font-weight);
-      font-family: var(--whcg-input-field-font-family);
-      line-height: 1;
-      
-      background-color: var(--whcg-input-field-background-color);
-      border-radius: var(--whcg-input-field-border-radius);
-      border-style: var(--whcg-input-field-border-style);
-      border-width: var(--whcg-input-field-border-width);
-      border-color: var(--whcg-input-field-border-color);
-      padding-top: var(--whcg-input-field-padding-top);
-      padding-bottom: var(--whcg-input-field-padding-bottom);
-      padding-left: var(--whcg-input-field-padding-left);
-      padding-right: var(--whcg-input-field-padding-right);
-
-      position: relative;
-      cursor: text;
-      box-sizing: border-box;
-    }
-
-    :host(.dark) [part="input-field"] {
-      background-color: var(--whcg-input-field-host__dark-background-color);
-    }
-    :host(.shadow) [part="input-field"] {
-      box-shadow: var(--whcg-input-field-host__shadow-box-shadow);
+    function keyValueMerger(keys, values) {
+        let tmpObj = {};
+        keys.forEach((key, i) => tmpObj[key] = values[i]);
+        return tmpObj;
     }
 
 
-    [part="value"] {
-      cursor: inherit;
-      color: var(--whcg-value-color);
-      min-height: var(--whcg-value-min-height);
-      padding: 0 0.25em;
-    }
+    function whcgChartJsTransformer({whcgObj, datapackage}) {
 
-    :host(.dark) [part="value"] {
-      color: var(--whcg-value-host__dark-color);
-    }
+            let result = whcgObj.result;
 
+            let columnNames = Object.keys(result[0].data[datapackage].set);
 
-    [part="value"]::placeholder {
-      color: var(--whcg-value-placeholder-color);;
-    }
+            let sets = result.map((item) => {
+                let obj = {};
 
-
-
-  </style>
-  </template>
-</dom-module>`;
-
-    document.head.appendChild($_documentContainer$r.content);
-
-    class WhcgNumberField extends LitElement {
-      render() {
-            return html `
-        <style>
-        vaadin-text-field {
-                --whcg-host-before-font-size: var(--whcg-text-field-host-before-font-size);
-                --whcg-host-before-height: var(--whcg-text-field-host-before-height);
-
-                --whcg-host-padding-top: var(--whcg-text-field-host-padding-top);
-                --whcg-host-padding-bottom: var(--whcg-text-field-host-padding-bottom);
-                --whcg-host-padding-left: var(--whcg-text-field-host-padding-left);
-                --whcg-host-padding-right: var(--whcg-text-field-host-padding-right);
-                --whcg-host-haslabel-padding-top: var(--whcg-text-field-host-haslabel-padding-top);
-                --whcg-host-haslabel-padding-bottom: var(--whcg-text-field-host-haslabel-padding-bottom);
-                --whcg-host-haslabel-padding-left: var(--whcg-text-field-host-haslabel-padding-left);
-                --whcg-host-haslabel-padding-right: var(--whcg-text-field-host-haslabel-padding-right);
-
-                --whcg-label-font-size: var(--whcg-text-field-label-font-size);
-                --whcg-label-font-weight: var(--whcg-text-field-label-font-weight);
-                --whcg-label-font-family: var(--whcg-text-field-label-font-family);
-
-                --whcg-label-color: var(--whcg-text-field-label-color);
-                --whcg-label-host-focused-color: var(--whcg-text-field-label-host-focused-color);
-                --whcg-label-host-hover-not-focused-color: var(--whcg-text-field-label-host-hover-not-focused-color);
-                --whcg-label-host__dark-color: var(--whcg-text-field-label-host__dark-color);
-
-                --whcg-label-padding-top: var(--whcg-text-field-label-padding-top);
-                --whcg-label-padding-bottom: var(--whcg-text-field-label-padding-bottom);
-                --whcg-label-padding-left: var(--whcg-text-field-label-padding-left);
-                --whcg-label-padding-right: var(--whcg-text-field-label-padding-right);
-
-                --whcg-input-field-font-family: var(--whcg-text-field-input-field-font-family);
-                --whcg-input-field-font-size: var(--whcg-text-field-input-field-font-size);
-                --whcg-input-field-font-weight: var(--whcg-text-field-input-field-font-weight);
-                --whcg-input-field-background-color: var(--whcg-text-field-input-field-background-color);
-                --whcg-input-field-host__dark-background-color: var(--whcg-text-field-input-field-host__dark-background-color);
-
-                --whcg-input-field-host__shadow-box-shadow: var(--whcg-text-field-input-field-host__shadow-box-shadow);
-                
-                --whcg-input-field-border-radius: var(--whcg-text-field-input-field-border-radius);
-                --whcg-input-field-border-style: var(--whcg-text-field-input-field-border-style);
-                --whcg-input-field-border-width: var(--whcg-text-field-input-field-border-width);
-                --whcg-input-field-border-color: var(--whcg-text-field-input-field-border-color);
-                --whcg-input-field-padding-top: var(--whcg-text-field-input-field-padding-top);
-                --whcg-input-field-padding-bottom: var(--whcg-text-field-input-field-padding-bottom);
-                --whcg-input-field-padding-left: var(--whcg-text-field-input-field-padding-left);
-                --whcg-input-field-padding-right: var(--whcg-text-field-input-field-padding-right);
-              
-                --whcg-value-color: var(--whcg-text-field-value-color);
-                --whcg-value-placeholder-color: var(--whcg-text-field-value-placeholder-color);
-                --whcg-value-host__dark-color: var(--whcg-text-field-value-host__dark-color);
-                --whcg-value-min-height: var(--whcg-text-field-value-min-height);  
-
-             }
-            
-        </style>
-      
-    <vaadin-text-field id="vtf" @change=${this.valueChanged.bind(this)} value=${this.value} label=${this.label} placeholder=${this.placeholder} prevent-invalid-input pattern="[0-9]*" >
-    </vaadin-text-field>
-    `;
-        }
-
-        static get properties() {
-          return {
-              label: {type: String, reflect: true},
-              value: {type: String, reflect: true},
-              placeholder: {type: String, reflect: true},
-              // suffix: {type: String, reflect: true},
-              // kind: {type: String, reflect: true},
-              // period: {type: String, reflect: true},
-          };
-        }
-
-
-        valueChanged(e) {
-          let newValue = this.shadowRoot.querySelector('#vtf').__data.value;
-          this.dispatchEvent(new CustomEvent('valueChanged', { bubbles: true, composed: true, detail: { value: newValue } }));
-        }
-
-    }
-
-    window.customElements.define('whcg-number-field', WhcgNumberField);
-
-
-
-        // connectedCallback() {
-        //     super.connectedCallback();
-        //     let event = new CustomEvent('childrenattached', {bubbles: true, composed: true});
-        //     this.dispatchEvent(event);
-        // }
-
-    class WhcgChart extends LitElement {
-
-        render() {
-            console.log('Chart render: value');
-            console.log(this.value);
-            let canvas;
-
-            if (this.value) {
-                canvas = html`<canvas id="myChart" width="400px" height="400px"></canvas>`;
-              } else {
-                canvas = html``;
-              }
-
-            return html`
-        <style>
-            .thediv {
-                font-size: var(--parmaco-font-size-m);
-                border: 1px solid var(--whcg-shade-20pct);
-                border-radius: 5px 5px 4px 4px;
-                background-color: var(--whcg-shade-10pct);
-            }
-
-        </style>
-        <div class="thediv">
-            ${canvas}
-        </div>
-        `;
-        }
-        static get properties() {
-            return {
-                type: {
-                    type: String
-                },
-                value: {
-                    type: Object
-                },
-                width: {
-                    type: String
-                },
-                height: {
-                    type: String
-                },
-                legendposition: {
-                    type: String 
-                },
-
-                legendfontsize: {
-                    type: Number
-                },
-
-                legendfontfamily: {
-                    type: String
-                },
-
-                stacked: {
-                    type: Boolean
-                }
-            }
-        }
-
-
-        constructor() {
-            super();
-            this.width = '400px';
-            this.height = '400px';
-            this.legendposition = 'right';
-            this.legendfontsize = 12;
-            this.legendfontfamily = 'Arial';
-            this.stacked = false;
-        }
-
-        updated(changedProps) {
-            super.updated(changedProps);
-            if (changedProps.has('value')) {
-                console.log('Chart updated: value');
-                console.log(this.value);
-                this._chartJs(this.value);
-                // if(this.value) {
-                //     console.log('chart value');
-                //     console.log(this.value);
-                //     try {
-                //         this._chartJs(JSON.parse(this.value));
-                //     } catch(error) {
-                //         console.log(error);
-                //     }
-                // }  
-            }
-        }
-
-        // firstUpdated(changedProps) {
-        //     super.firstUpdated(changedProps);
-        //     if (changedProps.has('value')) {
-        //         console.log('Chart firstupdated: value')
-        //         console.log(this.value)
-        //         this._chartJs(this.value);
-        //         // if(this.value) {
-        //         //     console.log('chart value');
-        //         //     console.log(this.value);
-        //         //     try {
-        //         //         this._chartJs(JSON.parse(this.value));
-        //         //     } catch(error) {
-        //         //         console.log(error);
-        //         //     }
-        //         // }  
-        //     }
-        // }
-
-
-        _chartJs(data) {
-            console.log('_chartJS');
-            var ctx = this.shadowRoot.querySelector('#myChart');
-
-            if (this.thechart != null) {
-                this.thechart.destroy();
-            }
-
-            this.thechart = new Chart(ctx, {
-                type: this.type,
-                data: data,
-
-                options: {
-                    legend: {
-                        position: this.legendposition,
-                        labels: {
-                            fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-                            fontColor: '#FFFFFF',
-                            fontSize: 14,
-                            boxWidth: 14
-                        }
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero:true
-                            }
-                        }],
-                        yAxes: [{
-                            ticks: {
-                                fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-                                fontColor: '#FFFFFF',
-                                fontSize: 14
-                            },
-                            gridLines: {
-                            }
-                        }],
-                        xAxes: [{
-                            ticks: {
-                                fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
-                                fontColor: '#FFFFFF',
-                                fontSize: 14
-                            },
-                            gridLines: {
-                            }
-                        }]
-                    },
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    layout: {
-                        padding: {
-                            left: 15,
-                            right: 15,
-                            top: 50,
-                            bottom: 20
-                        }
-                    }
-                }
+                obj.label = item.object;
+                //obj.backgroundColor = getRandomColor();
+                obj.backgroundColor = 'hsla(24, 70%, 50%, 1)';
+                obj.data = Object.values(item.data[datapackage].set);
+                obj.borderColor = '#FFFFFF';
+                obj.borderWidth = 1;
+                return obj;
             });
 
+            let chartJsData = {};
+            chartJsData.labels = columnNames;
+            chartJsData.datasets = sets;
 
 
-        }
+            // console.log('chartJsData');
+            // console.log(chartJsData);
 
-
+            return chartJsData;
     }
 
-    window.customElements.define('whcg-chart', WhcgChart);
+
+     function setFactory({value, period, key}) {
+
+        let set = {};
+
+        if (key === 'fill') {
+            for (let i = 0; i < period; i++) {
+                set[i] = value;    
+            } 
+        } else {
+            for (let i = 0; i < period; i++) {
+                set[i] = 0;
+            } 
+            set[key] = value;
+        }
+
+        return set;
+    }
+
+
+
+    function setsPeriodOperator({sets, mode}) {
+
+        let acc = 0;
+
+        if (mode === 'multiply') {
+            acc = 1;
+        }
+
+        let setKeys = Object.keys(sets[0]);
+
+        let setValues = setKeys.map(setKey => {
+            return sets.reduce((acc, set, index) => {
+                if (isNaN(Number(set[setKey]))) {
+                    return acc;
+                } else {
+
+                    if(mode === 'subtract' && index > 0) {
+                        return acc = acc - Number(set[setKey]);
+                    } else if (mode === 'multiply') {
+                        return acc = acc * Number(set[setKey]);
+                    } else {
+                        return acc = acc + Number(set[setKey]);
+                    } 
+                }
+                
+            }, acc);
+        });
+
+        return keyValueMerger(setKeys, setValues);
+    }
+
+
+    function setCompounder({set, growthRate}) {
+        return keyValueMerger(Object.keys(set), Object.values(set).map((value, index) => {
+            return value * Math.pow((1 + Number(growthRate)), (index + 1));
+        }));
+    }
+
+
+    function singleMultiplier(values) {
+        return values.reduce((acc, item) => {
+            return acc * Number(item);
+        }, 1);
+    }
+
+
+    function whcgObjMaker({set, name, label, datapackage}) {
+        let data = {
+            [datapackage]: {
+                label: label,
+                set: set
+            }
+        };
+
+        let resultItem = {
+            object: name,
+            data: data
+        };
+
+        let result = [];
+
+        result = [...result, resultItem];
+
+        let whcgObj = {};
+
+        return {...whcgObj, result: result };
+    }
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -35603,130 +35039,732 @@ var MyModule = (function (exports) {
 
     /** PURE_IMPORTS_START  PURE_IMPORTS_END */
 
-    function keyValueMerger(keys, values) {
-        let tmpObj = {};
-        keys.forEach((key, i) => tmpObj[key] = values[i]);
-        return tmpObj;
+    class XOne extends LitElement {
+
+        constructor() {
+            super();
+            this.discountrate$ = new BehaviorSubject(0);
+            this.inflationrate$ = new BehaviorSubject(0);
+            this.startyear$ = new BehaviorSubject(0);
+            this.numberofyears$ = new BehaviorSubject(0);
+        }
+
+        static get properties() {
+            return {
+                storeHolder: {type: Object},
+                discountrate: {type: String},
+                inflationrate: {type: String},
+                startyear: {type: String},
+                numberofyears: {type: String}
+            };
+        }
+
+        updated(changedProps) {
+            super.updated(changedProps);
+            if (changedProps.has('discountrate')) {
+                this.discountrate$.next(this.discountrate);
+            }
+
+            if (changedProps.has('inflationrate')) {
+                this.inflationrate$.next(this.inflationrate);
+            }
+
+            if (changedProps.has('startyear')) {
+                this.startyear$.next(this.startyear);
+            }
+
+            if (changedProps.has('numberofyears')) {
+                this.numberofyears$.next(this.numberofyears);
+            }
+        }
+
+        render() {
+            return html`
+        ${grid}
+        <style>
+        </style>
+        <div class="grid-12">
+            <whcg-section-text-input class="col1span12">
+                <span slot="title">KALKYLLÄNGD</span>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-number-field-box slot="input" column name="">
+                    <whcg-select label="Kalkyllängd" suffix="år" @valueChanged=${this.numberofyearsChanged.bind(this)} value=${this.numberofyears} placeholder="...antal år" valueoutput="{{period}}" jsoninput='[{"value": 1, "caption": "1"}, {"value": 2, "caption": "2"}, {"value": 3, "caption": "2"}, {"value": 4, "caption": "4"}, {"value": 5, "caption": "5"}, {"value": 6, "caption": "6"}, {"value": 7, "caption": "7"}, {"value": 8, "caption": "8"}, {"value": 9, "caption": "9"}, {"value": 10, "caption": "10"}]'></whcg-select>
+                    <whcg-select label="Startår" value=${this.startyear} placeholder="...år" @valueChanged=${this.startyearChanged.bind(this)} jsoninput='[{"value": 2018, "caption": "2018"}, {"value": 2019, "caption": "2019"}, {"value": 2020, "caption": "2020"}, {"value": 2021, "caption": "2021"}, {"value": 2022, "caption": "2022"}, {"value": 2023, "caption": "2023"}, {"value": 2024, "caption": "2024"}, {"value": 2025, "caption": "2025"}, {"value": 2026, "caption": "2026"}, {"value": 2027, "caption": "2027"}]'></whcg-select>
+                </whcg-number-field-box>
+            </whcg-section-text-input>
+
+            <whcg-section-text-input class="col1span12">
+                <span slot="title">INFLATION</span>
+                <whcg-number-field-box slot="input" name="Inflation">
+                    <whcg-select label="Inflation" suffix="%" @valueChanged=${this.inflationrateChanged.bind(this)} value=${this.inflationrate} placeholder="...antal procent" jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
+                </whcg-number-field-box>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+            </whcg-section-text-input>
+
+
+            <whcg-section-text-input class="col1span12">
+                <span slot="title">KALKYLRÄNTA</span>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-number-field-box slot="input" name="Kalkylränta">
+                    <whcg-select label="Kalkylränta" suffix="%" @valueChanged=${this.discountrateChanged.bind(this)} value=${this.discountrate} placeholder="...antal procent" jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
+                </whcg-number-field-box>
+            </whcg-section-text-input>
+        </div>  `
+        }
+
+        discountrateChanged(e) {
+            this.storeHolder.store.dispatch(action.discountratevalue(e.detail.value));
+        }
+
+        inflationrateChanged(e) {
+            this.storeHolder.store.dispatch(action.inflationratevalue(e.detail.value));
+        }
+
+        numberofyearsChanged(e) {
+            this.storeHolder.store.dispatch(action.numberofyearsvalue(e.detail.value));
+        }
+
+        startyearChanged(e) {
+            this.storeHolder.store.dispatch(action.startyearvalue(e.detail.value));
+        }
+
+        // adder(values) {
+        //     return values.reduce((acc, value) => acc+value, 0);
+        // }
+
+        _stateChanged(state) {
+            if (this.discountrate !== state.discountrate) {
+                this.discountrate = state.discountrate;
+            }
+
+            if (this.inflationrate !== state.inflationrate) {
+                this.inflationrate = state.inflationrate;
+            }
+
+            if (this.startyear !== state.startyear) {
+                this.startyear = state.startyear;
+            }
+
+            if (this.numberofyears !== state.numberofyears) {
+                this.numberofyears = state.numberofyears;
+            }
+        }
+    }
+
+    customElements.define('x-one', XOne);
+
+    class WhcgSectionTextlongInputChart extends PolymerElement {
+      static get template() {
+        return html$1`
+    <style include = "style-element-grid">
+
+        .section {
+            padding-top: 130px;
+        }
+
+        .headline {
+            padding-top: 32px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-xl);
+            color: var(--parmaco-base-color-100pct);   
+        }
+       
+        .content {
+            grid-template-rows: auto 350px;
+        }
+
+        .content-text{
+            padding-top: 33px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-s);
+            font-weight: var(--parmaco-font-weight-normal);
+            color: var(--parmaco-base-color-100pct);
+        }
+
+        .content-inputbox {
+        }
+
+        .content-chart {
+            padding-top: 33px;
+        }
+
+    </style>
+
+    <div class="grid-12 section">
+        <div class="col2span2 headline">
+            <slot name="title"></slot>
+        </div>
+
+        <div class="col4span8 grid-8 content">
+            <div class="col1span8 content-text">
+                <slot name="text"></slot>
+            </div>
+            <div class="col1span3 content-inputbox">
+                <slot name="input"></slot>
+            </div>
+            <div class="col4span5 content-chart">
+                <slot name="chart"></slot>
+            </div>
+        </div>
+    </div>
+  `;
+      }
+    }
+
+    window.customElements.define('whcg-section-textlong-input-chart', WhcgSectionTextlongInputChart);
+
+    class WhcgSectionChartTextInputlong extends PolymerElement {
+      static get template() {
+        return html$1`
+    <style include = "style-element-grid">
+      
+        .section {
+            padding-top: 130px;
+        }
+
+        .headline {
+            padding-top: 32px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-xl);
+            color: var(--parmaco-base-color-100pct); 
+        }
+
+        .content {
+            grid-template-rows: 350px auto;
+        }
+
+        .content-chart {
+            padding-top: 33px;
+        }
+
+        .content-text{
+            padding-top: 33px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-s);
+            font-weight: var(--parmaco-font-weight-normal);
+            color: var(--parmaco-base-color-100pct);
+        }
+
+        .content-inputbox {
+            padding-top: 33px;
+        }
+
+    </style>
+
+
+
+    <div class="col1span12 grid-12 section">
+        <div class="col2span2 headline">
+            <slot name="title"></slot>
+        </div>
+        <div class="col4span8 grid-8 content">
+            <div class="col1span5 content-chart">
+                <slot name="chart"></slot>
+            </div>
+            <div class="col6span3 content-text">
+                <slot name="text"></slot>
+            </div>
+            <div class="col1span8 content-inputbox">
+                <slot name="input"></slot>
+            </div>
+        </div>
+    </div>
+  `;
+      }
+    }
+
+    window.customElements.define('whcg-section-chart-text-inputlong', WhcgSectionChartTextInputlong);
+
+    class WhcgSectionTextlongChartInput extends PolymerElement {
+      static get template() {
+        return html$1`
+    <style include = "style-element-grid">
+      
+        .section {
+            padding-top: 130px;
+        }
+
+        .headline {
+            padding-top: 32px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-xl);
+            color: var(--parmaco-base-color-100pct);    
+        }
+
+        .content {
+            grid-template-rows: auto 350px;
+        }
+
+        .content-text{
+            padding-top: 33px;
+            font-family: var(--parmaco-font-family);
+            font-size: var(--parmaco-font-size-s);
+            font-weight: var(--parmaco-font-weight-normal);
+            color: var(--parmaco-base-color-100pct);
+        }
+
+        .content-chart {
+            padding-top: 33px;
+        }
+
+        .content-inputbox {
+            justify-self: end;
+        }
+
+    </style>
+
+
+    <div class="col1span12 grid-12 section">
+        <div class="col2span2 headline"><slot name="title"></slot></div>
+        <div class="col4span8 grid-8 content">
+            <div class="col1span8 content-text">
+                <slot name="text"></slot>
+            </div>
+            <div class="col1span5 content-chart">
+                <slot name="chart"></slot> 
+            </div>
+            <div class="col6span3 content-inputbox">
+                <slot name="input"></slot> 
+            </div>
+            
+        </div>
+    </div>
+  `;
+      }
+    }
+
+    window.customElements.define('whcg-section-textlong-chart-input', WhcgSectionTextlongChartInput);
+
+    class WhcgBoxContainer extends LitElement {
+      
+      static get properties() {
+        return {
+          column: {
+            type: Boolean,
+            reflect: true
+          },
+          name: {
+            type: String,
+            reflect: true
+          }
+        };
+      }
+
+      render() {
+        return html`
+    ${flex}
+    <style>
+      .headline {
+        color: var(--whcg-box-container-headline-color);
+        font-family: var(--whcg-box-container-headline-font-family);
+        font-size: var(--whcg-box-container-headline-font-size);
+        font-weight: var(--whcg-box-container-headline-font-weight);
+      }
+
+      ::slotted(*) {
+        padding-right: var(--whcg-box-container-slotted-padding-right);
+        padding-top: var(--whcg-box-container-slotted-padding-top);
+      }
+    </style>
+    <span class="headline">${this.name}</span>
+    <div id="box" class="flex ${classMap({'flex-column': this.column, 'flex-row': !this.column})}">
+      <slot></slot>
+    </div>
+  `;
+      }
+    }
+
+    window.customElements.define('whcg-box-container', WhcgBoxContainer);
+
+    const $_documentContainer$r = document.createElement('template');
+
+    $_documentContainer$r.innerHTML = `<dom-module id="whcg-number-field-styles" theme-for="vaadin-text-field">
+  <template>
+    <style>
+
+    :host::before {
+      font-size: var(--whcg-host-before-font-size);
+      height: var(--whcg-host-before-height);
+      box-sizing: border-box;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    :host {        
+      font-size: var(--whcg-host-font-size);
+      padding-top: var(--whcg-host-padding-top);
+      padding-bottom: var(--whcg-host-padding-bottom);
+      padding-left: var(--whcg-host-padding-left);
+      padding-right: var(--whcg-host-padding-right);
+      box-sizing: border-box;
+    }
+
+    :host([has-label]) {
+      padding-top: var(--whcg-host-haslabel-padding-top);
+      padding-bottom: var(--whcg-host-haslabel-padding-bottom);
+      padding-left: var(--whcg-host-haslabel-padding-left);
+      padding-right: var(--whcg-host-haslabel-padding-right);
+    }
+
+    [part="label"] {
+      font-weight: var(--whcg-label-font-weight);
+      font-size: var(--whcg-label-font-size);
+      font-family: var(--whcg-label-font-family);
+      line-height: 1;
+      color: var(--whcg-label-color);
+      align-self: flex-start;
+      padding-top: var(--whcg-label-padding-top);
+      padding-bottom: var(--whcg-label-padding-bottom);
+      padding-right: var(--whcg-label-padding-right);
+      padding-left: var(--whcg-label-padding-left);
+
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      position: relative;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    :host(.dark) [part="label"] {
+      color: var(--whcg-label-host__dark-color);
+    }
+
+    :host([focused]:not([readonly])) [part="label"] {
+      color: var(--whcg-label-host-focused-not-readonly-color);
+    }
+
+    :host(:hover:not([focused])) [part="label"] {
+      color: var(--whcg-label-host-hover-not-focused-color);
+    }
+
+    :host([focused]) [part="label"] {
+      color: var(--whcg-label-host-focused-color);
+    }
+
+    [part="input-field"] {
+      font-size: var(--whcg-input-field-font-size);
+      font-weight: var(--whcg-input-field-font-weight);
+      font-family: var(--whcg-input-field-font-family);
+      line-height: 1;
+      
+      background-color: var(--whcg-input-field-background-color);
+      border-radius: var(--whcg-input-field-border-radius);
+      border-style: var(--whcg-input-field-border-style);
+      border-width: var(--whcg-input-field-border-width);
+      border-color: var(--whcg-input-field-border-color);
+      padding-top: var(--whcg-input-field-padding-top);
+      padding-bottom: var(--whcg-input-field-padding-bottom);
+      padding-left: var(--whcg-input-field-padding-left);
+      padding-right: var(--whcg-input-field-padding-right);
+
+      position: relative;
+      cursor: text;
+      box-sizing: border-box;
+    }
+
+    :host(.dark) [part="input-field"] {
+      background-color: var(--whcg-input-field-host__dark-background-color);
+    }
+    :host(.shadow) [part="input-field"] {
+      box-shadow: var(--whcg-input-field-host__shadow-box-shadow);
     }
 
 
-    function whcgChartJsTransformer({whcgObj, datapackage}) {
+    [part="value"] {
+      cursor: inherit;
+      color: var(--whcg-value-color);
+      min-height: var(--whcg-value-min-height);
+      padding: 0 0.25em;
+    }
 
-            let result = whcgObj.result;
+    :host(.dark) [part="value"] {
+      color: var(--whcg-value-host__dark-color);
+    }
 
-            let columnNames = Object.keys(result[0].data[datapackage].set);
 
-            let sets = result.map((item) => {
-                let obj = {};
+    [part="value"]::placeholder {
+      color: var(--whcg-value-placeholder-color);;
+    }
 
-                obj.label = item.object;
-                //obj.backgroundColor = getRandomColor();
-                obj.backgroundColor = 'hsla(24, 70%, 50%, 1)';
-                obj.data = Object.values(item.data[datapackage].set);
-                obj.borderColor = '#FFFFFF';
-                obj.borderWidth = 1;
-                return obj;
+
+
+  </style>
+  </template>
+</dom-module>`;
+
+    document.head.appendChild($_documentContainer$r.content);
+
+    class WhcgNumberField extends LitElement {
+      render() {
+            return html `
+        <style>
+        vaadin-text-field {
+                --whcg-host-before-font-size: var(--whcg-text-field-host-before-font-size);
+                --whcg-host-before-height: var(--whcg-text-field-host-before-height);
+
+                --whcg-host-padding-top: var(--whcg-text-field-host-padding-top);
+                --whcg-host-padding-bottom: var(--whcg-text-field-host-padding-bottom);
+                --whcg-host-padding-left: var(--whcg-text-field-host-padding-left);
+                --whcg-host-padding-right: var(--whcg-text-field-host-padding-right);
+                --whcg-host-haslabel-padding-top: var(--whcg-text-field-host-haslabel-padding-top);
+                --whcg-host-haslabel-padding-bottom: var(--whcg-text-field-host-haslabel-padding-bottom);
+                --whcg-host-haslabel-padding-left: var(--whcg-text-field-host-haslabel-padding-left);
+                --whcg-host-haslabel-padding-right: var(--whcg-text-field-host-haslabel-padding-right);
+
+                --whcg-label-font-size: var(--whcg-text-field-label-font-size);
+                --whcg-label-font-weight: var(--whcg-text-field-label-font-weight);
+                --whcg-label-font-family: var(--whcg-text-field-label-font-family);
+
+                --whcg-label-color: var(--whcg-text-field-label-color);
+                --whcg-label-host-focused-color: var(--whcg-text-field-label-host-focused-color);
+                --whcg-label-host-hover-not-focused-color: var(--whcg-text-field-label-host-hover-not-focused-color);
+                --whcg-label-host__dark-color: var(--whcg-text-field-label-host__dark-color);
+
+                --whcg-label-padding-top: var(--whcg-text-field-label-padding-top);
+                --whcg-label-padding-bottom: var(--whcg-text-field-label-padding-bottom);
+                --whcg-label-padding-left: var(--whcg-text-field-label-padding-left);
+                --whcg-label-padding-right: var(--whcg-text-field-label-padding-right);
+
+                --whcg-input-field-font-family: var(--whcg-text-field-input-field-font-family);
+                --whcg-input-field-font-size: var(--whcg-text-field-input-field-font-size);
+                --whcg-input-field-font-weight: var(--whcg-text-field-input-field-font-weight);
+                --whcg-input-field-background-color: var(--whcg-text-field-input-field-background-color);
+                --whcg-input-field-host__dark-background-color: var(--whcg-text-field-input-field-host__dark-background-color);
+
+                --whcg-input-field-host__shadow-box-shadow: var(--whcg-text-field-input-field-host__shadow-box-shadow);
+                
+                --whcg-input-field-border-radius: var(--whcg-text-field-input-field-border-radius);
+                --whcg-input-field-border-style: var(--whcg-text-field-input-field-border-style);
+                --whcg-input-field-border-width: var(--whcg-text-field-input-field-border-width);
+                --whcg-input-field-border-color: var(--whcg-text-field-input-field-border-color);
+                --whcg-input-field-padding-top: var(--whcg-text-field-input-field-padding-top);
+                --whcg-input-field-padding-bottom: var(--whcg-text-field-input-field-padding-bottom);
+                --whcg-input-field-padding-left: var(--whcg-text-field-input-field-padding-left);
+                --whcg-input-field-padding-right: var(--whcg-text-field-input-field-padding-right);
+              
+                --whcg-value-color: var(--whcg-text-field-value-color);
+                --whcg-value-placeholder-color: var(--whcg-text-field-value-placeholder-color);
+                --whcg-value-host__dark-color: var(--whcg-text-field-value-host__dark-color);
+                --whcg-value-min-height: var(--whcg-text-field-value-min-height);  
+
+             }
+            
+        </style>
+      
+    <vaadin-text-field id="vtf" @change=${this.valueChanged.bind(this)} value=${this.value} label=${this.label} placeholder=${this.placeholder} prevent-invalid-input pattern="[0-9]*" >
+    </vaadin-text-field>
+    `;
+        }
+
+        static get properties() {
+          return {
+              label: {type: String, reflect: true},
+              value: {type: String, reflect: true},
+              placeholder: {type: String, reflect: true},
+              // suffix: {type: String, reflect: true},
+              // kind: {type: String, reflect: true},
+              // period: {type: String, reflect: true},
+          };
+        }
+
+
+        valueChanged(e) {
+          let newValue = this.shadowRoot.querySelector('#vtf').__data.value;
+          this.dispatchEvent(new CustomEvent('valueChanged', { bubbles: true, composed: true, detail: { value: newValue } }));
+        }
+
+    }
+
+    window.customElements.define('whcg-number-field', WhcgNumberField);
+
+
+
+        // connectedCallback() {
+        //     super.connectedCallback();
+        //     let event = new CustomEvent('childrenattached', {bubbles: true, composed: true});
+        //     this.dispatchEvent(event);
+        // }
+
+    class WhcgChart extends LitElement {
+
+        render() {
+            console.log('Chart render: value');
+            console.log(this.value);
+            let canvas;
+
+            if (this.value) {
+                canvas = html`<canvas id="myChart" width="400px" height="400px"></canvas>`;
+              } else {
+                canvas = html``;
+              }
+
+            return html`
+        <style>
+            .thediv {
+                font-size: var(--parmaco-font-size-m);
+                border: 1px solid var(--whcg-shade-20pct);
+                border-radius: 5px 5px 4px 4px;
+                background-color: var(--whcg-shade-10pct);
+            }
+
+        </style>
+        <div class="thediv">
+            ${canvas}
+        </div>
+        `;
+        }
+        static get properties() {
+            return {
+                type: {
+                    type: String
+                },
+                value: {
+                    type: Object
+                },
+                width: {
+                    type: String
+                },
+                height: {
+                    type: String
+                },
+                legendposition: {
+                    type: String 
+                },
+
+                legendfontsize: {
+                    type: Number
+                },
+
+                legendfontfamily: {
+                    type: String
+                },
+
+                stacked: {
+                    type: Boolean
+                }
+            }
+        }
+
+
+        constructor() {
+            super();
+            this.width = '400px';
+            this.height = '400px';
+            this.legendposition = 'right';
+            this.legendfontsize = 12;
+            this.legendfontfamily = 'Arial';
+            this.stacked = false;
+        }
+
+        updated(changedProps) {
+            super.updated(changedProps);
+            if (changedProps.has('value')) {
+                console.log('Chart updated: value');
+                console.log(this.value);
+                this._chartJs(this.value);
+                // if(this.value) {
+                //     console.log('chart value');
+                //     console.log(this.value);
+                //     try {
+                //         this._chartJs(JSON.parse(this.value));
+                //     } catch(error) {
+                //         console.log(error);
+                //     }
+                // }  
+            }
+        }
+
+        // firstUpdated(changedProps) {
+        //     super.firstUpdated(changedProps);
+        //     if (changedProps.has('value')) {
+        //         console.log('Chart firstupdated: value')
+        //         console.log(this.value)
+        //         this._chartJs(this.value);
+        //         // if(this.value) {
+        //         //     console.log('chart value');
+        //         //     console.log(this.value);
+        //         //     try {
+        //         //         this._chartJs(JSON.parse(this.value));
+        //         //     } catch(error) {
+        //         //         console.log(error);
+        //         //     }
+        //         // }  
+        //     }
+        // }
+
+
+        _chartJs(data) {
+            console.log('_chartJS');
+            var ctx = this.shadowRoot.querySelector('#myChart');
+
+            if (this.thechart != null) {
+                this.thechart.destroy();
+            }
+
+            this.thechart = new Chart(ctx, {
+                type: this.type,
+                data: data,
+
+                options: {
+                    legend: {
+                        position: this.legendposition,
+                        labels: {
+                            fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                            fontColor: '#FFFFFF',
+                            fontSize: 14,
+                            boxWidth: 14
+                        }
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                                fontColor: '#FFFFFF',
+                                fontSize: 14
+                            },
+                            gridLines: {
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                fontFamily: "'Exo 2', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+                                fontColor: '#FFFFFF',
+                                fontSize: 14
+                            },
+                            gridLines: {
+                            }
+                        }]
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: 15,
+                            right: 15,
+                            top: 50,
+                            bottom: 20
+                        }
+                    }
+                }
             });
 
-            let chartJsData = {};
-            chartJsData.labels = columnNames;
-            chartJsData.datasets = sets;
 
 
-            // console.log('chartJsData');
-            // console.log(chartJsData);
-
-            return chartJsData;
-    }
-
-
-     function setFactory({value, period, key}) {
-
-        let set = {};
-
-        if (key === 'fill') {
-            for (let i = 0; i < period; i++) {
-                set[i] = value;    
-            } 
-        } else {
-            for (let i = 0; i < period; i++) {
-                set[i] = 0;
-            } 
-            set[key] = value;
         }
 
-        return set;
+
     }
 
-
-
-    function setsPeriodOperator({sets, mode}) {
-
-        let acc = 0;
-
-        if (mode === 'multiply') {
-            acc = 1;
-        }
-
-        let setKeys = Object.keys(sets[0]);
-
-        let setValues = setKeys.map(setKey => {
-            return sets.reduce((acc, set, index) => {
-                if (isNaN(Number(set[setKey]))) {
-                    return acc;
-                } else {
-
-                    if(mode === 'subtract' && index > 0) {
-                        return acc = acc - Number(set[setKey]);
-                    } else if (mode === 'multiply') {
-                        return acc = acc * Number(set[setKey]);
-                    } else {
-                        return acc = acc + Number(set[setKey]);
-                    } 
-                }
-                
-            }, acc);
-        });
-
-        return keyValueMerger(setKeys, setValues);
-    }
-
-
-    function setCompounder({set, growthRate}) {
-        return keyValueMerger(Object.keys(set), Object.values(set).map((value, index) => {
-            return value * Math.pow((1 + Number(growthRate)), (index + 1));
-        }));
-    }
-
-
-    function singleMultiplier(values) {
-        return values.reduce((acc, item) => {
-            return acc * Number(item);
-        }, 1);
-    }
-
-
-    function whcgObjMaker({set, name, label, datapackage}) {
-        let data = {
-            [datapackage]: {
-                label: label,
-                set: set
-            }
-        };
-
-        let resultItem = {
-            object: name,
-            data: data
-        };
-
-        let result = [];
-
-        result = [...result, resultItem];
-
-        let whcgObj = {};
-
-        return {...whcgObj, result: result };
-    }
+    window.customElements.define('whcg-chart', WhcgChart);
 
     class XTwo extends LitElement {
 
@@ -35799,6 +35837,57 @@ var MyModule = (function (exports) {
                 this.compondedCostRepairOwnSet$.next(this.compondedCostRepairOwnSet);
             }
 
+            if (changedProps.has('maint1yearOwn')) {
+                this.maint1yearOwn$.next(this.maint1yearOwn);
+            }
+
+            if (changedProps.has('maint2yearOwn')) {
+                this.maint2yearOwn$.next(this.maint2yearOwn);
+            }
+
+            if (changedProps.has('maint3yearOwn')) {
+                this.maint3yearOwn$.next(this.maint3yearOwn);
+            }
+
+            if (changedProps.has('maint4yearOwn')) {
+                this.maint4yearOwn$.next(this.maint4yearOwn);
+            }
+
+            if (changedProps.has('maint1costOwn')) {
+                this.maint1costOwn$.next(this.maint1costOwn);
+            }
+
+            if (changedProps.has('maint2costOwn')) {
+                this.maint2costOwn$.next(this.maint2costOwn);
+            }
+
+            if (changedProps.has('maint3costOwn')) {
+                this.maint3costOwn$.next(this.maint3costOwn);
+            }
+
+            if (changedProps.has('maint4costOwn')) {
+                this.maint4costOwn$.next(this.maint4costOwn);
+            }
+
+            if (changedProps.has('maint1OwnSet')) {
+                this.maint1OwnSet$.next(this.maint1OwnSet);
+            }
+
+            if (changedProps.has('maint2OwnSet')) {
+                this.maint2OwnSet$.next(this.maint2OwnSet);
+            }
+
+            if (changedProps.has('maint3OwnSet')) {
+                this.maint3OwnSet$.next(this.maint3OwnSet);
+            }
+
+            if (changedProps.has('maint4OwnSet')) {
+                this.maint4OwnSet$.next(this.maint4OwnSet);
+            }
+
+            if (changedProps.has('maintAllOwnSet')) {
+                this.maintAllOwnSet$.next(this.maintAllOwnSet);
+            }
 
 
             // }
@@ -35848,14 +35937,7 @@ var MyModule = (function (exports) {
                 // chartJsInitialEstablishCostOwnObj: {type: Object},
                 // kwhOwn: {type: String},
                 // krPerkwhOwn: {type: String},
-                // maint1yearOwn: {type: String},
-                // maint2yearOwn: {type: String},
-                // maint3yearOwn: {type: String},
-                // maint4yearOwn: {type: String},
-                // maint1costOwn: {type: String},
-                // maint2costOwn: {type: String},
-                // maint3costOwn: {type: String},
-                // maint4costOwn: {type: String},
+
                 // compoundrateRepairOwn: {type: String},
                 // initialRepairCostPerSqmOwn: {type: String},
                 // whcgCompoundedHeatCostsPerSqmOwnObj: {type: Object},
@@ -35881,6 +35963,23 @@ var MyModule = (function (exports) {
                 priceRepairOwnSet: {type: Object},
                 compondedCostRepairOwnSet: {type: Object},
                 chartJsCompoundedCostRepairOwnObj: {type: Object},
+                maint1yearOwn: {type: String},
+                maint2yearOwn: {type: String},
+                maint3yearOwn: {type: String},
+                maint4yearOwn: {type: String},
+                maint1costOwn: {type: String},
+                maint2costOwn: {type: String},
+                maint3costOwn: {type: String},
+                maint4costOwn: {type: String},
+                maint1OwnSet: {type: Object},
+                maint2OwnSet: {type: Object},
+                maint3OwnSet: {type: Object},
+                maint4OwnSet: {type: Object},
+                maintAllOwnSet: {type: Object},
+                chartJsMaintAllOwnObj: {type: Object},
+                
+
+                
                 
 
 
@@ -36009,6 +36108,71 @@ var MyModule = (function (exports) {
             return whcgChartJsTransformer(whcgChartJsTransformerData)
         }
 
+
+        setMaint1OwnSet(maint1costOwn, maint1yearOwn, numberofyears) {
+            let setFactoryData = {
+                value: maint1costOwn,
+                period: numberofyears,
+                key: maint1yearOwn
+            };
+            return setFactory(setFactoryData)
+        }
+
+        setMaint2OwnSet(maint2costOwn, maint2yearOwn, numberofyears) {
+            let setFactoryData = {
+                value: maint2costOwn,
+                period: numberofyears,
+                key: maint2yearOwn
+            };
+            return setFactory(setFactoryData)
+        }
+
+        setMaint3OwnSet(maint3costOwn, maint3yearOwn, numberofyears) {
+            let setFactoryData = {
+                value: maint3costOwn,
+                period: numberofyears,
+                key: maint3yearOwn
+            };
+            return setFactory(setFactoryData)
+        }
+
+        setMaint4OwnSet(maint4costOwn, maint4yearOwn, numberofyears) {
+            let setFactoryData = {
+                value: maint4costOwn,
+                period: numberofyears,
+                key: maint4yearOwn
+            };
+            return setFactory(setFactoryData)
+        }
+
+        setChartJsMaintAllOwnObj(maintAllOwnSet) {
+
+            let whcgObjMakerData = {
+                set: maintAllOwnSet,
+                name: 'Kostnader planerat underhåll',
+                label: 'kr',
+                datapackage: 'yearlyamounts'
+            };
+
+            let whcgChartJsTransformerData = {
+                whcgObj: whcgObjMaker(whcgObjMakerData), 
+                datapackage: 'yearlyamounts'
+            };
+            
+            return whcgChartJsTransformer(whcgChartJsTransformerData)
+        }
+
+
+
+        setMaintAllOwnSet(maint1OwnSet, maint2OwnSet, maint3OwnSet, maint4OwnSet) {
+            let setsPeriodOperatorData = {
+                sets: [maint1OwnSet, maint2OwnSet, maint3OwnSet, maint4OwnSet],
+                mode: 'add'
+            };
+        
+            return setsPeriodOperator(setsPeriodOperatorData);
+        }
+
         constructor() {
             super();
             this.initialPriceHeatOwn$ = new BehaviorSubject(0);
@@ -36023,14 +36187,25 @@ var MyModule = (function (exports) {
             this.compondedCostHeatOwnSet$ = new BehaviorSubject(0);
             this.initialCostAreaOwn$ = new BehaviorSubject(0);
             this.costAreaOwnSet$ = new BehaviorSubject(0);
-
             this.initialPriceRepairOwn$ = new BehaviorSubject(0);
             this.compoundrateRepairOwn$ = new BehaviorSubject(0);
             this.priceRepairOwnSet$ = new BehaviorSubject(0);
             this.compondedCostRepairOwnSet$ = new BehaviorSubject(0);
+            this.maint1yearOwn$ = new BehaviorSubject(0);
+            this.maint2yearOwn$ = new BehaviorSubject(0);
+            this.maint3yearOwn$ = new BehaviorSubject(0);
+            this.maint4yearOwn$ = new BehaviorSubject(0);
+            this.maint1costOwn$ = new BehaviorSubject(0);
+            this.maint2costOwn$ = new BehaviorSubject(0);
+            this.maint3costOwn$ = new BehaviorSubject(0);
+            this.maint4costOwn$ = new BehaviorSubject(0);
 
+            this.maint1OwnSet$ = new BehaviorSubject(0);
+            this.maint2OwnSet$ = new BehaviorSubject(0);
+            this.maint3OwnSet$ = new BehaviorSubject(0);
+            this.maint4OwnSet$ = new BehaviorSubject(0);
+            this.maintAllOwnSet$ = new BehaviorSubject(0);
 
-            
 
             combineLatest(this.initialPriceHeatOwn$, this.initialAmountHeatOwn$).subscribe(([initialPriceHeatOwn, initialAmountHeatOwn]) => this.initialCostHeatOwn = singleMultiplier([initialPriceHeatOwn, initialAmountHeatOwn]));
             combineLatest(this.initialCostHeatOwn$, this.numberofyears$, this.inflationrate$).subscribe(([initialCostHeatOwn, numberofyears, inflationrate]) => this.costHeatOwnSet = this.setCostHeatOwnSet(initialCostHeatOwn, numberofyears, inflationrate));
@@ -36038,15 +36213,25 @@ var MyModule = (function (exports) {
             combineLatest(this.costHeatOwnSet$, this.initialAmountAreaOwnSet$).subscribe(([costHeatOwnSet, initialAmountAreaOwnSet]) => this.compondedCostHeatOwnSet = this.setCompondedCostHeatOwnSet(initialAmountAreaOwnSet, costHeatOwnSet));
             combineLatest(this.compondedCostHeatOwnSet$).subscribe(([compondedCostHeatOwnSet]) => this.chartJsCompondedCostHeatOwnObj = this.setChartJsCompondedCostHeatOwnObj(compondedCostHeatOwnSet));
             combineLatest(this.initialPriceAreaOwn$, this.initialAmountAreaOwn$).subscribe(([initialPriceAreaOwn, initialAmountAreaOwn]) => this.initialCostAreaOwn = singleMultiplier([initialPriceAreaOwn, initialAmountAreaOwn]));
-
             combineLatest(this.initialCostAreaOwn$, this.numberofyears$).subscribe(([initialCostAreaOwn, numberofyears]) => this.costAreaOwnSet = this.setCostAreaOwnSet(initialCostAreaOwn, numberofyears));
             combineLatest(this.costAreaOwnSet$).subscribe(([costAreaOwnSet]) => this.chartJsCostAreaOwnObj = this.setChartJsCostAreaOwnObj(costAreaOwnSet));
-
-
             combineLatest(this.initialPriceRepairOwn$, this.numberofyears$, this.compoundrateRepairOwn$).subscribe(([initialPriceRepairOwn, numberofyears, compoundrateRepairOwn]) => this.priceRepairOwnSet = this.setPriceRepairOwnSet(initialPriceRepairOwn, numberofyears, compoundrateRepairOwn));
             combineLatest(this.priceRepairOwnSet$, this.initialAmountAreaOwnSet$).subscribe(([priceRepairOwnSet, initialAmountAreaOwnSet]) => this.compondedCostRepairOwnSet = this.setCompondedCostRepairOwnSet(initialAmountAreaOwnSet, priceRepairOwnSet));
-            
             combineLatest(this.compondedCostRepairOwnSet$).subscribe(([compondedCostRepairOwnSet]) => this.chartJsCompoundedCostRepairOwnObj = this.setChartJsCompoundedCostRepairOwnObj(compondedCostRepairOwnSet));
+        
+            
+            combineLatest(this.maint1costOwn$, this.maint1yearOwn$, this.numberofyears$).subscribe(([maint1costOwn, maint1yearOwn, numberofyears]) => this.maint1OwnSet = this.setMaint1OwnSet(maint1costOwn, maint1yearOwn, numberofyears));
+            combineLatest(this.maint2costOwn$, this.maint2yearOwn$, this.numberofyears$).subscribe(([maint2costOwn, maint2yearOwn, numberofyears]) => this.maint2OwnSet = this.setMaint2OwnSet(maint2costOwn, maint2yearOwn, numberofyears));
+            combineLatest(this.maint3costOwn$, this.maint3yearOwn$, this.numberofyears$).subscribe(([maint3costOwn, maint3yearOwn, numberofyears]) => this.maint3OwnSet = this.setMaint3OwnSet(maint3costOwn, maint3yearOwn, numberofyears));
+            combineLatest(this.maint4costOwn$, this.maint4yearOwn$, this.numberofyears$).subscribe(([maint4costOwn, maint4yearOwn, numberofyears]) => this.maint4OwnSet = this.setMaint4OwnSet(maint4costOwn, maint4yearOwn, numberofyears));
+
+            combineLatest(this.maint1OwnSet$, this.maint2OwnSet$, this.maint3OwnSet$, this.maint4OwnSet$).subscribe(([maint1OwnSet, maint2OwnSet, maint3OwnSet, maint4OwnSet]) => this.maintAllOwnSet = this.setMaintAllOwnSet(maint1OwnSet, maint2OwnSet, maint3OwnSet, maint4OwnSet));
+
+
+
+            combineLatest(this.maintAllOwnSet$).subscribe(([maintAllOwnSet]) => this.chartJsMaintAllOwnObj = this.setChartJsMaintAllOwnObj(maintAllOwnSet));
+
+        
         }
 
         render() {
@@ -36056,6 +36241,32 @@ var MyModule = (function (exports) {
         </style>
         <vaadin-button id="button">BUTTON</vaadin-button>
         <div class="grid-12">
+
+            <whcg-section-chart-text-inputlong class="col1span12">
+                <span slot="title">PLANNERAT UNDERHÅLL</span>
+                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" .value=${this.chartJsMaintAllOwnObj}>
+                </whcg-chart>
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-box-container slot="input" name="Underhållsinsatser">
+                    <whcg-number-field-box column name="Underhållsinsats 1">
+                        <whcg-number-field label="År" @valueChanged=${this.maint1yearOwnChanged.bind(this)} value=${this.maint1yearOwn} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint1costOwnChanged.bind(this)} value=${this.maint1costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
+                    </whcg-number-field-box>
+                    <whcg-number-field-box column name="Underhållsinsats 2">
+                        <whcg-number-field label="År" @valueChanged=${this.maint2yearOwnChanged.bind(this)} value=${this.maint2yearOwn} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint2costOwnChanged.bind(this)} value=${this.maint2costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
+                    </whcg-number-field-box>
+                    <whcg-number-field-box column name="Underhållsinsats 3">
+                        <whcg-number-field label="År" @valueChanged=${this.maint3yearOwnChanged.bind(this)} value=${this.maint3yearOwn} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint3costOwnChanged.bind(this)} value=${this.maint3costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
+                    </whcg-number-field-box>
+                    <whcg-number-field-box column name="Underhållsinsats 4">
+                        <whcg-number-field label="År" @valueChanged=${this.maint4yearOwnChanged.bind(this)} value=${this.maint4yearOwn} placeholder="...antal"></whcg-number-field>
+                        <whcg-number-field label="Kostnad" @valueChanged=${this.maint4costOwnChanged.bind(this)} value=${this.maint4costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
+                    </whcg-number-field-box>
+                </whcg-box-container>
+            </whcg-section-chart-text-inputlong>
             
             <whcg-section-text-input class="col1span12">
                 <span slot="title">INITIAL YTSTORLEK</span>
@@ -36102,6 +36313,8 @@ var MyModule = (function (exports) {
                 </whcg-number-field-box>
             </whcg-section-textlong-input-chart>
 
+
+
         </div>
         `
         }
@@ -36132,57 +36345,37 @@ var MyModule = (function (exports) {
             this.storeHolder.store.dispatch(action.compoundrateRepairOwnValue(e.detail.value));
         }
 
+        maint1costOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint1costOwnValue(e.detail.value));
+        }
 
+        maint2costOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint2costOwnValue(e.detail.value));
+        }
 
+        maint3costOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint3costOwnValue(e.detail.value));
+        }
 
+        maint4costOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint4costOwnValue(e.detail.value));
+        }
 
+        maint1yearOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint1yearOwnValue(e.detail.value));
+        }
 
-        // initialEstablishCostPerSqmOwnChanged(e) {
-        //     console.log('initialEstablishCostPerSqmOwnChanged');
-        //     this.storeHolder.store.dispatch(action.initialEstablishCostPerSqmOwnValue(e.detail.value));
-        // }
+        maint2yearOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint2yearOwnValue(e.detail.value));
+        }
 
+        maint3yearOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint3yearOwnValue(e.detail.value));
+        }
 
-
-        // maint1costOwnChanged(e) {
-        //     this.storeHolder.store.dispatch(action.maint1costOwnValue(e.detail.value));
-        // }
-
-        // maint2costOwnChanged(e) {
-        //     this.storeHolder.store.dispatch(action.maint2costOwnValue(e.detail.value));
-        // }
-
-        // maint3costOwnChanged(e) {
-        //     this.storeHolder.store.dispatch(action.maint3costOwnValue(e.detail.value));
-        // }
-
-        // maint4costOwnChanged(e) {
-        //     this.storeHolder.store.dispatch(action.maint4costOwnValue(e.detail.value));
-        // }
-
-        // maint1yearOwnChanged(e) {
-        //     this.storeHolder.store.dispatch(action.maint1yearOwnValue(e.detail.value));
-        // }
-
-        // maint2yearOwnChanged(e) {
-        //     this.storeHolder.store.dispatch(action.maint2yearOwnValue(e.detail.value));
-        // }
-
-        // maint3yearOwnChanged(e) {
-        //     this.storeHolder.store.dispatch(action.maint3yearOwnValue(e.detail.value));
-        // }
-
-        // maint4yearOwnChanged(e) {
-        //     this.storeHolder.store.dispatch(action.maint4yearOwnValue(e.detail.value));
-        // }
-
-        // compoundrateRepairOwnChanged(e) {
-        //     this.storeHolder.store.dispatch(action.compoundrateRepairOwnValue(e.detail.value));
-        // }
-
-        // initialRepairCostPerSqmOwnChanged(e) {
-        //     this.storeHolder.store.dispatch(action.initialRepairCostPerSqmOwnValue(e.detail.value));
-        // } 
+        maint4yearOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.maint4yearOwnValue(e.detail.value));
+        }
 
 
         _stateChanged(state) {
@@ -36220,57 +36413,37 @@ var MyModule = (function (exports) {
                 this.initialPriceRepairOwn = state.initialPriceRepairOwn;
             }
 
+            if (this.maint1yearOwn !== state.maint1yearOwn) {
+                this.maint1yearOwn = state.maint1yearOwn;
+            }
 
+            if (this.maint2yearOwn !== state.maint2yearOwn) {
+                this.maint2yearOwn = state.maint2yearOwn;
+            }
 
+            if (this.maint3yearOwn !== state.maint3yearOwn) {
+                this.maint3yearOwn = state.maint3yearOwn;
+            }
 
+            if (this.maint4yearOwn !== state.maint4yearOwn) {
+                this.maint4yearOwn = state.maint4yearOwn;
+            }
 
+            if (this.maint1costOwn !== state.maint1costOwn) {
+                this.maint1costOwn = state.maint1costOwn;
+            }
 
+            if (this.maint2costOwn !== state.maint2costOwn) {
+                this.maint2costOwn = state.maint2costOwn;
+            }
 
-            // if (this.initialEstablishCostPerSqmOwn !== state.initialEstablishCostPerSqmOwn) {
-            //     this.initialEstablishCostPerSqmOwn = state.initialEstablishCostPerSqmOwn;
-            // }
+            if (this.maint3costOwn !== state.maint3costOwn) {
+                this.maint3costOwn = state.maint3costOwn;
+            }
 
-
-
-            // if (this.maint1yearOwn !== state.maint1yearOwn) {
-            //     this.maint1yearOwn = state.maint1yearOwn;
-            // }
-
-            // if (this.maint2yearOwn !== state.maint2yearOwn) {
-            //     this.maint2yearOwn = state.maint2yearOwn;
-            // }
-
-            // if (this.maint3yearOwn !== state.maint3yearOwn) {
-            //     this.maint3yearOwn = state.maint3yearOwn;
-            // }
-
-            // if (this.maint4yearOwn !== state.maint4yearOwn) {
-            //     this.maint4yearOwn = state.maint4yearOwn;
-            // }
-
-            // if (this.maint1costOwn !== state.maint1costOwn) {
-            //     this.maint1costOwn = state.maint1costOwn;
-            // }
-
-            // if (this.maint2costOwn !== state.maint2costOwn) {
-            //     this.maint2costOwn = state.maint2costOwn;
-            // }
-
-            // if (this.maint3costOwn !== state.maint3costOwn) {
-            //     this.maint3costOwn = state.maint3costOwn;
-            // }
-
-            // if (this.maint4costOwn !== state.maint4costOwn) {
-            //     this.maint4costOwn = state.maint4costOwn;
-            // }
-
-            // if (this.initialRepairCostPerSqmOwn !== state.initialRepairCostPerSqmOwn) {
-            //     this.initialRepairCostPerSqmOwn = state.initialRepairCostPerSqmOwn;
-            // }
-
-            // if (this.compoundrateRepairOwn !== state.compoundrateRepairOwn) {
-            //     this.compoundrateRepairOwn = state.compoundrateRepairOwn;
-            // }
+            if (this.maint4costOwn !== state.maint4costOwn) {
+                this.maint4costOwn = state.maint4costOwn;
+            }
         }
 
     }
