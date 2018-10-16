@@ -435,7 +435,7 @@ export class XTwo extends LitElement {
         <div class="grid-12">
 
             <whcg-section-chart-text-inputlong class="col1span12">
-                <span slot="title">PLANNERAT UNDERHÅLL</span>
+                <span slot="title">PLANERAT UNDERHÅLL</span>
                 <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" .value=${this.chartJsMaintAllOwnObj}>
                 </whcg-chart>
                 <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.

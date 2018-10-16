@@ -7,7 +7,8 @@ const INITIALPRICEREPAIROWN_VALUE = 'INITIALPRICEREPAIROWN_VALUE';
 const INITIALAMOUNTAREARENT_VALUE = 'INITIALAMOUNTAREARENT_VALUE';
 const INITIALAMOUNTHEATRENT_VALUE = 'INITIALAMOUNTHEATRENT_VALUE';
 const INITIALPRICEHEATRENT_VALUE = 'INITIALPRICEHEATRENT_VALUE';
-
+const COMPOUNDRATEAREARENT_VALUE = 'COMPOUNDRATEAREARENT_VALUE';
+const INITIALPRICEAREARENT_VALUE = 'INITIALPRICEAREARENT_VALUE';
 
 
 const THREE_VALUE = 'THREE_VALUE';
@@ -51,12 +52,24 @@ const DEC2AREA_VALUE = 'DEC2AREA_VALUE';
 const DEC3AREA_VALUE = 'DEC3AREA_VALUE';
 const DEC4AREA_VALUE = 'DEC4AREA_VALUE';
 
-const RENTINCREASE_VALUE = 'RENTINCREASE_VALUE';
-const INITIALRENTCOSTPERSQM_VALUE = 'INITIALRENTCOSTPERSQM_VALUE';
+
 
 
 
 export const action = {
+
+    initialPriceAreaRentValue: (payload) => {
+      return {
+        type: INITIALPRICEAREARENT_VALUE,
+        payload: payload
+      };
+    },
+    compoundrateAreaRentValue: (payload) => {
+      return {
+        type: COMPOUNDRATEAREARENT_VALUE,
+        payload: payload
+      };
+    },
     initialAmountHeatRentValue: (payload) => {
       return {
         type: INITIALAMOUNTHEATRENT_VALUE,
@@ -307,18 +320,7 @@ export const action = {
           payload: payload
         };
       },
-      rentincreaseValue: (payload) => {
-        return {
-          type: RENTINCREASE_VALUE,
-          payload: payload
-        };
-      },
-      initialRentCostPerSqmValue: (payload) => {
-        return {
-          type: INITIALRENTCOSTPERSQM_VALUE,
-          payload: payload
-        };
-      },
+
 
       testvalueValue: (payload) => {
         return {

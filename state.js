@@ -8,7 +8,13 @@ export const initState = {
     initialAmountAreaRent: 3000,
     initialAmountHeatRent: 10,
     initialPriceHeatRent: 10,
+    compoundrateAreaRent: 0.03,
+    initialPriceAreaRent: 10,
 
+
+
+
+    
     one: 74,
     two: 47,
     three: 7,
@@ -48,6 +54,5 @@ export const initState = {
     dec2area: 10,
     dec3area: 10,
     dec4area: 10,
-    initialRentCostPerSqm: 10,
-    rentincrease: 10,
+
 }
