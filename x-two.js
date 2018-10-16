@@ -10,6 +10,8 @@ import '@whcg/whcg-section-textlong-chart-input'
 import './whcg-box-container.js';
 import './whcg-number-field';
 import './whcg-chart.js';
+import * as rxjs from 'rxjs';
+import '@vaadin/vaadin-button';
 
 
 import { whcgJsonMaker, whcgObjMerger, whcgPeriodOperator, getRandomColor, whcgChartJsTransformer, singleMultiplier, whcgCompounder, setFactory, setsPeriodOperator, setCompounder, whcgObjMaker } from './whcg-functions.js';
@@ -20,67 +22,45 @@ import { grid } from './grid.css.js';
 
 export class XTwo extends LitElement {
 
+    firstUpdated(changedProps) {
+    }
+
     updated(changedProps) {
         super.updated(changedProps);
-        if (changedProps.has('initialPriceHeatOwn') || changedProps.has('initialAmountHeatOwn')) {
-            if(this.initialPriceHeatOwn && this.initialAmountHeatOwn) {
-                this.initialCostHeatOwn = singleMultiplier([this.initialAmountHeatOwn, this.initialPriceHeatOwn])
-            } 
+        if (changedProps.has('initialPriceHeatOwn')) {
+            this.initialPriceHeatOwn$.next(this.initialPriceHeatOwn);
         }
 
-        if (changedProps.has('initialCostHeatOwn') || changedProps.has('numberofyears') || changedProps.has('inflationrate')) {
-            if(this.initialCostHeatOwn && this.numberofyears && this.inflationrate) {
-                let setFactoryData = {
-                    value: this.initialCostHeatOwn,
-                    period: this.numberofyears,
-                    key: 'fill'
-                }
-
-                let setCompounderdata = {
-                    set: setFactory(setFactoryData),
-                    growthRate: this.inflationrate
-                }
-                this.costHeatOwnSet = setCompounder(setCompounderdata)
-            } 
+        if (changedProps.has('initialAmountHeatOwn')) {
+            this.initialAmountHeatOwn$.next(this.initialAmountHeatOwn);
         }
 
-        if (changedProps.has('initialAmountAreaOwn') || changedProps.has('numberofyears')) {
-            if(this.initialAmountAreaOwn && this.numberofyears) {
-                let setFactoryData = {
-                    value: this.initialAmountAreaOwn,
-                    period: this.numberofyears,
-                    key: 'fill'
-                }
-                this.initialAmountAreaOwnSet = setFactory(setFactoryData)
-            }  
+        if (changedProps.has('initialCostHeatOwn')) {
+            this.initialCostHeatOwn$.next(this.initialCostHeatOwn);
         }
 
-        if (changedProps.has('costHeatOwnSet') || changedProps.has('initialAmountAreaOwnSet')) {
-            if(this.costHeatOwnSet && this.initialAmountAreaOwnSet) {
-                let setsPeriodOperatorData = {
-                    sets: [this.costHeatOwnSet, this.initialAmountAreaOwnSet],
-                    mode: 'multiply'
-                }
+        if (changedProps.has('numberofyears')) {
+            this.numberofyears$.next(this.numberofyears);
+        }
 
-                this.compondedCostHeatOwnSet = setsPeriodOperator(setsPeriodOperatorData);
-            } 
+        if (changedProps.has('inflationrate')) {
+            this.inflationrate$.next(this.inflationrate);
+        }
+
+        if (changedProps.has('initialAmountAreaOwn')) {
+            this.initialAmountAreaOwn$.next(this.initialAmountAreaOwn);
+        }
+
+        if (changedProps.has('costHeatOwnSet')) {
+            this.costHeatOwnSet$.next(this.costHeatOwnSet);
+        }
+
+        if (changedProps.has('initialAmountAreaOwnSet')) {
+            this.initialAmountAreaOwnSet$.next(this.initialAmountAreaOwnSet);
         }
 
         if (changedProps.has('compondedCostHeatOwnSet')) {
-            if(this.compondedCostHeatOwnSet) {
-                let whcgObjMakerData = {
-                    set: this.compondedCostHeatOwnSet,
-                    name: 'Värmekostnader',
-                    label: 'kr',
-                    datapackage: 'yearlyamounts'
-                }
-
-                let whcgChartJsTransformerData = {
-                    whcgObj: whcgObjMaker(whcgObjMakerData), 
-                    datapackage: 'yearlyamounts'
-                }
-                this.chartJsCompondedCostHeatOwnObj = whcgChartJsTransformer(whcgChartJsTransformerData)
-            }
+            this.compondedCostHeatOwnSet$.next(this.compondedCostHeatOwnSet);
         }
 
 
@@ -142,7 +122,7 @@ export class XTwo extends LitElement {
             // compoundrateRepairOwn: {type: String},
             // initialRepairCostPerSqmOwn: {type: String},
             // whcgCompoundedHeatCostsPerSqmOwnObj: {type: Object},
-            chartJsCompondedCostHeatOwnObj: {Object},
+            chartJsCompondedCostHeatOwnObj: {type: Object},
             compondedCostHeatOwnSet: {type: Object},
             initialAmountAreaOwnSet: {type: Object},
             costHeatOwnSet: {type: Object},
@@ -159,8 +139,71 @@ export class XTwo extends LitElement {
         };
     }
 
+    setCostHeatOwnSet(initialCostHeatOwn, numberofyears, inflationrate) {
+        let setFactoryData = {
+            value: initialCostHeatOwn,
+            period: numberofyears,
+            key: 'fill'
+        }
+
+        let setCompounderdata = {
+            set: setFactory(setFactoryData),
+            growthRate: inflationrate
+        }
+        return setCompounder(setCompounderdata)
+    }
+
+    setInitialAmountAreaOwnSet(initialAmountAreaOwn, numberofyears) {
+        let setFactoryData = {
+            value: initialAmountAreaOwn,
+            period: numberofyears,
+            key: 'fill'
+        }
+        return setFactory(setFactoryData)
+    }
+
+    setCompondedCostHeatOwnSet(initialAmountAreaOwnSet, costHeatOwnSet) {
+        let setsPeriodOperatorData = {
+            sets: [costHeatOwnSet, initialAmountAreaOwnSet],
+            mode: 'multiply'
+        }
+    
+        return setsPeriodOperator(setsPeriodOperatorData);
+    }
+
+    setChartJsCompondedCostHeatOwnObj(compondedCostHeatOwnSet) {
+
+        let whcgObjMakerData = {
+            set: compondedCostHeatOwnSet,
+            name: 'Värmekostnader',
+            label: 'kr',
+            datapackage: 'yearlyamounts'
+        }
+
+        let whcgChartJsTransformerData = {
+            whcgObj: whcgObjMaker(whcgObjMakerData), 
+            datapackage: 'yearlyamounts'
+        }
+        
+        return whcgChartJsTransformer(whcgChartJsTransformerData)
+    }
+
     constructor() {
         super();
+        this.initialPriceHeatOwn$ = new rxjs.BehaviorSubject(0);
+        this.initialAmountHeatOwn$ = new rxjs.BehaviorSubject(0);
+        this.initialCostHeatOwn$ = new rxjs.BehaviorSubject(0);
+        this.numberofyears$ = new rxjs.BehaviorSubject(0);
+        this.inflationrate$ = new rxjs.BehaviorSubject(0);
+        this.initialAmountAreaOwn$ = new rxjs.BehaviorSubject(0);
+        this.costHeatOwnSet$ = new rxjs.BehaviorSubject(0);
+        this.initialAmountAreaOwnSet$ = new rxjs.BehaviorSubject(0);
+        this.compondedCostHeatOwnSet$ = new rxjs.BehaviorSubject(0);
+        rxjs.combineLatest(this.initialPriceHeatOwn$, this.initialAmountHeatOwn$).subscribe(([initialPriceHeatOwn, initialAmountHeatOwn]) => this.initialCostHeatOwn = singleMultiplier([initialPriceHeatOwn, initialAmountHeatOwn]));
+        rxjs.combineLatest(this.initialCostHeatOwn$, this.numberofyears$, this.inflationrate$).subscribe(([initialCostHeatOwn, numberofyears, inflationrate]) => this.costHeatOwnSet = this.setCostHeatOwnSet(initialCostHeatOwn, numberofyears, inflationrate));
+        rxjs.combineLatest(this.initialAmountAreaOwn$, this.numberofyears$).subscribe(([initialAmountAreaOwn, numberofyears]) => this.initialAmountAreaOwnSet = this.setInitialAmountAreaOwnSet(initialAmountAreaOwn, numberofyears));
+        rxjs.combineLatest(this.costHeatOwnSet$, this.initialAmountAreaOwnSet$).subscribe(([costHeatOwnSet, initialAmountAreaOwnSet]) => this.compondedCostHeatOwnSet = this.setCompondedCostHeatOwnSet(initialAmountAreaOwnSet, costHeatOwnSet));
+        rxjs.combineLatest(this.compondedCostHeatOwnSet$).subscribe(([compondedCostHeatOwnSet]) => this.chartJsCompondedCostHeatOwnObj = this.setChartJsCompondedCostHeatOwnObj(compondedCostHeatOwnSet));
     }
 
     render() {
@@ -168,8 +211,9 @@ export class XTwo extends LitElement {
         ${grid}
         <style>
         </style>
+        <vaadin-button id="button">BUTTON</vaadin-button>
         <div class="grid-12">
-
+            
             <whcg-section-text-input class="col1span12">
                 <span slot="title">INITIAL YTSTORLEK</span>
                 <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
