@@ -8,6 +8,10 @@ export function reducer(state, action) {
         return {...state, initialAmountHeatOwn: action.payload}
     case 'INITIALPRICEAREAOWN_VALUE':
         return {...state, initialPriceAreaOwn: action.payload}
+    case 'COMPOUNDRATEREPAIROWN_VALUE':
+        return {...state, compoundrateRepairOwn: action.payload}
+    case 'INITIALPRICEREPAIROWN_VALUE':
+        return {...state, initialPriceRepairOwn: action.payload}
 
     case 'ONE_INCREMENT':
         return {...state, one: state.one + 1}
@@ -47,10 +51,8 @@ export function reducer(state, action) {
         return {...state, maint3yearOwn: action.payload}
     case 'MAIN4YEAROWN_VALUE':
         return {...state, maint4yearOwn: action.payload}
-    case 'COMPOUNDRATEREPAIROWN_VALUE':
-        return {...state, compoundrateRepairOwn: action.payload}
-    case 'INITIALREPAIRCOSTPERSQMOWN_VALUE':
-        return {...state, initialRepairCostPerSqmOwn: action.payload}
+
+
     case 'EXP1YEAR_VALUE':
         return {...state, exp1year: action.payload}
     case 'EXP2YEAR_VALUE':

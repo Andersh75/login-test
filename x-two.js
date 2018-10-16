@@ -75,6 +75,22 @@ export class XTwo extends LitElement {
             this.costAreaOwnSet$.next(this.costAreaOwnSet);
         }
 
+        if (changedProps.has('initialPriceRepairOwn')) {
+            this.initialPriceRepairOwn$.next(this.initialPriceRepairOwn);
+        }
+
+        if (changedProps.has('compoundrateRepairOwn')) {
+            this.compoundrateRepairOwn$.next(this.compoundrateRepairOwn);
+        }
+
+        if (changedProps.has('priceRepairOwnSet')) {
+            this.priceRepairOwnSet$.next(this.priceRepairOwnSet);
+        }
+
+        if (changedProps.has('compondedCostRepairOwnSet')) {
+            this.compondedCostRepairOwnSet$.next(this.compondedCostRepairOwnSet);
+        }
+
 
 
         // }
@@ -152,6 +168,12 @@ export class XTwo extends LitElement {
             initialPriceAreaOwn: {type: String},
             initialAmountHeatOwn: {type: String},
             initialCostHeatOwn: {type: String},
+            initialPriceRepairOwn: {type: String},
+            compoundrateRepairOwn: {type: String},
+            priceRepairOwnSet: {type: Object},
+            compondedCostRepairOwnSet: {type: Object},
+            chartJsCompoundedCostRepairOwnObj: {type: Object},
+            
 
 
 
@@ -239,6 +261,46 @@ export class XTwo extends LitElement {
         return whcgChartJsTransformer(whcgChartJsTransformerData)
     }
 
+    setPriceRepairOwnSet(initialPriceRepairOwn, numberofyears, compoundrateRepairOwn) {
+        let setFactoryData = {
+            value: initialPriceRepairOwn,
+            period: numberofyears,
+            key: 'fill'
+        }
+
+        let setCompounderdata = {
+            set: setFactory(setFactoryData),
+            growthRate: compoundrateRepairOwn
+        }
+        return setCompounder(setCompounderdata)
+    }
+
+    setCompondedCostRepairOwnSet(initialAmountAreaOwnSet, priceRepairOwnSet) {
+        let setsPeriodOperatorData = {
+            sets: [priceRepairOwnSet, initialAmountAreaOwnSet],
+            mode: 'multiply'
+        }
+    
+        return setsPeriodOperator(setsPeriodOperatorData);
+    }
+
+    setChartJsCompoundedCostRepairOwnObj(compondedCostRepairOwnSet) {
+
+        let whcgObjMakerData = {
+            set: compondedCostRepairOwnSet,
+            name: 'Reparationskostnader',
+            label: 'kr',
+            datapackage: 'yearlyamounts'
+        }
+
+        let whcgChartJsTransformerData = {
+            whcgObj: whcgObjMaker(whcgObjMakerData), 
+            datapackage: 'yearlyamounts'
+        }
+        
+        return whcgChartJsTransformer(whcgChartJsTransformerData)
+    }
+
     constructor() {
         super();
         this.initialPriceHeatOwn$ = new rxjs.BehaviorSubject(0);
@@ -253,6 +315,15 @@ export class XTwo extends LitElement {
         this.compondedCostHeatOwnSet$ = new rxjs.BehaviorSubject(0);
         this.initialCostAreaOwn$ = new rxjs.BehaviorSubject(0);
         this.costAreaOwnSet$ = new rxjs.BehaviorSubject(0);
+
+        this.initialPriceRepairOwn$ = new rxjs.BehaviorSubject(0);
+        this.compoundrateRepairOwn$ = new rxjs.BehaviorSubject(0);
+        this.priceRepairOwnSet$ = new rxjs.BehaviorSubject(0);
+        this.compondedCostRepairOwnSet$ = new rxjs.BehaviorSubject(0);
+
+
+        
+
         rxjs.combineLatest(this.initialPriceHeatOwn$, this.initialAmountHeatOwn$).subscribe(([initialPriceHeatOwn, initialAmountHeatOwn]) => this.initialCostHeatOwn = singleMultiplier([initialPriceHeatOwn, initialAmountHeatOwn]));
         rxjs.combineLatest(this.initialCostHeatOwn$, this.numberofyears$, this.inflationrate$).subscribe(([initialCostHeatOwn, numberofyears, inflationrate]) => this.costHeatOwnSet = this.setCostHeatOwnSet(initialCostHeatOwn, numberofyears, inflationrate));
         rxjs.combineLatest(this.initialAmountAreaOwn$, this.numberofyears$).subscribe(([initialAmountAreaOwn, numberofyears]) => this.initialAmountAreaOwnSet = this.setInitialAmountAreaOwnSet(initialAmountAreaOwn, numberofyears));
@@ -263,6 +334,11 @@ export class XTwo extends LitElement {
         rxjs.combineLatest(this.initialCostAreaOwn$, this.numberofyears$).subscribe(([initialCostAreaOwn, numberofyears]) => this.costAreaOwnSet = this.setCostAreaOwnSet(initialCostAreaOwn, numberofyears));
         rxjs.combineLatest(this.costAreaOwnSet$).subscribe(([costAreaOwnSet]) => this.chartJsCostAreaOwnObj = this.setChartJsCostAreaOwnObj(costAreaOwnSet));
 
+
+        rxjs.combineLatest(this.initialPriceRepairOwn$, this.numberofyears$, this.compoundrateRepairOwn$).subscribe(([initialPriceRepairOwn, numberofyears, compoundrateRepairOwn]) => this.priceRepairOwnSet = this.setPriceRepairOwnSet(initialPriceRepairOwn, numberofyears, compoundrateRepairOwn));
+        rxjs.combineLatest(this.priceRepairOwnSet$, this.initialAmountAreaOwnSet$).subscribe(([priceRepairOwnSet, initialAmountAreaOwnSet]) => this.compondedCostRepairOwnSet = this.setCompondedCostRepairOwnSet(initialAmountAreaOwnSet, priceRepairOwnSet));
+        
+        rxjs.combineLatest(this.compondedCostRepairOwnSet$).subscribe(([compondedCostRepairOwnSet]) => this.chartJsCompoundedCostRepairOwnObj = this.setChartJsCompoundedCostRepairOwnObj(compondedCostRepairOwnSet));
     }
 
     render() {
@@ -305,9 +381,24 @@ export class XTwo extends LitElement {
                 </whcg-chart> 
             </whcg-section-textlong-input-chart>
 
+            <whcg-section-textlong-chart-input class="col1span12">
+                <span slot="title">KOSTNADER FÖR REPARATIONER OCH LÖPANDE UNDERHÅLL</span>
+                <span slot="text">Selectedpage sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+                .value=${this.chartJsCompoundedCostRepairOwnObj}>
+                </whcg-chart> 
+                <whcg-number-field-box slot="input" column name="" mode="none">
+                    <whcg-select label="Kostnadsutveckling" suffix="%" @valueChanged=${this.compoundrateRepairOwnChanged.bind(this)} value=${this.compoundrateRepairOwn} placeholder="...antal procent" jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
+                    <whcg-number-field label="Kostnad per kvm" @valueChanged=${this.initialPriceRepairOwnChanged.bind(this)} value=${this.initialPriceRepairOwn} placeholder="... antal" kind="price" suffix="kr"></whcg-number-field>
+                </whcg-number-field-box>
+            </whcg-section-textlong-input-chart>
+
         </div>
         `
     }
+
+    
 
     initialAmountAreaOwnChanged(e) {
         this.storeHolder.store.dispatch(action.initialAmountAreaOwnValue(e.detail.value));
@@ -323,6 +414,14 @@ export class XTwo extends LitElement {
 
     initialPriceAreaOwnChanged(e) {
         this.storeHolder.store.dispatch(action.initialPriceAreaOwnValue(e.detail.value));
+    }
+
+    initialPriceRepairOwnChanged(e) {
+        this.storeHolder.store.dispatch(action.initialPriceRepairOwnValue(e.detail.value));
+    }
+
+    compoundrateRepairOwnChanged(e) {
+        this.storeHolder.store.dispatch(action.compoundrateRepairOwnValue(e.detail.value));
     }
 
 
@@ -403,6 +502,14 @@ export class XTwo extends LitElement {
 
         if (this.initialPriceAreaOwn !== state.initialPriceAreaOwn) {
             this.initialPriceAreaOwn = state.initialPriceAreaOwn;
+        }
+
+        if (this.compoundrateRepairOwn !== state.compoundrateRepairOwn) {
+            this.compoundrateRepairOwn = state.compoundrateRepairOwn;
+        }
+
+        if (this.initialPriceRepairOwn !== state.initialPriceRepairOwn) {
+            this.initialPriceRepairOwn = state.initialPriceRepairOwn;
         }
 
 

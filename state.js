@@ -1,8 +1,11 @@
 export const initState = {
+    initialPriceRepairOwn: 10, 
+    compoundrateRepairOwn: 10,
     initialPriceAreaOwn: 10,
     initialAmountAreaOwn: 10,
     initialAmountHeatOwn: 14,
     initialPriceHeatOwn: 10,
+    
     one: 74,
     two: 47,
     three: 7,
@@ -24,8 +27,8 @@ export const initState = {
     maint2costOwn: 10,
     maint3costOwn: 10,
     maint4costOwn: 10,
-    compoundrateRepairOwn: 10,
-    initialRepairCostPerSqmOwn: 10, 
+    
+    
     exp1year: 10,
     exp2year: 10,
     exp3year: 10,

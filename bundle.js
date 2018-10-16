@@ -25228,6 +25228,10 @@ var MyModule = (function (exports) {
             return {...state, initialAmountHeatOwn: action.payload}
         case 'INITIALPRICEAREAOWN_VALUE':
             return {...state, initialPriceAreaOwn: action.payload}
+        case 'COMPOUNDRATEREPAIROWN_VALUE':
+            return {...state, compoundrateRepairOwn: action.payload}
+        case 'INITIALPRICEREPAIROWN_VALUE':
+            return {...state, initialPriceRepairOwn: action.payload}
 
         case 'ONE_INCREMENT':
             return {...state, one: state.one + 1}
@@ -25267,10 +25271,8 @@ var MyModule = (function (exports) {
             return {...state, maint3yearOwn: action.payload}
         case 'MAIN4YEAROWN_VALUE':
             return {...state, maint4yearOwn: action.payload}
-        case 'COMPOUNDRATEREPAIROWN_VALUE':
-            return {...state, compoundrateRepairOwn: action.payload}
-        case 'INITIALREPAIRCOSTPERSQMOWN_VALUE':
-            return {...state, initialRepairCostPerSqmOwn: action.payload}
+
+
         case 'EXP1YEAR_VALUE':
             return {...state, exp1year: action.payload}
         case 'EXP2YEAR_VALUE':
@@ -25335,10 +25337,13 @@ var MyModule = (function (exports) {
     }
 
     const initState = {
+        initialPriceRepairOwn: 10, 
+        compoundrateRepairOwn: 10,
         initialPriceAreaOwn: 10,
         initialAmountAreaOwn: 10,
         initialAmountHeatOwn: 14,
         initialPriceHeatOwn: 10,
+        
         one: 74,
         two: 47,
         three: 7,
@@ -25360,8 +25365,8 @@ var MyModule = (function (exports) {
         maint2costOwn: 10,
         maint3costOwn: 10,
         maint4costOwn: 10,
-        compoundrateRepairOwn: 10,
-        initialRepairCostPerSqmOwn: 10, 
+        
+        
         exp1year: 10,
         exp2year: 10,
         exp3year: 10,
@@ -27970,6 +27975,8 @@ var MyModule = (function (exports) {
     const INITIALAMOUNTHEATOWN_VALUE = 'INITIALAMOUNTHEATOWN_VALUE';
     const INITIALPRICEHEATOWN_VALUE = 'INITIALPRICEHEATOWN_VALUE';
     const INITIALPRICEAREAOWN_VALUE = 'INITIALPRICEAREAOWN_VALUE';
+    const COMPOUNDRATEREPAIROWN_VALUE = 'COMPOUNDRATEREPAIROWN_VALUE';
+    const INITIALPRICEREPAIROWN_VALUE = 'INITIALPRICEREPAIROWN_VALUE';
 
 
 
@@ -27990,8 +27997,8 @@ var MyModule = (function (exports) {
     const MAIN2YEAROWN_VALUE = 'MAIN2YEAROWN_VALUE';
     const MAIN3YEAROWN_VALUE = 'MAIN3YEAROWN_VALUE';
     const MAIN4YEAROWN_VALUE = 'MAIN4YEAROWN_VALUE';
-    const INITIALREPAIRCOSTPERSQMOWN_VALUE = 'INITIALREPAIRCOSTPERSQMOWN_VALUE';
-    const COMPOUNDRATEREPAIROWN_VALUE = 'COMPOUNDRATEREPAIROWN_VALUE';
+
+
 
     const EXP1YEAR_VALUE = 'EXP1YEAR_VALUE';
     const EXP2YEAR_VALUE = 'EXP2YEAR_VALUE';
@@ -28017,6 +28024,18 @@ var MyModule = (function (exports) {
 
 
     const action = {
+        initialPriceRepairOwnValue: (payload) => {
+          return {
+            type: INITIALPRICEREPAIROWN_VALUE,
+            payload: payload
+          };
+        },
+        compoundrateRepairOwnValue: (payload) => {
+          return {
+            type: COMPOUNDRATEREPAIROWN_VALUE,
+            payload: payload
+          };
+        },
         initialPriceAreaOwnValue: (payload) => {
           return {
             type: INITIALPRICEAREAOWN_VALUE,
@@ -28143,18 +28162,8 @@ var MyModule = (function (exports) {
               payload: payload
             };
           },
-          compoundrateRepairOwnValue: (payload) => {
-            return {
-              type: COMPOUNDRATEREPAIROWN_VALUE,
-              payload: payload
-            };
-          },
-          initialRepairCostPerSqmOwnValue: (payload) => {
-            return {
-              type: INITIALREPAIRCOSTPERSQMOWN_VALUE,
-              payload: payload
-            };
-          },
+
+
 
           exp1yearValue: (payload) => {
             return {
@@ -35774,6 +35783,22 @@ var MyModule = (function (exports) {
                 this.costAreaOwnSet$.next(this.costAreaOwnSet);
             }
 
+            if (changedProps.has('initialPriceRepairOwn')) {
+                this.initialPriceRepairOwn$.next(this.initialPriceRepairOwn);
+            }
+
+            if (changedProps.has('compoundrateRepairOwn')) {
+                this.compoundrateRepairOwn$.next(this.compoundrateRepairOwn);
+            }
+
+            if (changedProps.has('priceRepairOwnSet')) {
+                this.priceRepairOwnSet$.next(this.priceRepairOwnSet);
+            }
+
+            if (changedProps.has('compondedCostRepairOwnSet')) {
+                this.compondedCostRepairOwnSet$.next(this.compondedCostRepairOwnSet);
+            }
+
 
 
             // }
@@ -35851,6 +35876,12 @@ var MyModule = (function (exports) {
                 initialPriceAreaOwn: {type: String},
                 initialAmountHeatOwn: {type: String},
                 initialCostHeatOwn: {type: String},
+                initialPriceRepairOwn: {type: String},
+                compoundrateRepairOwn: {type: String},
+                priceRepairOwnSet: {type: Object},
+                compondedCostRepairOwnSet: {type: Object},
+                chartJsCompoundedCostRepairOwnObj: {type: Object},
+                
 
 
 
@@ -35938,6 +35969,46 @@ var MyModule = (function (exports) {
             return whcgChartJsTransformer(whcgChartJsTransformerData)
         }
 
+        setPriceRepairOwnSet(initialPriceRepairOwn, numberofyears, compoundrateRepairOwn) {
+            let setFactoryData = {
+                value: initialPriceRepairOwn,
+                period: numberofyears,
+                key: 'fill'
+            };
+
+            let setCompounderdata = {
+                set: setFactory(setFactoryData),
+                growthRate: compoundrateRepairOwn
+            };
+            return setCompounder(setCompounderdata)
+        }
+
+        setCompondedCostRepairOwnSet(initialAmountAreaOwnSet, priceRepairOwnSet) {
+            let setsPeriodOperatorData = {
+                sets: [priceRepairOwnSet, initialAmountAreaOwnSet],
+                mode: 'multiply'
+            };
+        
+            return setsPeriodOperator(setsPeriodOperatorData);
+        }
+
+        setChartJsCompoundedCostRepairOwnObj(compondedCostRepairOwnSet) {
+
+            let whcgObjMakerData = {
+                set: compondedCostRepairOwnSet,
+                name: 'Reparationskostnader',
+                label: 'kr',
+                datapackage: 'yearlyamounts'
+            };
+
+            let whcgChartJsTransformerData = {
+                whcgObj: whcgObjMaker(whcgObjMakerData), 
+                datapackage: 'yearlyamounts'
+            };
+            
+            return whcgChartJsTransformer(whcgChartJsTransformerData)
+        }
+
         constructor() {
             super();
             this.initialPriceHeatOwn$ = new BehaviorSubject(0);
@@ -35952,6 +36023,15 @@ var MyModule = (function (exports) {
             this.compondedCostHeatOwnSet$ = new BehaviorSubject(0);
             this.initialCostAreaOwn$ = new BehaviorSubject(0);
             this.costAreaOwnSet$ = new BehaviorSubject(0);
+
+            this.initialPriceRepairOwn$ = new BehaviorSubject(0);
+            this.compoundrateRepairOwn$ = new BehaviorSubject(0);
+            this.priceRepairOwnSet$ = new BehaviorSubject(0);
+            this.compondedCostRepairOwnSet$ = new BehaviorSubject(0);
+
+
+            
+
             combineLatest(this.initialPriceHeatOwn$, this.initialAmountHeatOwn$).subscribe(([initialPriceHeatOwn, initialAmountHeatOwn]) => this.initialCostHeatOwn = singleMultiplier([initialPriceHeatOwn, initialAmountHeatOwn]));
             combineLatest(this.initialCostHeatOwn$, this.numberofyears$, this.inflationrate$).subscribe(([initialCostHeatOwn, numberofyears, inflationrate]) => this.costHeatOwnSet = this.setCostHeatOwnSet(initialCostHeatOwn, numberofyears, inflationrate));
             combineLatest(this.initialAmountAreaOwn$, this.numberofyears$).subscribe(([initialAmountAreaOwn, numberofyears]) => this.initialAmountAreaOwnSet = this.setInitialAmountAreaOwnSet(initialAmountAreaOwn, numberofyears));
@@ -35962,6 +36042,11 @@ var MyModule = (function (exports) {
             combineLatest(this.initialCostAreaOwn$, this.numberofyears$).subscribe(([initialCostAreaOwn, numberofyears]) => this.costAreaOwnSet = this.setCostAreaOwnSet(initialCostAreaOwn, numberofyears));
             combineLatest(this.costAreaOwnSet$).subscribe(([costAreaOwnSet]) => this.chartJsCostAreaOwnObj = this.setChartJsCostAreaOwnObj(costAreaOwnSet));
 
+
+            combineLatest(this.initialPriceRepairOwn$, this.numberofyears$, this.compoundrateRepairOwn$).subscribe(([initialPriceRepairOwn, numberofyears, compoundrateRepairOwn]) => this.priceRepairOwnSet = this.setPriceRepairOwnSet(initialPriceRepairOwn, numberofyears, compoundrateRepairOwn));
+            combineLatest(this.priceRepairOwnSet$, this.initialAmountAreaOwnSet$).subscribe(([priceRepairOwnSet, initialAmountAreaOwnSet]) => this.compondedCostRepairOwnSet = this.setCompondedCostRepairOwnSet(initialAmountAreaOwnSet, priceRepairOwnSet));
+            
+            combineLatest(this.compondedCostRepairOwnSet$).subscribe(([compondedCostRepairOwnSet]) => this.chartJsCompoundedCostRepairOwnObj = this.setChartJsCompoundedCostRepairOwnObj(compondedCostRepairOwnSet));
         }
 
         render() {
@@ -36004,9 +36089,24 @@ var MyModule = (function (exports) {
                 </whcg-chart> 
             </whcg-section-textlong-input-chart>
 
+            <whcg-section-textlong-chart-input class="col1span12">
+                <span slot="title">KOSTNADER FÖR REPARATIONER OCH LÖPANDE UNDERHÅLL</span>
+                <span slot="text">Selectedpage sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica"
+                .value=${this.chartJsCompoundedCostRepairOwnObj}>
+                </whcg-chart> 
+                <whcg-number-field-box slot="input" column name="" mode="none">
+                    <whcg-select label="Kostnadsutveckling" suffix="%" @valueChanged=${this.compoundrateRepairOwnChanged.bind(this)} value=${this.compoundrateRepairOwn} placeholder="...antal procent" jsoninput='[{"value": 0.01, "caption": "1"}, {"value": 0.02, "caption": "2"}, {"value": 0.03, "caption": "2"}, {"value": 0.04, "caption": "4"}, {"value": 0.05, "caption": "5"}, {"value": 0.06, "caption": "6"}, {"value": 0.07, "caption": "7"}, {"value": 0.08, "caption": "8"}, {"value": 0.09, "caption": "9"}, {"value": 0.10, "caption": "10"}]'></whcg-select>
+                    <whcg-number-field label="Kostnad per kvm" @valueChanged=${this.initialPriceRepairOwnChanged.bind(this)} value=${this.initialPriceRepairOwn} placeholder="... antal" kind="price" suffix="kr"></whcg-number-field>
+                </whcg-number-field-box>
+            </whcg-section-textlong-input-chart>
+
         </div>
         `
         }
+
+        
 
         initialAmountAreaOwnChanged(e) {
             this.storeHolder.store.dispatch(action.initialAmountAreaOwnValue(e.detail.value));
@@ -36022,6 +36122,14 @@ var MyModule = (function (exports) {
 
         initialPriceAreaOwnChanged(e) {
             this.storeHolder.store.dispatch(action.initialPriceAreaOwnValue(e.detail.value));
+        }
+
+        initialPriceRepairOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.initialPriceRepairOwnValue(e.detail.value));
+        }
+
+        compoundrateRepairOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.compoundrateRepairOwnValue(e.detail.value));
         }
 
 
@@ -36102,6 +36210,14 @@ var MyModule = (function (exports) {
 
             if (this.initialPriceAreaOwn !== state.initialPriceAreaOwn) {
                 this.initialPriceAreaOwn = state.initialPriceAreaOwn;
+            }
+
+            if (this.compoundrateRepairOwn !== state.compoundrateRepairOwn) {
+                this.compoundrateRepairOwn = state.compoundrateRepairOwn;
+            }
+
+            if (this.initialPriceRepairOwn !== state.initialPriceRepairOwn) {
+                this.initialPriceRepairOwn = state.initialPriceRepairOwn;
             }
 
 

@@ -2,6 +2,8 @@ const INITIALAMOUNTAREAOWN_VALUE = 'INITIALAMOUNTAREAOWN_VALUE';
 const INITIALAMOUNTHEATOWN_VALUE = 'INITIALAMOUNTHEATOWN_VALUE';
 const INITIALPRICEHEATOWN_VALUE = 'INITIALPRICEHEATOWN_VALUE';
 const INITIALPRICEAREAOWN_VALUE = 'INITIALPRICEAREAOWN_VALUE';
+const COMPOUNDRATEREPAIROWN_VALUE = 'COMPOUNDRATEREPAIROWN_VALUE';
+const INITIALPRICEREPAIROWN_VALUE = 'INITIALPRICEREPAIROWN_VALUE';
 
 
 
@@ -25,8 +27,8 @@ const MAIN1YEAROWN_VALUE = 'MAIN1YEAROWN_VALUE';
 const MAIN2YEAROWN_VALUE = 'MAIN2YEAROWN_VALUE';
 const MAIN3YEAROWN_VALUE = 'MAIN3YEAROWN_VALUE';
 const MAIN4YEAROWN_VALUE = 'MAIN4YEAROWN_VALUE';
-const INITIALREPAIRCOSTPERSQMOWN_VALUE = 'INITIALREPAIRCOSTPERSQMOWN_VALUE';
-const COMPOUNDRATEREPAIROWN_VALUE = 'COMPOUNDRATEREPAIROWN_VALUE';
+
+
 
 const EXP1YEAR_VALUE = 'EXP1YEAR_VALUE';
 const EXP2YEAR_VALUE = 'EXP2YEAR_VALUE';
@@ -52,6 +54,18 @@ const INITIALRENTCOSTPERSQM_VALUE = 'INITIALRENTCOSTPERSQM_VALUE';
 
 
 export const action = {
+    initialPriceRepairOwnValue: (payload) => {
+      return {
+        type: INITIALPRICEREPAIROWN_VALUE,
+        payload: payload
+      };
+    },
+    compoundrateRepairOwnValue: (payload) => {
+      return {
+        type: COMPOUNDRATEREPAIROWN_VALUE,
+        payload: payload
+      };
+    },
     initialPriceAreaOwnValue: (payload) => {
       return {
         type: INITIALPRICEAREAOWN_VALUE,
@@ -178,18 +192,8 @@ export const action = {
           payload: payload
         };
       },
-      compoundrateRepairOwnValue: (payload) => {
-        return {
-          type: COMPOUNDRATEREPAIROWN_VALUE,
-          payload: payload
-        };
-      },
-      initialRepairCostPerSqmOwnValue: (payload) => {
-        return {
-          type: INITIALREPAIRCOSTPERSQMOWN_VALUE,
-          payload: payload
-        };
-      },
+
+
 
       exp1yearValue: (payload) => {
         return {
