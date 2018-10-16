@@ -6,6 +6,8 @@ export function reducer(state, action) {
         return {...state, initialPriceHeatOwn: action.payload}
     case 'INITIALAMOUNTHEATOWN_VALUE':
         return {...state, initialAmountHeatOwn: action.payload}
+    case 'INITIALPRICEAREAOWN_VALUE':
+        return {...state, initialPriceAreaOwn: action.payload}
 
     case 'ONE_INCREMENT':
         return {...state, one: state.one + 1}
@@ -29,8 +31,6 @@ export function reducer(state, action) {
         return {...state, numberofyears: action.payload}
     case 'INITIALAREAAMOUNTOWN_VALUE':
         return {...state, initialAreaAmountOwn: action.payload}
-    case 'INITIALESTABLISHCOSTPERSQMOWN_VALUE':
-        return {...state, initialEstablishCostPerSqmOwn: action.payload}
     case 'MAIN1COSTOWN_VALUE':
         return {...state, maint1costOwn: action.payload}
     case 'MAIN2COSTOWN_VALUE':

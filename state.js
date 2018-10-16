@@ -1,4 +1,5 @@
 export const initState = {
+    initialPriceAreaOwn: 10,
     initialAmountAreaOwn: 10,
     initialAmountHeatOwn: 14,
     initialPriceHeatOwn: 10,

@@ -51,6 +51,10 @@ export class XTwo extends LitElement {
             this.initialAmountAreaOwn$.next(this.initialAmountAreaOwn);
         }
 
+        if (changedProps.has('initialPriceAreaOwn')) {
+            this.initialPriceAreaOwn$.next(this.initialPriceAreaOwn);
+        }
+
         if (changedProps.has('costHeatOwnSet')) {
             this.costHeatOwnSet$.next(this.costHeatOwnSet);
         }
@@ -62,6 +66,15 @@ export class XTwo extends LitElement {
         if (changedProps.has('compondedCostHeatOwnSet')) {
             this.compondedCostHeatOwnSet$.next(this.compondedCostHeatOwnSet);
         }
+
+        if (changedProps.has('initialCostAreaOwn')) {
+            this.initialCostAreaOwn$.next(this.initialCostAreaOwn);
+        }
+
+        if (changedProps.has('costAreaOwnSet')) {
+            this.costAreaOwnSet$.next(this.costAreaOwnSet);
+        }
+
 
 
         // }
@@ -122,6 +135,12 @@ export class XTwo extends LitElement {
             // compoundrateRepairOwn: {type: String},
             // initialRepairCostPerSqmOwn: {type: String},
             // whcgCompoundedHeatCostsPerSqmOwnObj: {type: Object},
+
+
+            costAreaOwnSet: {type: Object},
+            initialCostAreaOwn: {type: String},
+            chartJsCostAreaOwnObj: {type: Object},
+            initialEstablishCostPerSqmOwn: {type: String},
             chartJsCompondedCostHeatOwnObj: {type: Object},
             compondedCostHeatOwnSet: {type: Object},
             initialAmountAreaOwnSet: {type: Object},
@@ -130,6 +149,7 @@ export class XTwo extends LitElement {
             numberofyears: {type: String},
             inflationrate: {type: String},
             initialPriceHeatOwn: {type: String},
+            initialPriceAreaOwn: {type: String},
             initialAmountHeatOwn: {type: String},
             initialCostHeatOwn: {type: String},
 
@@ -149,6 +169,20 @@ export class XTwo extends LitElement {
         let setCompounderdata = {
             set: setFactory(setFactoryData),
             growthRate: inflationrate
+        }
+        return setCompounder(setCompounderdata)
+    }
+
+    setCostAreaOwnSet(initialCostHeatOwn, numberofyears) {
+        let setFactoryData = {
+            value: initialCostHeatOwn,
+            period: numberofyears,
+            key: '0'
+        }
+
+        let setCompounderdata = {
+            set: setFactory(setFactoryData),
+            growthRate: '0'
         }
         return setCompounder(setCompounderdata)
     }
@@ -188,6 +222,23 @@ export class XTwo extends LitElement {
         return whcgChartJsTransformer(whcgChartJsTransformerData)
     }
 
+    setChartJsCostAreaOwnObj(costAreaOwnSet) {
+
+        let whcgObjMakerData = {
+            set: costAreaOwnSet,
+            name: 'Etableringskostnader',
+            label: 'kr',
+            datapackage: 'yearlyamounts'
+        }
+
+        let whcgChartJsTransformerData = {
+            whcgObj: whcgObjMaker(whcgObjMakerData), 
+            datapackage: 'yearlyamounts'
+        }
+        
+        return whcgChartJsTransformer(whcgChartJsTransformerData)
+    }
+
     constructor() {
         super();
         this.initialPriceHeatOwn$ = new rxjs.BehaviorSubject(0);
@@ -196,14 +247,22 @@ export class XTwo extends LitElement {
         this.numberofyears$ = new rxjs.BehaviorSubject(0);
         this.inflationrate$ = new rxjs.BehaviorSubject(0);
         this.initialAmountAreaOwn$ = new rxjs.BehaviorSubject(0);
+        this.initialPriceAreaOwn$ = new rxjs.BehaviorSubject(0);
         this.costHeatOwnSet$ = new rxjs.BehaviorSubject(0);
         this.initialAmountAreaOwnSet$ = new rxjs.BehaviorSubject(0);
         this.compondedCostHeatOwnSet$ = new rxjs.BehaviorSubject(0);
+        this.initialCostAreaOwn$ = new rxjs.BehaviorSubject(0);
+        this.costAreaOwnSet$ = new rxjs.BehaviorSubject(0);
         rxjs.combineLatest(this.initialPriceHeatOwn$, this.initialAmountHeatOwn$).subscribe(([initialPriceHeatOwn, initialAmountHeatOwn]) => this.initialCostHeatOwn = singleMultiplier([initialPriceHeatOwn, initialAmountHeatOwn]));
         rxjs.combineLatest(this.initialCostHeatOwn$, this.numberofyears$, this.inflationrate$).subscribe(([initialCostHeatOwn, numberofyears, inflationrate]) => this.costHeatOwnSet = this.setCostHeatOwnSet(initialCostHeatOwn, numberofyears, inflationrate));
         rxjs.combineLatest(this.initialAmountAreaOwn$, this.numberofyears$).subscribe(([initialAmountAreaOwn, numberofyears]) => this.initialAmountAreaOwnSet = this.setInitialAmountAreaOwnSet(initialAmountAreaOwn, numberofyears));
         rxjs.combineLatest(this.costHeatOwnSet$, this.initialAmountAreaOwnSet$).subscribe(([costHeatOwnSet, initialAmountAreaOwnSet]) => this.compondedCostHeatOwnSet = this.setCompondedCostHeatOwnSet(initialAmountAreaOwnSet, costHeatOwnSet));
         rxjs.combineLatest(this.compondedCostHeatOwnSet$).subscribe(([compondedCostHeatOwnSet]) => this.chartJsCompondedCostHeatOwnObj = this.setChartJsCompondedCostHeatOwnObj(compondedCostHeatOwnSet));
+        rxjs.combineLatest(this.initialPriceAreaOwn$, this.initialAmountAreaOwn$).subscribe(([initialPriceAreaOwn, initialAmountAreaOwn]) => this.initialCostAreaOwn = singleMultiplier([initialPriceAreaOwn, initialAmountAreaOwn]));
+
+        rxjs.combineLatest(this.initialCostAreaOwn$, this.numberofyears$).subscribe(([initialCostAreaOwn, numberofyears]) => this.costAreaOwnSet = this.setCostAreaOwnSet(initialCostAreaOwn, numberofyears));
+        rxjs.combineLatest(this.costAreaOwnSet$).subscribe(([costAreaOwnSet]) => this.chartJsCostAreaOwnObj = this.setChartJsCostAreaOwnObj(costAreaOwnSet));
+
     }
 
     render() {
@@ -222,6 +281,16 @@ export class XTwo extends LitElement {
                     <whcg-number-field label="Antal kvm" @valueChanged=${this.initialAmountAreaOwnChanged.bind(this)} value=${this.initialAmountAreaOwn} suffix="kvm" placeholder="...antal"></whcg-number-field>
                 </whcg-number-field-box>
             </whcg-section-text-input>
+
+            <whcg-section-textlong-input-chart class="col1span12">
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <span slot="title">INITIAL ETABLERINGSKOSTNAD</span>
+                <whcg-number-field-box slot="input" name="Inflation">
+                    <whcg-number-field label="Etableringskostnad per kvm" @valueChanged=${this.initialPriceAreaOwnChanged.bind(this)} value=${this.initialPriceAreaOwn} suffix="kr" placeholder="...antal kr"></whcg-number-field>
+                </whcg-number-field-box>
+                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" .value=${this.chartJsCostAreaOwnObj}></whcg-chart>
+            </whcg-section-textlong-input-chart>
 
             <whcg-section-textlong-input-chart class="col1span12">
                 <span slot="title">VÄRMEKOSTNADER</span>
@@ -250,6 +319,10 @@ export class XTwo extends LitElement {
 
     initialPriceHeatOwnChanged(e) {
         this.storeHolder.store.dispatch(action.initialPriceHeatOwnValue(e.detail.value));
+    }
+
+    initialPriceAreaOwnChanged(e) {
+        this.storeHolder.store.dispatch(action.initialPriceAreaOwnValue(e.detail.value));
     }
 
 
@@ -313,10 +386,6 @@ export class XTwo extends LitElement {
         }
 
         if (this.initialAmountHeatOwn !== state.initialAmountHeatOwn) {
-            console.log('state.initialAmountHeatOwn')
-            console.log(state.initialAmountHeatOwn)
-            console.log('this.initialAmountHeatOwn')
-            console.log(this.initialAmountHeatOwn)
             this.initialAmountHeatOwn = state.initialAmountHeatOwn;
         }
 
@@ -330,6 +399,10 @@ export class XTwo extends LitElement {
 
         if (this.numberofyears !== state.numberofyears) {
             this.numberofyears = state.numberofyears;
+        }
+
+        if (this.initialPriceAreaOwn !== state.initialPriceAreaOwn) {
+            this.initialPriceAreaOwn = state.initialPriceAreaOwn;
         }
 
 
@@ -447,12 +520,3 @@ customElements.define('x-two', XTwo);
 
 
 
-        // <whcg-section-textlong-input-chart class="col1span12">
-        //     <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-        //     </span>
-        //     <span slot="title">INITIAL ETABLERINGSKOSTNAD</span>
-        //     <whcg-number-field-box slot="input" name="Inflation">
-        //         <whcg-number-field label="Etableringskostnad per kvm" @valueChanged=${this.initialEstablishCostPerSqmOwnChanged.bind(this)} value=${this.initialEstablishCostPerSqmOwn} suffix="kr" placeholder="...antal kr"></whcg-number-field>
-        //     </whcg-number-field-box>
-        //     <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" .value=${this.chartJsInitialEstablishCostOwnObj}></whcg-chart>
-        // </whcg-section-textlong-input-chart>

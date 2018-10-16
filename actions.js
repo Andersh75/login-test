@@ -1,6 +1,7 @@
 const INITIALAMOUNTAREAOWN_VALUE = 'INITIALAMOUNTAREAOWN_VALUE';
 const INITIALAMOUNTHEATOWN_VALUE = 'INITIALAMOUNTHEATOWN_VALUE';
 const INITIALPRICEHEATOWN_VALUE = 'INITIALPRICEHEATOWN_VALUE';
+const INITIALPRICEAREAOWN_VALUE = 'INITIALPRICEAREAOWN_VALUE';
 
 
 
@@ -51,6 +52,12 @@ const INITIALRENTCOSTPERSQM_VALUE = 'INITIALRENTCOSTPERSQM_VALUE';
 
 
 export const action = {
+    initialPriceAreaOwnValue: (payload) => {
+      return {
+        type: INITIALPRICEAREAOWN_VALUE,
+        payload: payload
+      };
+    },
     initialAmountAreaOwnValue: (payload) => {
       return {
         type: INITIALAMOUNTAREAOWN_VALUE,
@@ -120,12 +127,6 @@ export const action = {
       initialAreaAmountOwnValue: (payload) => {
         return {
           type: INITIALAREAAMOUNTOWN_VALUE,
-          payload: payload
-        };
-      },
-      initialEstablishCostPerSqmOwnValue: (payload) => {
-        return {
-          type: INITIALESTABLISHCOSTPERSQMOWN_VALUE,
           payload: payload
         };
       },

@@ -25226,6 +25226,8 @@ var MyModule = (function (exports) {
             return {...state, initialPriceHeatOwn: action.payload}
         case 'INITIALAMOUNTHEATOWN_VALUE':
             return {...state, initialAmountHeatOwn: action.payload}
+        case 'INITIALPRICEAREAOWN_VALUE':
+            return {...state, initialPriceAreaOwn: action.payload}
 
         case 'ONE_INCREMENT':
             return {...state, one: state.one + 1}
@@ -25249,8 +25251,6 @@ var MyModule = (function (exports) {
             return {...state, numberofyears: action.payload}
         case 'INITIALAREAAMOUNTOWN_VALUE':
             return {...state, initialAreaAmountOwn: action.payload}
-        case 'INITIALESTABLISHCOSTPERSQMOWN_VALUE':
-            return {...state, initialEstablishCostPerSqmOwn: action.payload}
         case 'MAIN1COSTOWN_VALUE':
             return {...state, maint1costOwn: action.payload}
         case 'MAIN2COSTOWN_VALUE':
@@ -25335,6 +25335,7 @@ var MyModule = (function (exports) {
     }
 
     const initState = {
+        initialPriceAreaOwn: 10,
         initialAmountAreaOwn: 10,
         initialAmountHeatOwn: 14,
         initialPriceHeatOwn: 10,
@@ -27968,6 +27969,7 @@ var MyModule = (function (exports) {
     const INITIALAMOUNTAREAOWN_VALUE = 'INITIALAMOUNTAREAOWN_VALUE';
     const INITIALAMOUNTHEATOWN_VALUE = 'INITIALAMOUNTHEATOWN_VALUE';
     const INITIALPRICEHEATOWN_VALUE = 'INITIALPRICEHEATOWN_VALUE';
+    const INITIALPRICEAREAOWN_VALUE = 'INITIALPRICEAREAOWN_VALUE';
 
 
 
@@ -27980,7 +27982,6 @@ var MyModule = (function (exports) {
     const STARTYEAR_VALUE = 'STARTYEAR_VALUE';
     const NUMBEROFYEARS_VALUE = 'NUMBEROFYEARS_VALUE';
     const INITIALAREAAMOUNTOWN_VALUE = 'INITIALAREAAMOUNTOWN_VALUE';
-    const INITIALESTABLISHCOSTPERSQMOWN_VALUE = 'INITIALESTABLISHCOSTPERSQMOWN_VALUE';
     const MAIN1COSTOWN_VALUE = 'MAIN1COSTOWN_VALUE';
     const MAIN2COSTOWN_VALUE = 'MAIN2COSTOWN_VALUE';
     const MAIN3COSTOWN_VALUE = 'MAIN3COSTOWN_VALUE';
@@ -28016,6 +28017,12 @@ var MyModule = (function (exports) {
 
 
     const action = {
+        initialPriceAreaOwnValue: (payload) => {
+          return {
+            type: INITIALPRICEAREAOWN_VALUE,
+            payload: payload
+          };
+        },
         initialAmountAreaOwnValue: (payload) => {
           return {
             type: INITIALAMOUNTAREAOWN_VALUE,
@@ -28085,12 +28092,6 @@ var MyModule = (function (exports) {
           initialAreaAmountOwnValue: (payload) => {
             return {
               type: INITIALAREAAMOUNTOWN_VALUE,
-              payload: payload
-            };
-          },
-          initialEstablishCostPerSqmOwnValue: (payload) => {
-            return {
-              type: INITIALESTABLISHCOSTPERSQMOWN_VALUE,
               payload: payload
             };
           },
@@ -35749,6 +35750,10 @@ var MyModule = (function (exports) {
                 this.initialAmountAreaOwn$.next(this.initialAmountAreaOwn);
             }
 
+            if (changedProps.has('initialPriceAreaOwn')) {
+                this.initialPriceAreaOwn$.next(this.initialPriceAreaOwn);
+            }
+
             if (changedProps.has('costHeatOwnSet')) {
                 this.costHeatOwnSet$.next(this.costHeatOwnSet);
             }
@@ -35761,56 +35766,14 @@ var MyModule = (function (exports) {
                 this.compondedCostHeatOwnSet$.next(this.compondedCostHeatOwnSet);
             }
 
-            
-
-            // if (changedProps.has('initialCostHeatOwn') || changedProps.has('numberofyears') || changedProps.has('inflationrate')) {
-            //     this.initialCostHeatOwn$.next(this.initialCostHeatOwn);
-
-
-            //     if(this.initialCostHeatOwn && this.numberofyears && this.inflationrate) {
-
-
-                    
-            //     } 
-            // }
-
-
-
-
-            // if (changedProps.has('initialAmountAreaOwn') || changedProps.has('numberofyears')) {
-            //     if(this.initialAmountAreaOwn && this.numberofyears) {
-                    
-            //     }  
-            // }
-
-            // if (changedProps.has('costHeatOwnSet') || changedProps.has('initialAmountAreaOwnSet')) {
-            //     if(this.costHeatOwnSet && this.initialAmountAreaOwnSet) {
-            //         console.log('HERE!!!');
-            //         let setsPeriodOperatorData = {
-            //             sets: [this.costHeatOwnSet, this.initialAmountAreaOwnSet],
-            //             mode: 'multiply'
-            //         }
-
-            //         this.compondedCostHeatOwnSet = setsPeriodOperator(setsPeriodOperatorData);
-            //     } 
-            // }
-
-            if (changedProps.has('compondedCostHeatOwnSet')) {
-                if(this.compondedCostHeatOwnSet) {
-                    let whcgObjMakerData = {
-                        set: this.compondedCostHeatOwnSet,
-                        name: 'Värmekostnader',
-                        label: 'kr',
-                        datapackage: 'yearlyamounts'
-                    };
-
-                    let whcgChartJsTransformerData = {
-                        whcgObj: whcgObjMaker(whcgObjMakerData), 
-                        datapackage: 'yearlyamounts'
-                    };
-                    this.chartJsCompondedCostHeatOwnObj = whcgChartJsTransformer(whcgChartJsTransformerData);
-                }
+            if (changedProps.has('initialCostAreaOwn')) {
+                this.initialCostAreaOwn$.next(this.initialCostAreaOwn);
             }
+
+            if (changedProps.has('costAreaOwnSet')) {
+                this.costAreaOwnSet$.next(this.costAreaOwnSet);
+            }
+
 
 
             // }
@@ -35871,7 +35834,13 @@ var MyModule = (function (exports) {
                 // compoundrateRepairOwn: {type: String},
                 // initialRepairCostPerSqmOwn: {type: String},
                 // whcgCompoundedHeatCostsPerSqmOwnObj: {type: Object},
-                chartJsCompondedCostHeatOwnObj: {Object},
+
+
+                costAreaOwnSet: {type: Object},
+                initialCostAreaOwn: {type: String},
+                chartJsCostAreaOwnObj: {type: Object},
+                initialEstablishCostPerSqmOwn: {type: String},
+                chartJsCompondedCostHeatOwnObj: {type: Object},
                 compondedCostHeatOwnSet: {type: Object},
                 initialAmountAreaOwnSet: {type: Object},
                 costHeatOwnSet: {type: Object},
@@ -35879,6 +35848,7 @@ var MyModule = (function (exports) {
                 numberofyears: {type: String},
                 inflationrate: {type: String},
                 initialPriceHeatOwn: {type: String},
+                initialPriceAreaOwn: {type: String},
                 initialAmountHeatOwn: {type: String},
                 initialCostHeatOwn: {type: String},
 
@@ -35898,6 +35868,20 @@ var MyModule = (function (exports) {
             let setCompounderdata = {
                 set: setFactory(setFactoryData),
                 growthRate: inflationrate
+            };
+            return setCompounder(setCompounderdata)
+        }
+
+        setCostAreaOwnSet(initialCostHeatOwn, numberofyears) {
+            let setFactoryData = {
+                value: initialCostHeatOwn,
+                period: numberofyears,
+                key: '0'
+            };
+
+            let setCompounderdata = {
+                set: setFactory(setFactoryData),
+                growthRate: '0'
             };
             return setCompounder(setCompounderdata)
         }
@@ -35937,6 +35921,23 @@ var MyModule = (function (exports) {
             return whcgChartJsTransformer(whcgChartJsTransformerData)
         }
 
+        setChartJsCostAreaOwnObj(costAreaOwnSet) {
+
+            let whcgObjMakerData = {
+                set: costAreaOwnSet,
+                name: 'Etableringskostnader',
+                label: 'kr',
+                datapackage: 'yearlyamounts'
+            };
+
+            let whcgChartJsTransformerData = {
+                whcgObj: whcgObjMaker(whcgObjMakerData), 
+                datapackage: 'yearlyamounts'
+            };
+            
+            return whcgChartJsTransformer(whcgChartJsTransformerData)
+        }
+
         constructor() {
             super();
             this.initialPriceHeatOwn$ = new BehaviorSubject(0);
@@ -35945,14 +35946,22 @@ var MyModule = (function (exports) {
             this.numberofyears$ = new BehaviorSubject(0);
             this.inflationrate$ = new BehaviorSubject(0);
             this.initialAmountAreaOwn$ = new BehaviorSubject(0);
+            this.initialPriceAreaOwn$ = new BehaviorSubject(0);
             this.costHeatOwnSet$ = new BehaviorSubject(0);
             this.initialAmountAreaOwnSet$ = new BehaviorSubject(0);
             this.compondedCostHeatOwnSet$ = new BehaviorSubject(0);
+            this.initialCostAreaOwn$ = new BehaviorSubject(0);
+            this.costAreaOwnSet$ = new BehaviorSubject(0);
             combineLatest(this.initialPriceHeatOwn$, this.initialAmountHeatOwn$).subscribe(([initialPriceHeatOwn, initialAmountHeatOwn]) => this.initialCostHeatOwn = singleMultiplier([initialPriceHeatOwn, initialAmountHeatOwn]));
             combineLatest(this.initialCostHeatOwn$, this.numberofyears$, this.inflationrate$).subscribe(([initialCostHeatOwn, numberofyears, inflationrate]) => this.costHeatOwnSet = this.setCostHeatOwnSet(initialCostHeatOwn, numberofyears, inflationrate));
             combineLatest(this.initialAmountAreaOwn$, this.numberofyears$).subscribe(([initialAmountAreaOwn, numberofyears]) => this.initialAmountAreaOwnSet = this.setInitialAmountAreaOwnSet(initialAmountAreaOwn, numberofyears));
             combineLatest(this.costHeatOwnSet$, this.initialAmountAreaOwnSet$).subscribe(([costHeatOwnSet, initialAmountAreaOwnSet]) => this.compondedCostHeatOwnSet = this.setCompondedCostHeatOwnSet(initialAmountAreaOwnSet, costHeatOwnSet));
             combineLatest(this.compondedCostHeatOwnSet$).subscribe(([compondedCostHeatOwnSet]) => this.chartJsCompondedCostHeatOwnObj = this.setChartJsCompondedCostHeatOwnObj(compondedCostHeatOwnSet));
+            combineLatest(this.initialPriceAreaOwn$, this.initialAmountAreaOwn$).subscribe(([initialPriceAreaOwn, initialAmountAreaOwn]) => this.initialCostAreaOwn = singleMultiplier([initialPriceAreaOwn, initialAmountAreaOwn]));
+
+            combineLatest(this.initialCostAreaOwn$, this.numberofyears$).subscribe(([initialCostAreaOwn, numberofyears]) => this.costAreaOwnSet = this.setCostAreaOwnSet(initialCostAreaOwn, numberofyears));
+            combineLatest(this.costAreaOwnSet$).subscribe(([costAreaOwnSet]) => this.chartJsCostAreaOwnObj = this.setChartJsCostAreaOwnObj(costAreaOwnSet));
+
         }
 
         render() {
@@ -35971,6 +35980,16 @@ var MyModule = (function (exports) {
                     <whcg-number-field label="Antal kvm" @valueChanged=${this.initialAmountAreaOwnChanged.bind(this)} value=${this.initialAmountAreaOwn} suffix="kvm" placeholder="...antal"></whcg-number-field>
                 </whcg-number-field-box>
             </whcg-section-text-input>
+
+            <whcg-section-textlong-input-chart class="col1span12">
+                <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
+                </span>
+                <span slot="title">INITIAL ETABLERINGSKOSTNAD</span>
+                <whcg-number-field-box slot="input" name="Inflation">
+                    <whcg-number-field label="Etableringskostnad per kvm" @valueChanged=${this.initialPriceAreaOwnChanged.bind(this)} value=${this.initialPriceAreaOwn} suffix="kr" placeholder="...antal kr"></whcg-number-field>
+                </whcg-number-field-box>
+                <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" .value=${this.chartJsCostAreaOwnObj}></whcg-chart>
+            </whcg-section-textlong-input-chart>
 
             <whcg-section-textlong-input-chart class="col1span12">
                 <span slot="title">VÄRMEKOSTNADER</span>
@@ -35999,6 +36018,10 @@ var MyModule = (function (exports) {
 
         initialPriceHeatOwnChanged(e) {
             this.storeHolder.store.dispatch(action.initialPriceHeatOwnValue(e.detail.value));
+        }
+
+        initialPriceAreaOwnChanged(e) {
+            this.storeHolder.store.dispatch(action.initialPriceAreaOwnValue(e.detail.value));
         }
 
 
@@ -36062,10 +36085,6 @@ var MyModule = (function (exports) {
             }
 
             if (this.initialAmountHeatOwn !== state.initialAmountHeatOwn) {
-                console.log('state.initialAmountHeatOwn');
-                console.log(state.initialAmountHeatOwn);
-                console.log('this.initialAmountHeatOwn');
-                console.log(this.initialAmountHeatOwn);
                 this.initialAmountHeatOwn = state.initialAmountHeatOwn;
             }
 
@@ -36079,6 +36098,10 @@ var MyModule = (function (exports) {
 
             if (this.numberofyears !== state.numberofyears) {
                 this.numberofyears = state.numberofyears;
+            }
+
+            if (this.initialPriceAreaOwn !== state.initialPriceAreaOwn) {
+                this.initialPriceAreaOwn = state.initialPriceAreaOwn;
             }
 
 
@@ -36189,22 +36212,6 @@ var MyModule = (function (exports) {
                 // }
 
                 // this.whcgInitialEstablishCostPerSqmOwnObj = whcgJsonMaker(data.name, data.updatedProp, data.period, data.datapackage, data.label, data.key, data.fill)
-
-
-
-
-
-
-
-            // <whcg-section-textlong-input-chart class="col1span12">
-            //     <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
-            //     </span>
-            //     <span slot="title">INITIAL ETABLERINGSKOSTNAD</span>
-            //     <whcg-number-field-box slot="input" name="Inflation">
-            //         <whcg-number-field label="Etableringskostnad per kvm" @valueChanged=${this.initialEstablishCostPerSqmOwnChanged.bind(this)} value=${this.initialEstablishCostPerSqmOwn} suffix="kr" placeholder="...antal kr"></whcg-number-field>
-            //     </whcg-number-field-box>
-            //     <whcg-chart slot="chart" type="bar" width="800px" height="300px" legendposition="right" legendfontsize="10" legendfontfamily="Helvetica" .value=${this.chartJsInitialEstablishCostOwnObj}></whcg-chart>
-            // </whcg-section-textlong-input-chart>
 
     class XThree extends LitElement {
 
