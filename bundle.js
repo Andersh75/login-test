@@ -32329,6 +32329,62 @@ var MyModule = (function (exports) {
         return {...whcgObj, result: result };
     }
 
+
+    function zipAndOperateSetsFactory(mode) {
+        return function(maintOwnSets) {
+            let setsPeriodOperatorData = {
+                sets: maintOwnSets,
+                mode: mode
+            };
+        
+            return setsPeriodOperator(setsPeriodOperatorData);
+        }
+    }
+
+    function setMaker({value, period, key}) {
+        let setFactoryData = {
+            value: value,
+            period: period,
+            key: key
+        };
+        return setFactory(setFactoryData)
+    }
+
+
+    function compoundedSetMaker({value, period, growthRate, key}) {
+        let setFactoryData = {
+            value: value,
+            period: period,
+            key: key
+        };
+
+        let setCompounderdata = {
+            set: setFactory(setFactoryData),
+            growthRate: growthRate
+        };
+        return setCompounder(setCompounderdata)
+    }
+
+
+
+
+    function setChartJsObj({set, name, label, datapackage}) {
+
+        let whcgObjMakerData = {
+            set: set,
+            name: name,
+            label: label,
+            datapackage: datapackage
+        };
+
+        let whcgChartJsTransformerData = {
+            whcgObj: whcgObjMaker(whcgObjMakerData), 
+            datapackage: datapackage
+        };
+        
+        return whcgChartJsTransformer(whcgChartJsTransformerData)
+    }
+
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -35784,35 +35840,33 @@ var MyModule = (function (exports) {
                 }
             ];
 
-
-            this.zipAndAddSets = this.zipAndOperateSetsFactory('add');
-            this.zipAndMultiplySets = this.zipAndOperateSetsFactory('multiply');
-            
-            combineLatest(this.initialPriceHeatOwn$, this.initialAmountHeatOwn$).subscribe((values) => this.initialCostHeatOwn = singleMultiplier(values));
-            combineLatest(this.initialPriceAreaOwn$, this.initialAmountAreaOwn$).subscribe((values) => this.initialCostAreaOwn = singleMultiplier(values));
-
-            combineLatest(this.initialAmountAreaOwn$, this.numberofyears$).subscribe((values) => this.initialAmountAreaOwnSet = this.setMaker({value: values[0], period: values[1], key: 'fill'}));
-
             maintOwns.forEach((item, i) => {
-                combineLatest(item.maintcostsOwn, this.numberofyears$, item.maintyearsOwn).subscribe((values) => this[`maint${String(i+1)}OwnSet`] = this.setMaker({value: values[0], period: values[1], key: values[2]}));
+                combineLatest(item.maintcostsOwn, this.numberofyears$, item.maintyearsOwn).subscribe((values) => this[`maint${String(i+1)}OwnSet`] = setMaker({value: values[0], period: values[1], key: values[2]}));
             });
 
 
-            combineLatest(this.initialCostAreaOwn$, this.numberofyears$).subscribe((values) => this.costAreaOwnSet = this.setMaker({value: values[0], period: values[1], key: '0'}));
+            this.zipAndAddSets = zipAndOperateSetsFactory('add');
+            this.zipAndMultiplySets = zipAndOperateSetsFactory('multiply');
+            
 
-            combineLatest(this.initialCostHeatOwn$, this.numberofyears$, this.inflationrate$).subscribe((values) => this.costHeatOwnSet = this.compoundedSetMaker({value: values[0], period: values[1], growthRate: values[2], key: 'fill'}));
-            combineLatest(this.initialPriceRepairOwn$, this.numberofyears$, this.compoundrateRepairOwn$).subscribe((values) => this.priceRepairOwnSet = this.compoundedSetMaker({value: values[0], period: values[1], growthRate: values[2], key: 'fill'}));
+            combineLatest(this.initialPriceHeatOwn$, this.initialAmountHeatOwn$).subscribe((values) => this.initialCostHeatOwn = singleMultiplier(values));
+            combineLatest(this.initialPriceAreaOwn$, this.initialAmountAreaOwn$).subscribe((values) => this.initialCostAreaOwn = singleMultiplier(values));
+
+            combineLatest(this.initialAmountAreaOwn$, this.numberofyears$).subscribe((values) => this.initialAmountAreaOwnSet = setMaker({value: values[0], period: values[1], key: 'fill'}));
+            combineLatest(this.initialCostAreaOwn$, this.numberofyears$).subscribe((values) => this.costAreaOwnSet = setMaker({value: values[0], period: values[1], key: '0'}));
+
+            combineLatest(this.initialCostHeatOwn$, this.numberofyears$, this.inflationrate$).subscribe((values) => this.costHeatOwnSet = compoundedSetMaker({value: values[0], period: values[1], growthRate: values[2], key: 'fill'}));
+            combineLatest(this.initialPriceRepairOwn$, this.numberofyears$, this.compoundrateRepairOwn$).subscribe((values) => this.priceRepairOwnSet = compoundedSetMaker({value: values[0], period: values[1], growthRate: values[2], key: 'fill'}));
 
             combineLatest(this.costHeatOwnSet$, this.initialAmountAreaOwnSet$).subscribe((sets) => this.compondedCostHeatOwnSet = this.zipAndMultiplySets(sets));
             combineLatest(this.priceRepairOwnSet$, this.initialAmountAreaOwnSet$).subscribe((sets) => this.compondedCostRepairOwnSet = this.zipAndMultiplySets(sets));
             combineLatest(...maintOwns.map(item => item.maintOwnSet)).subscribe((sets) => this.maintAllOwnSet = this.zipAndAddSets(sets));
 
-            combineLatest(this.compondedCostHeatOwnSet$).subscribe((values) => this.chartJsCompondedCostHeatOwnObj = this.setChartJsObj({set: values[0], name: 'Värmekostnader', label: 'kr', datapackage: 'yearlyamounts'}));
-            combineLatest(this.costAreaOwnSet$).subscribe((values) => this.chartJsCostAreaOwnObj = this.setChartJsObj({set: values[0], name: 'Etableringskostnader', label: 'kr', datapackage: 'yearlyamounts'}));
-            combineLatest(this.compondedCostRepairOwnSet$).subscribe((values) => this.chartJsCompoundedCostRepairOwnObj = this.setChartJsObj({set: values[0], name: 'Reparationskostnader', label: 'kr', datapackage: 'yearlyamounts'}));        
-            combineLatest(this.maintAllOwnSet$).subscribe((values) => this.chartJsMaintAllOwnObj = this.setChartJsObj({set: values[0], name: 'Kostnader planerat underhåll', label: 'kr', datapackage: 'yearlyamounts'}));
+            combineLatest(this.compondedCostHeatOwnSet$).subscribe((values) => this.chartJsCompondedCostHeatOwnObj = setChartJsObj({set: values[0], name: 'Värmekostnader', label: 'kr', datapackage: 'yearlyamounts'}));
+            combineLatest(this.costAreaOwnSet$).subscribe((values) => this.chartJsCostAreaOwnObj = setChartJsObj({set: values[0], name: 'Etableringskostnader', label: 'kr', datapackage: 'yearlyamounts'}));
+            combineLatest(this.compondedCostRepairOwnSet$).subscribe((values) => this.chartJsCompoundedCostRepairOwnObj = setChartJsObj({set: values[0], name: 'Reparationskostnader', label: 'kr', datapackage: 'yearlyamounts'}));        
+            combineLatest(this.maintAllOwnSet$).subscribe((values) => this.chartJsMaintAllOwnObj = setChartJsObj({set: values[0], name: 'Kostnader planerat underhåll', label: 'kr', datapackage: 'yearlyamounts'}));
         }
-
 
 
         updated(changedProps) {
@@ -35874,151 +35928,8 @@ var MyModule = (function (exports) {
 
 
 
-        zipAndOperateSetsFactory(mode) {
-            return function(maintOwnSets) {
-                let setsPeriodOperatorData = {
-                    sets: maintOwnSets,
-                    mode: mode
-                };
-            
-                return setsPeriodOperator(setsPeriodOperatorData);
-            }
-        }
-
-        setMaker({value, period, key}) {
-            let setFactoryData = {
-                value: value,
-                period: period,
-                key: key
-            };
-            return setFactory(setFactoryData)
-        }
 
 
-        compoundedSetMaker({value, period, growthRate, key}) {
-            let setFactoryData = {
-                value: value,
-                period: period,
-                key: key
-            };
-
-            let setCompounderdata = {
-                set: setFactory(setFactoryData),
-                growthRate: growthRate
-            };
-            return setCompounder(setCompounderdata)
-        }
-
-
-
-
-        setChartJsObj({set, name, label, datapackage}) {
-
-            let whcgObjMakerData = {
-                set: set,
-                name: name,
-                label: label,
-                datapackage: datapackage
-            };
-
-            let whcgChartJsTransformerData = {
-                whcgObj: whcgObjMaker(whcgObjMakerData), 
-                datapackage: datapackage
-            };
-            
-            return whcgChartJsTransformer(whcgChartJsTransformerData)
-        }
-
-
-
-       
-
-        setChartJsMaintAllOwnObj(maintAllOwnSet) {
-
-            let whcgObjMakerData = {
-                set: maintAllOwnSet,
-                name: 'Kostnader planerat underhåll',
-                label: 'kr',
-                datapackage: 'yearlyamounts'
-            };
-
-            let whcgChartJsTransformerData = {
-                whcgObj: whcgObjMaker(whcgObjMakerData), 
-                datapackage: 'yearlyamounts'
-            };
-            
-            return whcgChartJsTransformer(whcgChartJsTransformerData)
-        }
-
-
-         // setMaintAllOwnSet(maintOwnSets) {
-        //     let setsPeriodOperatorData = {
-        //         sets: maintOwnSets,
-        //         mode: 'add'
-        //     }
-        
-        //     return setsPeriodOperator(setsPeriodOperatorData);
-        // }
-
-        // setMaint2OwnSet(maint2costOwn, maint2yearOwn, numberofyears) {
-        //     let setFactoryData = {
-        //         value: maint2costOwn,
-        //         period: numberofyears,
-        //         key: maint2yearOwn
-        //     }
-        //     return setFactory(setFactoryData)
-        // }
-
-        // setMaint3OwnSet(maint3costOwn, maint3yearOwn, numberofyears) {
-        //     let setFactoryData = {
-        //         value: maint3costOwn,
-        //         period: numberofyears,
-        //         key: maint3yearOwn
-        //     }
-        //     return setFactory(setFactoryData)
-        // }
-
-        // setMaint4OwnSet(maint4costOwn, maint4yearOwn, numberofyears) {
-        //     let setFactoryData = {
-        //         value: maint4costOwn,
-        //         period: numberofyears,
-        //         key: maint4yearOwn
-        //     }
-        //     return setFactory(setFactoryData)
-        // }
-
-        // setInitialAmountAreaOwnSet(initialAmountAreaOwn, numberofyears) {
-        //     let setFactoryData = {
-        //         value: initialAmountAreaOwn,
-        //         period: numberofyears,
-        //         key: 'fill'
-        //     }
-        //     return setFactory(setFactoryData)
-        // }
-
-
-            // setCompondedCostHeatOwnSet(initialAmountAreaOwnSet, costHeatOwnSet) {
-        //     let setsPeriodOperatorData = {
-        //         sets: [costHeatOwnSet, initialAmountAreaOwnSet],
-        //         mode: 'multiply'
-        //     }
-        
-        //     return setsPeriodOperator(setsPeriodOperatorData);
-        // }
-
-            // setCostAreaOwnSet(initialCostHeatOwn, numberofyears) {
-        //     let setFactoryData = {
-        //         value: initialCostHeatOwn,
-        //         period: numberofyears,
-        //         key: '0'
-        //     }
-
-        //     let setCompounderdata = {
-        //         set: setFactory(setFactoryData),
-        //         growthRate: '0'
-        //     }
-        //     return setCompounder(setCompounderdata)
-        // }
 
 
 

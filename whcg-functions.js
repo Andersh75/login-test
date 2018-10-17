@@ -273,4 +273,60 @@ export function whcgObjMaker({set, name, label, datapackage}) {
 }
 
 
+export function zipAndOperateSetsFactory(mode) {
+    return function(maintOwnSets) {
+        let setsPeriodOperatorData = {
+            sets: maintOwnSets,
+            mode: mode
+        }
+    
+        return setsPeriodOperator(setsPeriodOperatorData);
+    }
+}
+
+export function setMaker({value, period, key}) {
+    let setFactoryData = {
+        value: value,
+        period: period,
+        key: key
+    }
+    return setFactory(setFactoryData)
+}
+
+
+export function compoundedSetMaker({value, period, growthRate, key}) {
+    let setFactoryData = {
+        value: value,
+        period: period,
+        key: key
+    }
+
+    let setCompounderdata = {
+        set: setFactory(setFactoryData),
+        growthRate: growthRate
+    }
+    return setCompounder(setCompounderdata)
+}
+
+
+
+
+export function setChartJsObj({set, name, label, datapackage}) {
+
+    let whcgObjMakerData = {
+        set: set,
+        name: name,
+        label: label,
+        datapackage: datapackage
+    }
+
+    let whcgChartJsTransformerData = {
+        whcgObj: whcgObjMaker(whcgObjMakerData), 
+        datapackage: datapackage
+    }
+    
+    return whcgChartJsTransformer(whcgChartJsTransformerData)
+}
+
+
 
