@@ -21,11 +21,28 @@ export class XTwo extends LitElement {
     firstUpdated(changedProps) {
         this.constructor.props().forEach(prop => this[`${prop.propKey}$`] = new rxjs.BehaviorSubject(0));
 
-
-        let maintOwnSets = [this.maint1OwnSet$, this.maint2OwnSet$, this.maint3OwnSet$, this.maint4OwnSet$]
-
-        let maintcostsOwn = [this.maint1costOwn$, this.maint2costOwn$, this.maint3costOwn$, this.maint4costOwn$]
-        let maintyearsOwn = [this.maint1yearOwn$, this.maint2yearOwn$, this.maint3yearOwn$, this.maint4yearOwn$]
+        let maintOwns = [
+            {
+                maintOwnSet: this.maint1OwnSet$,
+                maintcostsOwn: this.maint1costOwn$,
+                maintyearsOwn: this.maint1yearOwn$
+            },
+            {
+                maintOwnSet: this.maint2OwnSet$,
+                maintcostsOwn: this.maint2costOwn$,
+                maintyearsOwn: this.maint2yearOwn$
+            },
+            {
+                maintOwnSet: this.maint3OwnSet$,
+                maintcostsOwn: this.maint3costOwn$,
+                maintyearsOwn: this.maint3yearOwn$
+            },
+            {
+                maintOwnSet: this.maint4OwnSet$,
+                maintcostsOwn: this.maint4costOwn$,
+                maintyearsOwn: this.maint4yearOwn$
+            }
+        ]
 
 
         this.zipAndAddSets = this.zipAndOperateSetsFactory('add');
@@ -36,8 +53,8 @@ export class XTwo extends LitElement {
 
         rxjs.combineLatest(this.initialAmountAreaOwn$, this.numberofyears$).subscribe((values) => this.initialAmountAreaOwnSet = this.setMaker({value: values[0], period: values[1], key: 'fill'}));
 
-        maintcostsOwn.forEach((item, i) => {
-            rxjs.combineLatest(maintcostsOwn[i], this.numberofyears$, maintyearsOwn[i]).subscribe((values) => this[`maint${String(i+1)}OwnSet`] = this.setMaker({value: values[0], period: values[1], key: values[2]}));
+        maintOwns.forEach((item, i) => {
+            rxjs.combineLatest(item.maintcostsOwn, this.numberofyears$, item.maintyearsOwn).subscribe((values) => this[`maint${String(i+1)}OwnSet`] = this.setMaker({value: values[0], period: values[1], key: values[2]}));
         })
 
 
@@ -48,7 +65,7 @@ export class XTwo extends LitElement {
 
         rxjs.combineLatest(this.costHeatOwnSet$, this.initialAmountAreaOwnSet$).subscribe((sets) => this.compondedCostHeatOwnSet = this.zipAndMultiplySets(sets));
         rxjs.combineLatest(this.priceRepairOwnSet$, this.initialAmountAreaOwnSet$).subscribe((sets) => this.compondedCostRepairOwnSet = this.zipAndMultiplySets(sets));
-        rxjs.combineLatest(...maintOwnSets).subscribe((sets) => this.maintAllOwnSet = this.zipAndAddSets(sets));
+        rxjs.combineLatest(...maintOwns.map(item => item.maintOwnSet)).subscribe((sets) => this.maintAllOwnSet = this.zipAndAddSets(sets));
 
         rxjs.combineLatest(this.compondedCostHeatOwnSet$).subscribe((values) => this.chartJsCompondedCostHeatOwnObj = this.setChartJsObj({set: values[0], name: 'Värmekostnader', label: 'kr', datapackage: 'yearlyamounts'}));
         rxjs.combineLatest(this.costAreaOwnSet$).subscribe((values) => this.chartJsCostAreaOwnObj = this.setChartJsObj({set: values[0], name: 'Etableringskostnader', label: 'kr', datapackage: 'yearlyamounts'}));

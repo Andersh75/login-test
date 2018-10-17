@@ -35761,30 +35761,41 @@ var MyModule = (function (exports) {
         firstUpdated(changedProps) {
             this.constructor.props().forEach(prop => this[`${prop.propKey}$`] = new BehaviorSubject(0));
 
-
-            let maintOwnSets = [this.maint1OwnSet$, this.maint2OwnSet$, this.maint3OwnSet$, this.maint4OwnSet$];
-
-            let maintcostsOwn = [this.maint1costOwn$, this.maint2costOwn$, this.maint3costOwn$, this.maint4costOwn$];
-            let maintyearsOwn = [this.maint1yearOwn$, this.maint2yearOwn$, this.maint3yearOwn$, this.maint4yearOwn$];
+            let maintOwns = [
+                {
+                    maintOwnSet: this.maint1OwnSet$,
+                    maintcostsOwn: this.maint1costOwn$,
+                    maintyearsOwn: this.maint1yearOwn$
+                },
+                {
+                    maintOwnSet: this.maint2OwnSet$,
+                    maintcostsOwn: this.maint2costOwn$,
+                    maintyearsOwn: this.maint2yearOwn$
+                },
+                {
+                    maintOwnSet: this.maint3OwnSet$,
+                    maintcostsOwn: this.maint3costOwn$,
+                    maintyearsOwn: this.maint3yearOwn$
+                },
+                {
+                    maintOwnSet: this.maint4OwnSet$,
+                    maintcostsOwn: this.maint4costOwn$,
+                    maintyearsOwn: this.maint4yearOwn$
+                }
+            ];
 
 
             this.zipAndAddSets = this.zipAndOperateSetsFactory('add');
             this.zipAndMultiplySets = this.zipAndOperateSetsFactory('multiply');
-
             
             combineLatest(this.initialPriceHeatOwn$, this.initialAmountHeatOwn$).subscribe((values) => this.initialCostHeatOwn = singleMultiplier(values));
             combineLatest(this.initialPriceAreaOwn$, this.initialAmountAreaOwn$).subscribe((values) => this.initialCostAreaOwn = singleMultiplier(values));
 
             combineLatest(this.initialAmountAreaOwn$, this.numberofyears$).subscribe((values) => this.initialAmountAreaOwnSet = this.setMaker({value: values[0], period: values[1], key: 'fill'}));
 
-            maintcostsOwn.forEach((item, i) => {
-                combineLatest(maintcostsOwn[i], this.numberofyears$, maintyearsOwn[i]).subscribe((values) => this[`maint${String(i+1)}OwnSet`] = this.setMaker({value: values[0], period: values[1], key: values[2]}));
+            maintOwns.forEach((item, i) => {
+                combineLatest(item.maintcostsOwn, this.numberofyears$, item.maintyearsOwn).subscribe((values) => this[`maint${String(i+1)}OwnSet`] = this.setMaker({value: values[0], period: values[1], key: values[2]}));
             });
-       
-            // rxjs.combineLatest(maintcostsOwn[0], this.numberofyears$, maintyearsOwn[0]).subscribe((values) => this.maint1OwnSet = this.setMaker({value: values[0], period: values[1], key: values[2]}));
-            // rxjs.combineLatest(maintcostsOwn[1], this.numberofyears$, maintyearsOwn[1]).subscribe((values) => this.maint2OwnSet = this.setMaker({value: values[0], period: values[1], key: values[2]}));
-            // rxjs.combineLatest(maintcostsOwn[2], this.numberofyears$, maintyearsOwn[2]).subscribe((values) => this.maint3OwnSet = this.setMaker({value: values[0], period: values[1], key: values[2]}));
-            // rxjs.combineLatest(maintcostsOwn[3], this.numberofyears$, maintyearsOwn[3]).subscribe((values) => this.maint4OwnSet = this.setMaker({value: values[0], period: values[1], key: values[2]}));
 
 
             combineLatest(this.initialCostAreaOwn$, this.numberofyears$).subscribe((values) => this.costAreaOwnSet = this.setMaker({value: values[0], period: values[1], key: '0'}));
@@ -35794,7 +35805,7 @@ var MyModule = (function (exports) {
 
             combineLatest(this.costHeatOwnSet$, this.initialAmountAreaOwnSet$).subscribe((sets) => this.compondedCostHeatOwnSet = this.zipAndMultiplySets(sets));
             combineLatest(this.priceRepairOwnSet$, this.initialAmountAreaOwnSet$).subscribe((sets) => this.compondedCostRepairOwnSet = this.zipAndMultiplySets(sets));
-            combineLatest(...maintOwnSets).subscribe((sets) => this.maintAllOwnSet = this.zipAndAddSets(sets));
+            combineLatest(...maintOwns.map(item => item.maintOwnSet)).subscribe((sets) => this.maintAllOwnSet = this.zipAndAddSets(sets));
 
             combineLatest(this.compondedCostHeatOwnSet$).subscribe((values) => this.chartJsCompondedCostHeatOwnObj = this.setChartJsObj({set: values[0], name: 'Värmekostnader', label: 'kr', datapackage: 'yearlyamounts'}));
             combineLatest(this.costAreaOwnSet$).subscribe((values) => this.chartJsCostAreaOwnObj = this.setChartJsObj({set: values[0], name: 'Etableringskostnader', label: 'kr', datapackage: 'yearlyamounts'}));
@@ -35806,30 +35817,6 @@ var MyModule = (function (exports) {
 
         updated(changedProps) {
             super.updated(changedProps);
-            if (changedProps.has('maintAllOwnSet')) {
-                console.log('maintAllOwnSet!!!');
-                console.log(this.maintAllOwnSet);
-            }
-
-            if (changedProps.has('maint1OwnSet')) {
-                console.log('maint1OwnSet!!!');
-                console.log(this.maint1OwnSet);
-            }
-
-            if (changedProps.has('maint2OwnSet')) {
-                console.log('maint2OwnSet!!!');
-                console.log(this.maint2OwnSet);
-            }
-
-            if (changedProps.has('maint3OwnSet')) {
-                console.log('maint3OwnSet!!!');
-                console.log(this.maint3OwnSet);
-            }
-
-            if (changedProps.has('maint4OwnSet')) {
-                console.log('maint4OwnSet!!!');
-                console.log(this.maint4OwnSet);
-            }
             changedProps.forEach((value, key) => {
                 this.constructor.props().forEach(prop => {
                     if(prop.propKey === key) {
