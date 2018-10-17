@@ -33,20 +33,13 @@ export class XTwo extends LitElement {
         rxjs.combineLatest(this.costAreaOwnSet$).subscribe(([costAreaOwnSet]) => this.chartJsCostAreaOwnObj = this.setChartJsCostAreaOwnObj(costAreaOwnSet));
         rxjs.combineLatest(this.initialPriceRepairOwn$, this.numberofyears$, this.compoundrateRepairOwn$).subscribe(([initialPriceRepairOwn, numberofyears, compoundrateRepairOwn]) => this.priceRepairOwnSet = this.setPriceRepairOwnSet(initialPriceRepairOwn, numberofyears, compoundrateRepairOwn));
         rxjs.combineLatest(this.priceRepairOwnSet$, this.initialAmountAreaOwnSet$).subscribe(([priceRepairOwnSet, initialAmountAreaOwnSet]) => this.compondedCostRepairOwnSet = this.setCompondedCostRepairOwnSet(initialAmountAreaOwnSet, priceRepairOwnSet));
-        rxjs.combineLatest(this.compondedCostRepairOwnSet$).subscribe(([compondedCostRepairOwnSet]) => this.chartJsCompoundedCostRepairOwnObj = this.setChartJsCompoundedCostRepairOwnObj(compondedCostRepairOwnSet));
-    
-        
+        rxjs.combineLatest(this.compondedCostRepairOwnSet$).subscribe(([compondedCostRepairOwnSet]) => this.chartJsCompoundedCostRepairOwnObj = this.setChartJsCompoundedCostRepairOwnObj(compondedCostRepairOwnSet));        
         rxjs.combineLatest(this.maint1costOwn$, this.maint1yearOwn$, this.numberofyears$).subscribe(([maint1costOwn, maint1yearOwn, numberofyears]) => this.maint1OwnSet = this.setMaint1OwnSet(maint1costOwn, maint1yearOwn, numberofyears));
         rxjs.combineLatest(this.maint2costOwn$, this.maint2yearOwn$, this.numberofyears$).subscribe(([maint2costOwn, maint2yearOwn, numberofyears]) => this.maint2OwnSet = this.setMaint2OwnSet(maint2costOwn, maint2yearOwn, numberofyears));
         rxjs.combineLatest(this.maint3costOwn$, this.maint3yearOwn$, this.numberofyears$).subscribe(([maint3costOwn, maint3yearOwn, numberofyears]) => this.maint3OwnSet = this.setMaint3OwnSet(maint3costOwn, maint3yearOwn, numberofyears));
         rxjs.combineLatest(this.maint4costOwn$, this.maint4yearOwn$, this.numberofyears$).subscribe(([maint4costOwn, maint4yearOwn, numberofyears]) => this.maint4OwnSet = this.setMaint4OwnSet(maint4costOwn, maint4yearOwn, numberofyears));
-
         rxjs.combineLatest(this.maint1OwnSet$, this.maint2OwnSet$, this.maint3OwnSet$, this.maint4OwnSet$).subscribe(([maint1OwnSet, maint2OwnSet, maint3OwnSet, maint4OwnSet]) => this.maintAllOwnSet = this.setMaintAllOwnSet(maint1OwnSet, maint2OwnSet, maint3OwnSet, maint4OwnSet));
-
-
-
         rxjs.combineLatest(this.maintAllOwnSet$).subscribe(([maintAllOwnSet]) => this.chartJsMaintAllOwnObj = this.setChartJsMaintAllOwnObj(maintAllOwnSet));
-
     }
 
 
@@ -298,9 +291,6 @@ export class XTwo extends LitElement {
 
     constructor() {
         super();
-
-
-    
     }
 
     render() {
@@ -388,72 +378,11 @@ export class XTwo extends LitElement {
 
 
     _stateChanged(state) {
-        console.log('stateChanged');
-
-
-        if (this.initialAmountAreaOwn !== state.initialAmountAreaOwn) {
-            this.initialAmountAreaOwn = state.initialAmountAreaOwn;
-        }
-
-        if (this.initialAmountHeatOwn !== state.initialAmountHeatOwn) {
-            this.initialAmountHeatOwn = state.initialAmountHeatOwn;
-        }
-
-        if (this.initialPriceHeatOwn !== state.initialPriceHeatOwn) {
-            this.initialPriceHeatOwn = state.initialPriceHeatOwn;
-        }
-
-        if (this.inflationrate !== state.inflationrate) {
-            this.inflationrate = state.inflationrate;
-        }
-
-        if (this.numberofyears !== state.numberofyears) {
-            this.numberofyears = state.numberofyears;
-        }
-
-        if (this.initialPriceAreaOwn !== state.initialPriceAreaOwn) {
-            this.initialPriceAreaOwn = state.initialPriceAreaOwn;
-        }
-
-        if (this.compoundrateRepairOwn !== state.compoundrateRepairOwn) {
-            this.compoundrateRepairOwn = state.compoundrateRepairOwn;
-        }
-
-        if (this.initialPriceRepairOwn !== state.initialPriceRepairOwn) {
-            this.initialPriceRepairOwn = state.initialPriceRepairOwn;
-        }
-
-        if (this.maint1yearOwn !== state.maint1yearOwn) {
-            this.maint1yearOwn = state.maint1yearOwn;
-        }
-
-        if (this.maint2yearOwn !== state.maint2yearOwn) {
-            this.maint2yearOwn = state.maint2yearOwn;
-        }
-
-        if (this.maint3yearOwn !== state.maint3yearOwn) {
-            this.maint3yearOwn = state.maint3yearOwn;
-        }
-
-        if (this.maint4yearOwn !== state.maint4yearOwn) {
-            this.maint4yearOwn = state.maint4yearOwn;
-        }
-
-        if (this.maint1costOwn !== state.maint1costOwn) {
-            this.maint1costOwn = state.maint1costOwn;
-        }
-
-        if (this.maint2costOwn !== state.maint2costOwn) {
-            this.maint2costOwn = state.maint2costOwn;
-        }
-
-        if (this.maint3costOwn !== state.maint3costOwn) {
-            this.maint3costOwn = state.maint3costOwn;
-        }
-
-        if (this.maint4costOwn !== state.maint4costOwn) {
-            this.maint4costOwn = state.maint4costOwn;
-        }
+        this.constructor.props().forEach(prop => {
+            if (this[prop.propKey] !== state[prop.propKey] && state[prop.propKey] != undefined) {
+                this[prop.propKey] = state[prop.propKey];
+            }
+        })
     }
 
 }

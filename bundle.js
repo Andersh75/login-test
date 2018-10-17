@@ -36130,70 +36130,86 @@ var MyModule = (function (exports) {
         _stateChanged(state) {
             console.log('stateChanged');
 
+            this.constructor.props().forEach(prop => {
+                if (this[prop.propKey] !== state[prop.propKey] && state[prop.propKey] != undefined) {
+                    console.log('this');
+                    console.log(this);
+                    console.log('this constructor');
+                    console.log(this.constructor);
+                    console.log('prop');
+                    console.log(prop);
+                    console.log('this[prop.propKey]');
+                    console.log(this[prop.propKey]);
+                    console.log('state[prop.propKey]');
+                    console.log(state[prop.propKey]);
+                    this[prop.propKey] = state[prop.propKey];
+                }
+            });
 
-            if (this.initialAmountAreaOwn !== state.initialAmountAreaOwn) {
-                this.initialAmountAreaOwn = state.initialAmountAreaOwn;
-            }
 
-            if (this.initialAmountHeatOwn !== state.initialAmountHeatOwn) {
-                this.initialAmountHeatOwn = state.initialAmountHeatOwn;
-            }
+            // if (this.initialAmountAreaOwn !== state.initialAmountAreaOwn) {
+            //     this.initialAmountAreaOwn = state.initialAmountAreaOwn;
+            // }
 
-            if (this.initialPriceHeatOwn !== state.initialPriceHeatOwn) {
-                this.initialPriceHeatOwn = state.initialPriceHeatOwn;
-            }
+            // if (this.initialAmountHeatOwn !== state.initialAmountHeatOwn) {
+            //     this.initialAmountHeatOwn = state.initialAmountHeatOwn;
+            // }
 
-            if (this.inflationrate !== state.inflationrate) {
-                this.inflationrate = state.inflationrate;
-            }
+            // if (this.initialPriceHeatOwn !== state.initialPriceHeatOwn) {
+            //     this.initialPriceHeatOwn = state.initialPriceHeatOwn;
+            // }
 
-            if (this.numberofyears !== state.numberofyears) {
-                this.numberofyears = state.numberofyears;
-            }
+            // if (this.inflationrate !== state.inflationrate) {
+            //     this.inflationrate = state.inflationrate;
+            // }
 
-            if (this.initialPriceAreaOwn !== state.initialPriceAreaOwn) {
-                this.initialPriceAreaOwn = state.initialPriceAreaOwn;
-            }
+            // if (this.numberofyears !== state.numberofyears) {
+            //     this.numberofyears = state.numberofyears;
+            // }
 
-            if (this.compoundrateRepairOwn !== state.compoundrateRepairOwn) {
-                this.compoundrateRepairOwn = state.compoundrateRepairOwn;
-            }
+            // if (this.initialPriceAreaOwn !== state.initialPriceAreaOwn) {
+            //     this.initialPriceAreaOwn = state.initialPriceAreaOwn;
+            // }
 
-            if (this.initialPriceRepairOwn !== state.initialPriceRepairOwn) {
-                this.initialPriceRepairOwn = state.initialPriceRepairOwn;
-            }
+            // if (this.compoundrateRepairOwn !== state.compoundrateRepairOwn) {
+            //     this.compoundrateRepairOwn = state.compoundrateRepairOwn;
+            // }
 
-            if (this.maint1yearOwn !== state.maint1yearOwn) {
-                this.maint1yearOwn = state.maint1yearOwn;
-            }
+            // if (this.initialPriceRepairOwn !== state.initialPriceRepairOwn) {
+            //     this.initialPriceRepairOwn = state.initialPriceRepairOwn;
+            // }
 
-            if (this.maint2yearOwn !== state.maint2yearOwn) {
-                this.maint2yearOwn = state.maint2yearOwn;
-            }
+            // if (this.maint1yearOwn !== state.maint1yearOwn) {
+            //     this.maint1yearOwn = state.maint1yearOwn;
+            // }
 
-            if (this.maint3yearOwn !== state.maint3yearOwn) {
-                this.maint3yearOwn = state.maint3yearOwn;
-            }
+            // if (this.maint2yearOwn !== state.maint2yearOwn) {
+            //     this.maint2yearOwn = state.maint2yearOwn;
+            // }
 
-            if (this.maint4yearOwn !== state.maint4yearOwn) {
-                this.maint4yearOwn = state.maint4yearOwn;
-            }
+            // if (this.maint3yearOwn !== state.maint3yearOwn) {
+            //     this.maint3yearOwn = state.maint3yearOwn;
+            // }
 
-            if (this.maint1costOwn !== state.maint1costOwn) {
-                this.maint1costOwn = state.maint1costOwn;
-            }
+            // if (this.maint4yearOwn !== state.maint4yearOwn) {
+            //     this.maint4yearOwn = state.maint4yearOwn;
+            // }
 
-            if (this.maint2costOwn !== state.maint2costOwn) {
-                this.maint2costOwn = state.maint2costOwn;
-            }
+            // if (this.maint1costOwn !== state.maint1costOwn) {
+            //     this.maint1costOwn = state.maint1costOwn;
+            // }
 
-            if (this.maint3costOwn !== state.maint3costOwn) {
-                this.maint3costOwn = state.maint3costOwn;
-            }
+            // if (this.maint2costOwn !== state.maint2costOwn) {
+            //     this.maint2costOwn = state.maint2costOwn;
+            // }
 
-            if (this.maint4costOwn !== state.maint4costOwn) {
-                this.maint4costOwn = state.maint4costOwn;
-            }
+            // if (this.maint3costOwn !== state.maint3costOwn) {
+            //     this.maint3costOwn = state.maint3costOwn;
+            // }
+
+            // if (this.maint4costOwn !== state.maint4costOwn) {
+            //     this.maint4costOwn = state.maint4costOwn;
+            // }
         }
 
     }
