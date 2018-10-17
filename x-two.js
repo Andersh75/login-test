@@ -48,10 +48,8 @@ export class XTwo extends LitElement {
             rxjs.combineLatest(item.maintcostsOwn, this.numberofyears$, item.maintyearsOwn).subscribe((values) => this[`maint${String(i+1)}OwnSet`] = setMaker({value: values[0], period: values[1], key: values[2]}));
         })
 
-
         this.zipAndAddSets = zipAndOperateSetsFactory('add');
         this.zipAndMultiplySets = zipAndOperateSetsFactory('multiply');
-        
 
         rxjs.combineLatest(this.initialPriceHeatOwn$, this.initialAmountHeatOwn$).subscribe((values) => this.initialCostHeatOwn = singleMultiplier(values));
         rxjs.combineLatest(this.initialPriceAreaOwn$, this.initialAmountAreaOwn$).subscribe((values) => this.initialCostAreaOwn = singleMultiplier(values));
@@ -126,20 +124,42 @@ export class XTwo extends LitElement {
         { propKey: 'chartJsMaintAllOwnObj', propValue: {type: Object} },
         { propKey: 'chartJsCostAreaOwnObj', propValue: {type: Object} },
         { propKey: 'chartJsCompondedCostHeatOwnObj', propValue: {type: Object} },
+        // { propKey: 'list', propValue: {type: Array} },
         ]
     };
 
 
-
-
-
-
-
-
-
     constructor() {
         super();
+        this.list = [
+            {
+                yearid: 'maint1yearOwn',
+                yearvalue: this.maint1yearOwn,
+                costvalue: this.maint1costOwn,
+                costid: 'maint1costOwn'
+            },
+            {
+                yearid: 'maint2yearOwn',
+                yearvalue: this.maint2yearOwn,
+                costvalue: this.maint2costOwn,
+                costid: 'maint2costOwn'
+            },
+            {
+                yearid: 'maint3yearOwn',
+                yearvalue: this.maint3yearOwn,
+                costvalue: this.maint3costOwn,
+                costid: 'maint3costOwn'
+            },
+            {
+                yearid: 'maint4yearOwn',
+                yearvalue: this.maint4yearOwn,
+                costvalue: this.maint4costOwn,
+                costid: 'maint4costOwn'
+            }
+        ]
     }
+
+    
 
     render() {
         return html`
@@ -155,6 +175,9 @@ export class XTwo extends LitElement {
                 <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
                 </span>
                 <whcg-box-container slot="input" name="Underhållsinsatser">
+
+                    
+
                     <whcg-number-field-box column name="Underhållsinsats 1">
                         <whcg-number-field label="År" id="maint1yearOwn" @valueChanged=${this.valueChanged.bind(this)} value=${this.maint1yearOwn} placeholder="...antal"></whcg-number-field>
                         <whcg-number-field label="Kostnad" id="maint1costOwn" @valueChanged=${this.valueChanged.bind(this)} value=${this.maint1costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
@@ -240,199 +263,9 @@ customElements.define('x-two', XTwo);
 
 
 
-        // this.initialPriceHeatOwn$ = new rxjs.BehaviorSubject(0);
-        // this.initialAmountHeatOwn$ = new rxjs.BehaviorSubject(0);
-        // this.initialCostHeatOwn$ = new rxjs.BehaviorSubject(0);
-        // this.numberofyears$ = new rxjs.BehaviorSubject(0);
-        // this.inflationrate$ = new rxjs.BehaviorSubject(0);
-        // this.initialAmountAreaOwn$ = new rxjs.BehaviorSubject(0);
-        // this.initialPriceAreaOwn$ = new rxjs.BehaviorSubject(0);
-        // this.costHeatOwnSet$ = new rxjs.BehaviorSubject(0);
-        // this.initialAmountAreaOwnSet$ = new rxjs.BehaviorSubject(0);
-        // this.compondedCostHeatOwnSet$ = new rxjs.BehaviorSubject(0);
-        // this.initialCostAreaOwn$ = new rxjs.BehaviorSubject(0);
-        // this.costAreaOwnSet$ = new rxjs.BehaviorSubject(0);
-        // this.initialPriceRepairOwn$ = new rxjs.BehaviorSubject(0);
-        // this.compoundrateRepairOwn$ = new rxjs.BehaviorSubject(0);
-        // this.priceRepairOwnSet$ = new rxjs.BehaviorSubject(0);
-        // this.compondedCostRepairOwnSet$ = new rxjs.BehaviorSubject(0);
-        // this.maint1yearOwn$ = new rxjs.BehaviorSubject(0);
-        // this.maint2yearOwn$ = new rxjs.BehaviorSubject(0);
-        // this.maint3yearOwn$ = new rxjs.BehaviorSubject(0);
-        // this.maint4yearOwn$ = new rxjs.BehaviorSubject(0);
-        // this.maint1costOwn$ = new rxjs.BehaviorSubject(0);
-        // this.maint2costOwn$ = new rxjs.BehaviorSubject(0);
-        // this.maint3costOwn$ = new rxjs.BehaviorSubject(0);
-        // this.maint4costOwn$ = new rxjs.BehaviorSubject(0);
-
-        // this.maint1OwnSet$ = new rxjs.BehaviorSubject(0);
-        // this.maint2OwnSet$ = new rxjs.BehaviorSubject(0);
-        // this.maint3OwnSet$ = new rxjs.BehaviorSubject(0);
-        // this.maint4OwnSet$ = new rxjs.BehaviorSubject(0);
-        // this.maintAllOwnSet$ = new rxjs.BehaviorSubject(0);
-        // this.chartJsMaintAllOwnObj = new rxjs.BehaviorSubject(0);
-        // this.chartJsCompondedCostHeatOwnObj = new rxjs.BehaviorSubject(0);
-        // this.chartJsCostAreaOwnObj = new rxjs.BehaviorSubject(0);
-
-
-
-
-            // static get properties() {
-    //     return {
-    //         costAreaOwnSet: {type: Object},
-    //         initialCostAreaOwn: {type: String},
-    //         compondedCostHeatOwnSet: {type: Object},
-    //         initialAmountAreaOwnSet: {type: Object},
-    //         costHeatOwnSet: {type: Object},
-    //         initialAmountAreaOwn: {type: String},
-    //         numberofyears: {type: String},
-    //         inflationrate: {type: String},
-    //         initialPriceHeatOwn: {type: String},
-    //         initialPriceAreaOwn: {type: String},
-    //         initialAmountHeatOwn: {type: String},
-    //         initialCostHeatOwn: {type: String},
-    //         initialPriceRepairOwn: {type: String},
-    //         compoundrateRepairOwn: {type: String},
-    //         priceRepairOwnSet: {type: Object},
-    //         compondedCostRepairOwnSet: {type: Object},
-    //         chartJsCompoundedCostRepairOwnObj: {type: Object},
-    //         maint1yearOwn: {type: String},
-    //         maint2yearOwn: {type: String},
-    //         maint3yearOwn: {type: String},
-    //         maint4yearOwn: {type: String},
-    //         maint1costOwn: {type: String},
-    //         maint2costOwn: {type: String},
-    //         maint3costOwn: {type: String},
-    //         maint4costOwn: {type: String},
-    //         maint1OwnSet: {type: Object},
-    //         maint2OwnSet: {type: Object},
-    //         maint3OwnSet: {type: Object},
-    //         maint4OwnSet: {type: Object},
-    //         maintAllOwnSet: {type: Object},
-    //         chartJsMaintAllOwnObj: {type: Object},
-    //         chartJsCostAreaOwnObj: {type: Object},
-    //         chartJsCompondedCostHeatOwnObj: {type: Object},
-    //         // initialEstablishCostPerSqmOwn: {type: String},
-    //         // storeHolder: {type: Object},
-    //     };
-    // }
-
-
-    // updated(changedProps) {
-    //     super.updated(changedProps);
-    //     if (changedProps.has('initialPriceHeatOwn')) {
-    //         this.initialPriceHeatOwn$.next(this.initialPriceHeatOwn);
-    //     }
-
-    //     if (changedProps.has('initialAmountHeatOwn')) {
-    //         this.initialAmountHeatOwn$.next(this.initialAmountHeatOwn);
-    //     }
-
-    //     if (changedProps.has('initialCostHeatOwn')) {
-    //         this.initialCostHeatOwn$.next(this.initialCostHeatOwn);
-    //     }
-
-    //     if (changedProps.has('numberofyears')) {
-    //         this.numberofyears$.next(this.numberofyears);
-    //     }
-
-    //     if (changedProps.has('inflationrate')) {
-    //         this.inflationrate$.next(this.inflationrate);
-    //     }
-
-    //     if (changedProps.has('initialAmountAreaOwn')) {
-    //         this.initialAmountAreaOwn$.next(this.initialAmountAreaOwn);
-    //     }
-
-    //     if (changedProps.has('initialPriceAreaOwn')) {
-    //         this.initialPriceAreaOwn$.next(this.initialPriceAreaOwn);
-    //     }
-
-    //     if (changedProps.has('costHeatOwnSet')) {
-    //         this.costHeatOwnSet$.next(this.costHeatOwnSet);
-    //     }
-
-    //     if (changedProps.has('initialAmountAreaOwnSet')) {
-    //         this.initialAmountAreaOwnSet$.next(this.initialAmountAreaOwnSet);
-    //     }
-
-    //     if (changedProps.has('compondedCostHeatOwnSet')) {
-    //         this.compondedCostHeatOwnSet$.next(this.compondedCostHeatOwnSet);
-    //     }
-
-    //     if (changedProps.has('initialCostAreaOwn')) {
-    //         this.initialCostAreaOwn$.next(this.initialCostAreaOwn);
-    //     }
-
-    //     if (changedProps.has('costAreaOwnSet')) {
-    //         this.costAreaOwnSet$.next(this.costAreaOwnSet);
-    //     }
-
-    //     if (changedProps.has('initialPriceRepairOwn')) {
-    //         this.initialPriceRepairOwn$.next(this.initialPriceRepairOwn);
-    //     }
-
-    //     if (changedProps.has('compoundrateRepairOwn')) {
-    //         this.compoundrateRepairOwn$.next(this.compoundrateRepairOwn);
-    //     }
-
-    //     if (changedProps.has('priceRepairOwnSet')) {
-    //         this.priceRepairOwnSet$.next(this.priceRepairOwnSet);
-    //     }
-
-    //     if (changedProps.has('compondedCostRepairOwnSet')) {
-    //         this.compondedCostRepairOwnSet$.next(this.compondedCostRepairOwnSet);
-    //     }
-
-    //     if (changedProps.has('maint1yearOwn')) {
-    //         this.maint1yearOwn$.next(this.maint1yearOwn);
-    //     }
-
-    //     if (changedProps.has('maint2yearOwn')) {
-    //         this.maint2yearOwn$.next(this.maint2yearOwn);
-    //     }
-
-    //     if (changedProps.has('maint3yearOwn')) {
-    //         this.maint3yearOwn$.next(this.maint3yearOwn);
-    //     }
-
-    //     if (changedProps.has('maint4yearOwn')) {
-    //         this.maint4yearOwn$.next(this.maint4yearOwn);
-    //     }
-
-    //     if (changedProps.has('maint1costOwn')) {
-    //         this.maint1costOwn$.next(this.maint1costOwn);
-    //     }
-
-    //     if (changedProps.has('maint2costOwn')) {
-    //         this.maint2costOwn$.next(this.maint2costOwn);
-    //     }
-
-    //     if (changedProps.has('maint3costOwn')) {
-    //         this.maint3costOwn$.next(this.maint3costOwn);
-    //     }
-
-    //     if (changedProps.has('maint4costOwn')) {
-    //         this.maint4costOwn$.next(this.maint4costOwn);
-    //     }
-
-    //     if (changedProps.has('maint1OwnSet')) {
-    //         this.maint1OwnSet$.next(this.maint1OwnSet);
-    //     }
-
-    //     if (changedProps.has('maint2OwnSet')) {
-    //         this.maint2OwnSet$.next(this.maint2OwnSet);
-    //     }
-
-    //     if (changedProps.has('maint3OwnSet')) {
-    //         this.maint3OwnSet$.next(this.maint3OwnSet);
-    //     }
-
-    //     if (changedProps.has('maint4OwnSet')) {
-    //         this.maint4OwnSet$.next(this.maint4OwnSet);
-    //     }
-
-    //     if (changedProps.has('maintAllOwnSet')) {
-    //         this.maintAllOwnSet$.next(this.maintAllOwnSet);
-    //     }
-    // }
+// ${ this.list.map((item) => html`
+// <whcg-number-field-box column name="Underhållsinsats">
+//     <whcg-number-field label="År" id=${item.yearid} @valueChanged=${this.valueChanged.bind(this)} value=${item.yearvalue} placeholder="...antal"></whcg-number-field>
+//     <whcg-number-field label="Kostnad" id=${item.costid} @valueChanged=${this.valueChanged.bind(this)} value=${item.costvalue} suffix="kr" placeholder="...antal"></whcg-number-field>
+// </whcg-number-field-box>
+// `)}

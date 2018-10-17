@@ -11,7 +11,7 @@ import './whcg-box-container.js';
 // import './whcg-chart';
 import './whcg-number-field';
 import { grid } from './grid.css.js';
-import { whcgJsonMaker, whcgObjMerger, whcgPeriodOperator, getRandomColor, whcgChartJsTransformer, singleMultiplier, whcgCompounder, setFactory, setsPeriodOperator, setCompounder, whcgObjMaker } from './whcg-functions.js';
+import { setChartJsObj, compoundedSetMaker, setMaker, zipAndOperateSetsFactory, whcgJsonMaker, whcgObjMerger, whcgPeriodOperator, getRandomColor, whcgChartJsTransformer, singleMultiplier, whcgCompounder, setFactory, setsPeriodOperator, setCompounder, whcgObjMaker } from './whcg-functions.js';
 import * as rxjs from 'rxjs';
 
 
@@ -20,30 +20,94 @@ export class XThree extends LitElement {
     firstUpdated(changedProps) {
         this.constructor.props().forEach(prop => this[`${prop.propKey}$`] = new rxjs.BehaviorSubject(0));
 
-        rxjs.combineLatest(this.initialPriceHeatRent$, this.initialAmountHeatRent$).subscribe(([initialPriceHeatRent, initialAmountHeatRent]) => this.initialCostHeatRent = singleMultiplier([initialPriceHeatRent, initialAmountHeatRent]));
-        rxjs.combineLatest(this.initialCostHeatRent$, this.numberofyears$, this.inflationrate$).subscribe(([initialCostHeatRent, numberofyears, inflationrate]) => this.costHeatRentSet = this.setCostHeatRentSet(initialCostHeatRent, numberofyears, inflationrate));
-        rxjs.combineLatest(this.initialAmountAreaRent$, this.numberofyears$).subscribe(([initialAmountAreaRent, numberofyears]) => this.initialAmountAreaRentSet = this.setInitialAmountAreaRentSet(initialAmountAreaRent, numberofyears));
-        rxjs.combineLatest(this.costHeatRentSet$, this.initialAmountAreaRentSet$).subscribe(([costHeatRentSet, initialAmountAreaRentSet]) => this.compondedCostHeatRentSet = this.setCompondedCostHeatRentSet(initialAmountAreaRentSet, costHeatRentSet));
-        rxjs.combineLatest(this.compondedCostHeatRentSet$).subscribe(([compondedCostHeatRentSet]) => this.chartJsCompondedCostHeatRentObj = this.setChartJsCompondedCostHeatRentObj(compondedCostHeatRentSet));   
-        rxjs.combineLatest(this.initialPriceAreaRent$, this.initialAmountAreaRent$).subscribe(([initialPriceAreaRent, initialAmountAreaRent]) => this.initialCostAreaRent = singleMultiplier([initialPriceAreaRent, initialAmountAreaRent]));
-        rxjs.combineLatest(this.initialCostAreaRent$, this.numberofyears$, this.compoundrateAreaRent$).subscribe(([initialCostAreaRent, numberofyears, compoundrateAreaRent]) => this.costAreaRentSet = this.setCostAreaRentSet(initialCostAreaRent, numberofyears, compoundrateAreaRent));
-        rxjs.combineLatest(this.costAreaRentSet$, this.initialAmountAreaRentSet$).subscribe(([costAreaRentSet, initialAmountAreaRentSet]) => this.compondedCostAreaRentSet = this.setCompondedCostAreaRentSet(initialAmountAreaRentSet, costAreaRentSet));
-        rxjs.combineLatest(this.compondedCostAreaRentSet$).subscribe(([compondedCostAreaRentSet]) => this.chartJsCompondedCostAreaRentObj = this.setChartJsCompondedCostAreaRentObj(compondedCostAreaRentSet));  
-        rxjs.combineLatest(this.exp1area$, this.exp1year$, this.numberofyears$).subscribe(([exp1area, exp1year, numberofyears]) => this.exp1RentSet = this.setExp1RentSet(exp1area, exp1year, numberofyears));
-        rxjs.combineLatest(this.exp2area$, this.exp2year$, this.numberofyears$).subscribe(([exp2area, exp2year, numberofyears]) => this.exp2RentSet = this.setExp2RentSet(exp2area, exp2year, numberofyears));
-        rxjs.combineLatest(this.exp3area$, this.exp3year$, this.numberofyears$).subscribe(([exp3area, exp3year, numberofyears]) => this.exp3RentSet = this.setExp3RentSet(exp3area, exp3year, numberofyears));
-        rxjs.combineLatest(this.exp4area$, this.exp4year$, this.numberofyears$).subscribe(([exp4area, exp4year, numberofyears]) => this.exp4RentSet = this.setExp4RentSet(exp4area, exp4year, numberofyears));
-        rxjs.combineLatest(this.exp1RentSet$, this.exp2RentSet$, this.exp3RentSet$, this.exp4RentSet$).subscribe(([exp1RentSet, exp2RentSet, exp3RentSet, exp4RentSet]) => this.expAllRentSet = this.setExpAllRentSet(exp1RentSet, exp2RentSet, exp3RentSet, exp4RentSet));
-        rxjs.combineLatest(this.dec1area$, this.dec1year$, this.numberofyears$).subscribe(([dec1area, dec1year, numberofyears]) => this.dec1RentSet = this.setDec1RentSet(dec1area, dec1year, numberofyears));
-        rxjs.combineLatest(this.dec2area$, this.dec2year$, this.numberofyears$).subscribe(([dec2area, dec2year, numberofyears]) => this.dec2RentSet = this.setDec2RentSet(dec2area, dec2year, numberofyears));
-        rxjs.combineLatest(this.dec3area$, this.dec3year$, this.numberofyears$).subscribe(([dec3area, dec3year, numberofyears]) => this.dec3RentSet = this.setDec3RentSet(dec3area, dec3year, numberofyears));
-        rxjs.combineLatest(this.dec4area$, this.dec4year$, this.numberofyears$).subscribe(([dec4area, dec4year, numberofyears]) => this.dec4RentSet = this.setDec4RentSet(dec4area, dec4year, numberofyears));
-        rxjs.combineLatest(this.dec1RentSet$, this.dec2RentSet$, this.dec3RentSet$, this.dec4RentSet$).subscribe(([dec1RentSet, dec2RentSet, dec3RentSet, dec4RentSet]) => this.decAllRentSet = this.setDecAllRentSet(dec1RentSet, dec2RentSet, dec3RentSet, dec4RentSet));
-        rxjs.combineLatest(this.expAllRentSet$).subscribe(([expAllRentSet]) => this.chartJsExpAllRentObj = this.setChartJsExpAllRentObj(expAllRentSet));
-        rxjs.combineLatest(this.decAllRentSet$).subscribe(([decAllRentSet]) => this.chartJsDecAllRentObj = this.setChartJsDecAllRentObj(decAllRentSet));
-        rxjs.combineLatest(this.initialAmountAreaRentSet$, this.expAllRentSet$).subscribe(([initialAmountAreaRentSet, expAllRentSet]) => this.bruttoAllRentSet = this.setBruttoAllRentSet(initialAmountAreaRentSet, expAllRentSet));
-        rxjs.combineLatest(this.bruttoAllRentSet$, this.decAllRentSet$).subscribe(([bruttoAllRentSet, decAllRentSet]) => this.nettoAllRentSet = this.setNettoAllRentSet(bruttoAllRentSet, decAllRentSet));
-        rxjs.combineLatest(this.nettoAllRentSet$).subscribe(([nettoAllRentSet]) => this.chartJsNettoAllRentObj = this.setChartJsNettoAllRentObj(nettoAllRentSet));
+        this.zipAndAddSets = zipAndOperateSetsFactory('add');
+        this.zipAndMultiplySets = zipAndOperateSetsFactory('multiply');
+        this.zipAndSubtractSets = zipAndOperateSetsFactory('subtract');
+
+
+        let expRents = [
+            {
+                expRentSet: this.exp1RentSet$,
+                expAreaRent: this.exp1area$,
+                expYearRent: this.exp1year$
+            },
+            {
+                expRentSet: this.exp2RentSet$,
+                expAreaRent: this.exp2area$,
+                expYearRent: this.exp2year$
+            },
+            {
+                expRentSet: this.exp3RentSet$,
+                expAreaRent: this.exp3area$,
+                expYearRent: this.exp3year$
+            },
+            {
+                expRentSet: this.exp4RentSet$,
+                expAreaRent: this.exp4area$,
+                expYearRent: this.exp4year$
+            },
+        ]
+
+        let decRents = [
+            {
+                decRentSet: this.dec1RentSet$,
+                decAreaRent: this.dec1area$,
+                decYearRent: this.dec1year$
+            },
+            {
+                decRentSet: this.dec2RentSet$,
+                decAreaRent: this.dec2area$,
+                decYearRent: this.dec2year$
+            },
+            {
+                decRentSet: this.dec3RentSet$,
+                decAreaRent: this.dec3area$,
+                decYearRent: this.dec3year$
+            },
+            {
+                decRentSet: this.dec4RentSet$,
+                decAreaRent: this.dec4area$,
+                decYearRent: this.dec4year$
+            },
+        ]
+
+        expRents.forEach((item, i) => {
+            rxjs.combineLatest(item.expAreaRent, this.numberofyears$, item.expYearRent).subscribe((values) => this[`exp${String(i+1)}RentSet`] = setMaker({value: values[0], period: values[1], key: values[2]}));
+        })
+
+        decRents.forEach((item, i) => {
+            rxjs.combineLatest(item.decAreaRent, this.numberofyears$, item.decYearRent).subscribe((values) => this[`dec${String(i+1)}RentSet`] = setMaker({value: values[0], period: values[1], key: values[2]}));
+        })
+
+        rxjs.combineLatest(this.initialPriceHeatRent$, this.initialAmountHeatRent$).subscribe((values) => this.initialCostHeatRent = singleMultiplier(values));
+        rxjs.combineLatest(this.initialPriceAreaRent$, this.initialAmountAreaRent$).subscribe((values) => this.initialCostAreaRent = singleMultiplier(values));
+
+
+
+        rxjs.combineLatest(this.initialAmountAreaRent$, this.numberofyears$).subscribe(([initialAmountAreaRent, numberofyears]) => this.initialAmountAreaRentSet = setMaker({value: initialAmountAreaRent, period: numberofyears, key: 'fill'}))
+
+  
+        rxjs.combineLatest(this.initialCostHeatRent$, this.numberofyears$, this.inflationrate$).subscribe(([initialCostHeatRent, numberofyears, inflationrate]) => this.costHeatRentSet = compoundedSetMaker({value: initialCostHeatRent, period: numberofyears, growthRate: inflationrate, key: 'fill'}));
+        rxjs.combineLatest(this.initialCostAreaRent$, this.numberofyears$, this.compoundrateAreaRent$).subscribe(([initialCostAreaRent, numberofyears, compoundrateAreaRent]) => this.costAreaRentSet = compoundedSetMaker({value: initialCostAreaRent, period: numberofyears, growthRate: compoundrateAreaRent, key: 'fill'}));
+
+
+
+        rxjs.combineLatest(this.costAreaRentSet$, this.initialAmountAreaRentSet$).subscribe((values) => this.compondedCostAreaRentSet = this.zipAndMultiplySets(values));
+        rxjs.combineLatest(this.costHeatRentSet$, this.initialAmountAreaRentSet$).subscribe((values) => this.compondedCostHeatRentSet = this.zipAndMultiplySets(values));
+
+        rxjs.combineLatest(...expRents.map(item => item.expRentSet)).subscribe((values) => this.expAllRentSet = this.zipAndAddSets(values));
+        rxjs.combineLatest(...decRents.map(item => item.decRentSet)).subscribe((values) => this.decAllRentSet = this.zipAndAddSets(values));
+
+
+        rxjs.combineLatest(this.initialAmountAreaRentSet$, this.expAllRentSet$).subscribe((values) => this.bruttoAllRentSet = this.zipAndAddSets(values));
+        rxjs.combineLatest(this.bruttoAllRentSet$, this.decAllRentSet$).subscribe((values) => this.nettoAllRentSet = this.zipAndSubtractSets(values));
+        
+
+        rxjs.combineLatest(this.compondedCostHeatRentSet$).subscribe((values) => this.chartJsCompondedCostHeatRentObj = setChartJsObj({set: values[0], name: 'Värmekostnader', label: 'kr', datapackage: 'yearlyamounts'}));
+        rxjs.combineLatest(this.compondedCostAreaRentSet$).subscribe((values) => this.chartJsCompondedCostAreaRentObj = setChartJsObj({set: values[0], name: 'Hyreskostnader', label: 'kr', datapackage: 'yearlyamounts'})); 
+        rxjs.combineLatest(this.expAllRentSet$).subscribe((values) => this.chartJsExpAllRentObj = setChartJsObj({set: values[0], name: 'Expanderad lokalyta', label: 'kvm', datapackage: 'yearlyamounts'}));
+        rxjs.combineLatest(this.decAllRentSet$).subscribe((values) => this.chartJsDecAllRentObj = setChartJsObj({set: values[0], name: 'Avvecklad lokalyta', label: 'kvm', datapackage: 'yearlyamounts'}));
+        rxjs.combineLatest(this.nettoAllRentSet$).subscribe((values) => this.chartJsNettoAllRentObj = setChartJsObj({set: values[0], name: 'Nettolokalyta', label: 'kvm', datapackage: 'yearlyamounts'}));
     }
 
     updated(changedProps) {
@@ -120,266 +184,7 @@ export class XThree extends LitElement {
         super();
     }
 
-    setChartJsNettoAllRentObj(nettoAllRentSet) {
 
-        let whcgObjMakerData = {
-            set: nettoAllRentSet,
-            name: 'Nettolokalyta',
-            label: 'kvm',
-            datapackage: 'yearlyamounts'
-        }
-
-        let whcgChartJsTransformerData = {
-            whcgObj: whcgObjMaker(whcgObjMakerData), 
-            datapackage: 'yearlyamounts'
-        }
-        
-        return whcgChartJsTransformer(whcgChartJsTransformerData)
-    }
-
-    setChartJsExpAllRentObj(expAllRentSet) {
-
-        let whcgObjMakerData = {
-            set: expAllRentSet,
-            name: 'Expanderad lokalyta',
-            label: 'kvm',
-            datapackage: 'yearlyamounts'
-        }
-
-        let whcgChartJsTransformerData = {
-            whcgObj: whcgObjMaker(whcgObjMakerData), 
-            datapackage: 'yearlyamounts'
-        }
-        
-        return whcgChartJsTransformer(whcgChartJsTransformerData)
-    }
-
-    setChartJsDecAllRentObj(decAllRentSet) {
-
-        let whcgObjMakerData = {
-            set: decAllRentSet,
-            name: 'Avvecklad lokalyta',
-            label: 'kvm',
-            datapackage: 'yearlyamounts'
-        }
-
-        let whcgChartJsTransformerData = {
-            whcgObj: whcgObjMaker(whcgObjMakerData), 
-            datapackage: 'yearlyamounts'
-        }
-        
-        return whcgChartJsTransformer(whcgChartJsTransformerData)
-    }
-
-
-
-    setExp1RentSet(exp1costRent, exp1yearRent, numberofyears) {
-        let setFactoryData = {
-            value: exp1costRent,
-            period: numberofyears,
-            key: exp1yearRent
-        }
-        return setFactory(setFactoryData)
-    }
-
-    setExp2RentSet(exp2costRent, exp2yearRent, numberofyears) {
-        let setFactoryData = {
-            value: exp2costRent,
-            period: numberofyears,
-            key: exp2yearRent
-        }
-        return setFactory(setFactoryData)
-    }
-
-    setExp3RentSet(exp3costRent, exp3yearRent, numberofyears) {
-        let setFactoryData = {
-            value: exp3costRent,
-            period: numberofyears,
-            key: exp3yearRent
-        }
-        return setFactory(setFactoryData)
-    }
-
-    setExp4RentSet(exp4costRent, exp4yearRent, numberofyears) {
-        let setFactoryData = {
-            value: exp4costRent,
-            period: numberofyears,
-            key: exp4yearRent
-        }
-        return setFactory(setFactoryData)
-    }
-
-
-    setDec1RentSet(dec1costRent, dec1yearRent, numberofyears) {
-        let setFactoryData = {
-            value: dec1costRent,
-            period: numberofyears,
-            key: dec1yearRent
-        }
-        return setFactory(setFactoryData)
-    }
-
-    setDec2RentSet(dec2costRent, dec2yearRent, numberofyears) {
-        let setFactoryData = {
-            value: dec2costRent,
-            period: numberofyears,
-            key: dec2yearRent
-        }
-        return setFactory(setFactoryData)
-    }
-
-    setDec3RentSet(dec3costRent, dec3yearRent, numberofyears) {
-        let setFactoryData = {
-            value: dec3costRent,
-            period: numberofyears,
-            key: dec3yearRent
-        }
-        return setFactory(setFactoryData)
-    }
-
-    setDec4RentSet(dec4costRent, dec4yearRent, numberofyears) {
-        let setFactoryData = {
-            value: dec4costRent,
-            period: numberofyears,
-            key: dec4yearRent
-        }
-        return setFactory(setFactoryData)
-    }
-
-
-    setExpAllRentSet(setExp1RentSet, setExp2RentSet, setExp3RentSet, setExp4RentSet) {
-        let setsPeriodOperatorData = {
-            sets: [setExp1RentSet, setExp2RentSet, setExp3RentSet, setExp4RentSet],
-            mode: 'add'
-        }
-    
-        return setsPeriodOperator(setsPeriodOperatorData);
-    }
-
-
-    setDecAllRentSet(setDec1RentSet, setDec2RentSet, setDec3RentSet, setDec4RentSet) {
-        let setsPeriodOperatorData = {
-            sets: [setDec1RentSet, setDec2RentSet, setDec3RentSet, setDec4RentSet],
-            mode: 'add'
-        }
-    
-        return setsPeriodOperator(setsPeriodOperatorData);
-    }
-
-
-    setBruttoAllRentSet(initialAmountAreaRentSet, expAllRentSet) {
-        let setsPeriodOperatorData = {
-            sets: [initialAmountAreaRentSet, expAllRentSet],
-            mode: 'add'
-        }
-    
-        return setsPeriodOperator(setsPeriodOperatorData);
-    }
-
-    setNettoAllRentSet(bruttoAllRentSet, decAllRentSet) {
-        let setsPeriodOperatorData = {
-            sets: [bruttoAllRentSet, decAllRentSet],
-            mode: 'subtract'
-        }
-    
-        return setsPeriodOperator(setsPeriodOperatorData);
-    }
-
-
-
-
-    setCostHeatRentSet(initialCostHeatRent, numberofyears, inflationrate) {
-        let setFactoryData = {
-            value: initialCostHeatRent,
-            period: numberofyears,
-            key: 'fill'
-        }
-
-        let setCompounderdata = {
-            set: setFactory(setFactoryData),
-            growthRate: inflationrate
-        }
-        return setCompounder(setCompounderdata)
-    }
-
-    setInitialAmountAreaRentSet(initialAmountAreaRent, numberofyears) {
-        let setFactoryData = {
-            value: initialAmountAreaRent,
-            period: numberofyears,
-            key: 'fill'
-        }
-        return setFactory(setFactoryData)
-    }
-
-    setCompondedCostHeatRentSet(initialAmountAreaRentSet, costHeatRentSet) {
-        let setsPeriodOperatorData = {
-            sets: [costHeatRentSet, initialAmountAreaRentSet],
-            mode: 'multiply'
-        }
-    
-        return setsPeriodOperator(setsPeriodOperatorData);
-    }
-
-    setChartJsCompondedCostHeatRentObj(compondedCostHeatRentSet) {
-
-        let whcgObjMakerData = {
-            set: compondedCostHeatRentSet,
-            name: 'Värmekostnader',
-            label: 'kr',
-            datapackage: 'yearlyamounts'
-        }
-
-        let whcgChartJsTransformerData = {
-            whcgObj: whcgObjMaker(whcgObjMakerData), 
-            datapackage: 'yearlyamounts'
-        }
-        
-        return whcgChartJsTransformer(whcgChartJsTransformerData)
-    }
-
-
-
-
-
-    setCostAreaRentSet(initialCostAreaRent, numberofyears, inflationrate) {
-        let setFactoryData = {
-            value: initialCostAreaRent,
-            period: numberofyears,
-            key: 'fill'
-        }
-
-        let setCompounderdata = {
-            set: setFactory(setFactoryData),
-            growthRate: inflationrate
-        }
-        return setCompounder(setCompounderdata)
-    }
-
-    setCompondedCostAreaRentSet(initialAmountAreaRentSet, costAreaRentSet) {
-        let setsPeriodOperatorData = {
-            sets: [costAreaRentSet, initialAmountAreaRentSet],
-            mode: 'multiply'
-        }
-    
-        return setsPeriodOperator(setsPeriodOperatorData);
-    }
-
-    setChartJsCompondedCostAreaRentObj(compondedCostAreaRentSet) {
-
-        let whcgObjMakerData = {
-            set: compondedCostAreaRentSet,
-            name: 'Hyreskostnader',
-            label: 'kr',
-            datapackage: 'yearlyamounts'
-        }
-
-        let whcgChartJsTransformerData = {
-            whcgObj: whcgObjMaker(whcgObjMakerData), 
-            datapackage: 'yearlyamounts'
-        }
-        
-        return whcgChartJsTransformer(whcgChartJsTransformerData)
-    }
 
 
     valueChanged(e) {
@@ -990,3 +795,261 @@ customElements.define('x-three', XThree);
     
         //     };
         // }
+
+
+
+
+
+    // setChartJsNettoAllRentObj(nettoAllRentSet) {
+
+    //     let whcgObjMakerData = {
+    //         set: nettoAllRentSet,
+    //         name: 'Nettolokalyta',
+    //         label: 'kvm',
+    //         datapackage: 'yearlyamounts'
+    //     }
+
+    //     let whcgChartJsTransformerData = {
+    //         whcgObj: whcgObjMaker(whcgObjMakerData), 
+    //         datapackage: 'yearlyamounts'
+    //     }
+        
+    //     return whcgChartJsTransformer(whcgChartJsTransformerData)
+    // }
+
+    // setChartJsExpAllRentObj(expAllRentSet) {
+
+    //     let whcgObjMakerData = {
+    //         set: expAllRentSet,
+    //         name: 'Expanderad lokalyta',
+    //         label: 'kvm',
+    //         datapackage: 'yearlyamounts'
+    //     }
+
+    //     let whcgChartJsTransformerData = {
+    //         whcgObj: whcgObjMaker(whcgObjMakerData), 
+    //         datapackage: 'yearlyamounts'
+    //     }
+        
+    //     return whcgChartJsTransformer(whcgChartJsTransformerData)
+    // }
+
+    // setChartJsDecAllRentObj(decAllRentSet) {
+
+    //     let whcgObjMakerData = {
+    //         set: decAllRentSet,
+    //         name: 'Avvecklad lokalyta',
+    //         label: 'kvm',
+    //         datapackage: 'yearlyamounts'
+    //     }
+
+    //     let whcgChartJsTransformerData = {
+    //         whcgObj: whcgObjMaker(whcgObjMakerData), 
+    //         datapackage: 'yearlyamounts'
+    //     }
+        
+    //     return whcgChartJsTransformer(whcgChartJsTransformerData)
+    // }
+
+
+
+    // setExp1RentSet(exp1costRent, exp1yearRent, numberofyears) {
+    //     let setFactoryData = {
+    //         value: exp1costRent,
+    //         period: numberofyears,
+    //         key: exp1yearRent
+    //     }
+    //     return setFactory(setFactoryData)
+    // }
+
+    // setExp2RentSet(exp2costRent, exp2yearRent, numberofyears) {
+    //     let setFactoryData = {
+    //         value: exp2costRent,
+    //         period: numberofyears,
+    //         key: exp2yearRent
+    //     }
+    //     return setFactory(setFactoryData)
+    // }
+
+    // setExp3RentSet(exp3costRent, exp3yearRent, numberofyears) {
+    //     let setFactoryData = {
+    //         value: exp3costRent,
+    //         period: numberofyears,
+    //         key: exp3yearRent
+    //     }
+    //     return setFactory(setFactoryData)
+    // }
+
+    // setExp4RentSet(exp4costRent, exp4yearRent, numberofyears) {
+    //     let setFactoryData = {
+    //         value: exp4costRent,
+    //         period: numberofyears,
+    //         key: exp4yearRent
+    //     }
+    //     return setFactory(setFactoryData)
+    // }
+
+
+    // setDec1RentSet(dec1costRent, dec1yearRent, numberofyears) {
+    //     let setFactoryData = {
+    //         value: dec1costRent,
+    //         period: numberofyears,
+    //         key: dec1yearRent
+    //     }
+    //     return setFactory(setFactoryData)
+    // }
+
+    // setDec2RentSet(dec2costRent, dec2yearRent, numberofyears) {
+    //     let setFactoryData = {
+    //         value: dec2costRent,
+    //         period: numberofyears,
+    //         key: dec2yearRent
+    //     }
+    //     return setFactory(setFactoryData)
+    // }
+
+    // setDec3RentSet(dec3costRent, dec3yearRent, numberofyears) {
+    //     let setFactoryData = {
+    //         value: dec3costRent,
+    //         period: numberofyears,
+    //         key: dec3yearRent
+    //     }
+    //     return setFactory(setFactoryData)
+    // }
+
+    // setDec4RentSet(dec4costRent, dec4yearRent, numberofyears) {
+    //     let setFactoryData = {
+    //         value: dec4costRent,
+    //         period: numberofyears,
+    //         key: dec4yearRent
+    //     }
+    //     return setFactory(setFactoryData)
+    // }
+
+
+    // setExpAllRentSet(setExp1RentSet, setExp2RentSet, setExp3RentSet, setExp4RentSet) {
+    //     let setsPeriodOperatorData = {
+    //         sets: [setExp1RentSet, setExp2RentSet, setExp3RentSet, setExp4RentSet],
+    //         mode: 'add'
+    //     }
+    
+    //     return setsPeriodOperator(setsPeriodOperatorData);
+    // }
+
+
+    // setDecAllRentSet(setDec1RentSet, setDec2RentSet, setDec3RentSet, setDec4RentSet) {
+    //     let setsPeriodOperatorData = {
+    //         sets: [setDec1RentSet, setDec2RentSet, setDec3RentSet, setDec4RentSet],
+    //         mode: 'add'
+    //     }
+    
+    //     return setsPeriodOperator(setsPeriodOperatorData);
+    // }
+
+
+    // setBruttoAllRentSet(initialAmountAreaRentSet, expAllRentSet) {
+    //     let setsPeriodOperatorData = {
+    //         sets: [initialAmountAreaRentSet, expAllRentSet],
+    //         mode: 'add'
+    //     }
+    
+    //     return setsPeriodOperator(setsPeriodOperatorData);
+    // }
+
+    // setNettoAllRentSet(bruttoAllRentSet, decAllRentSet) {
+    //     let setsPeriodOperatorData = {
+    //         sets: [bruttoAllRentSet, decAllRentSet],
+    //         mode: 'subtract'
+    //     }
+    
+    //     return setsPeriodOperator(setsPeriodOperatorData);
+    // }
+
+
+
+
+    // setCostHeatRentSet(initialCostHeatRent, numberofyears, inflationrate) {
+    //     let setFactoryData = {
+    //         value: initialCostHeatRent,
+    //         period: numberofyears,
+    //         key: 'fill'
+    //     }
+
+    //     let setCompounderdata = {
+    //         set: setFactory(setFactoryData),
+    //         growthRate: inflationrate
+    //     }
+    //     return setCompounder(setCompounderdata)
+    // }
+
+
+
+    // setCompondedCostHeatRentSet(initialAmountAreaRentSet, costHeatRentSet) {
+    //     let setsPeriodOperatorData = {
+    //         sets: [costHeatRentSet, initialAmountAreaRentSet],
+    //         mode: 'multiply'
+    //     }
+    
+    //     return setsPeriodOperator(setsPeriodOperatorData);
+    // }
+
+    // setChartJsCompondedCostHeatRentObj(compondedCostHeatRentSet) {
+
+    //     let whcgObjMakerData = {
+    //         set: compondedCostHeatRentSet,
+    //         name: 'Värmekostnader',
+    //         label: 'kr',
+    //         datapackage: 'yearlyamounts'
+    //     }
+
+    //     let whcgChartJsTransformerData = {
+    //         whcgObj: whcgObjMaker(whcgObjMakerData), 
+    //         datapackage: 'yearlyamounts'
+    //     }
+        
+    //     return whcgChartJsTransformer(whcgChartJsTransformerData)
+    // }
+
+
+
+
+
+    // setCostAreaRentSet(initialCostAreaRent, numberofyears, inflationrate) {
+    //     let setFactoryData = {
+    //         value: initialCostAreaRent,
+    //         period: numberofyears,
+    //         key: 'fill'
+    //     }
+
+    //     let setCompounderdata = {
+    //         set: setFactory(setFactoryData),
+    //         growthRate: inflationrate
+    //     }
+    //     return setCompounder(setCompounderdata)
+    // }
+
+    // setCompondedCostAreaRentSet(initialAmountAreaRentSet, costAreaRentSet) {
+    //     let setsPeriodOperatorData = {
+    //         sets: [costAreaRentSet, initialAmountAreaRentSet],
+    //         mode: 'multiply'
+    //     }
+    
+    //     return setsPeriodOperator(setsPeriodOperatorData);
+    // }
+
+    // setChartJsCompondedCostAreaRentObj(compondedCostAreaRentSet) {
+
+    //     let whcgObjMakerData = {
+    //         set: compondedCostAreaRentSet,
+    //         name: 'Hyreskostnader',
+    //         label: 'kr',
+    //         datapackage: 'yearlyamounts'
+    //     }
+
+    //     let whcgChartJsTransformerData = {
+    //         whcgObj: whcgObjMaker(whcgObjMakerData), 
+    //         datapackage: 'yearlyamounts'
+    //     }
+        
+    //     return whcgChartJsTransformer(whcgChartJsTransformerData)
+    // }
