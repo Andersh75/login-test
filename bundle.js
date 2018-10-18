@@ -35962,7 +35962,6 @@ var MyModule = (function (exports) {
         ${grid}
         <style>
         </style>
-        <vaadin-button id="button">BUTTON</vaadin-button>
         <div class="grid-12">
             <whcg-section-chart-text-inputlong class="col1span12">
                 <span slot="title">PLANERAT UNDERHÅLL</span>
@@ -35971,24 +35970,16 @@ var MyModule = (function (exports) {
                 <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
                 </span>
                 <whcg-box-container slot="input" name="Underhållsinsatser">
+                ${this.list.map((item, index) => {
+                    return html`
+                        <whcg-number-field-box column name="Underhållsinsats 1">
+                            <whcg-number-field label="År" id=${`maint${index+1}yearOwn`} @valueChanged=${this.valueChanged.bind(this)} value=${this[`maint${index+1}yearOwn`]} placeholder="...antal"></whcg-number-field>
+                            <whcg-number-field label="Kostnad" id=${`maint${index+1}costOwn`} @valueChanged=${this.valueChanged.bind(this)} value=${this[`maint${index+1}costOwn`]} suffix="kr" placeholder="...antal"></whcg-number-field>
+                        </whcg-number-field-box>
+                    `
+                })}
+                    
 
-
-                    <whcg-number-field-box column name="Underhållsinsats 1">
-                        <whcg-number-field label="År" id="maint1yearOwn" @valueChanged=${this.valueChanged.bind(this)} value=${this.maint1yearOwn} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" id="maint1costOwn" @valueChanged=${this.valueChanged.bind(this)} value=${this.maint1costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Underhållsinsats 2">
-                        <whcg-number-field label="År" id="maint2yearOwn"  @valueChanged=${this.valueChanged.bind(this)} value=${this.maint2yearOwn} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" id="maint2costOwn" @valueChanged=${this.valueChanged.bind(this)} value=${this.maint2costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Underhållsinsats 3">
-                        <whcg-number-field label="År" id="maint3yearOwn"  @valueChanged=${this.valueChanged.bind(this)} value=${this.maint3yearOwn} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" id="maint3costOwn" @valueChanged=${this.valueChanged.bind(this)} value=${this.maint3costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
-                    <whcg-number-field-box column name="Underhållsinsats 4">
-                        <whcg-number-field label="År" id="maint4yearOwn"  @valueChanged=${this.valueChanged.bind(this)} value=${this.maint4yearOwn} placeholder="...antal"></whcg-number-field>
-                        <whcg-number-field label="Kostnad" id="maint4costOwn" @valueChanged=${this.valueChanged.bind(this)} value=${this.maint4costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
-                    </whcg-number-field-box>
                 </whcg-box-container>
             </whcg-section-chart-text-inputlong>
             
@@ -36064,6 +36055,32 @@ var MyModule = (function (exports) {
     //     <whcg-number-field label="Kostnad" id=${item.costid} @valueChanged=${this.valueChanged.bind(this)} value=${item.costvalue} suffix="kr" placeholder="...antal"></whcg-number-field>
     // </whcg-number-field-box>
     // `)}
+
+
+
+    // ${this.list.map((item, index) => {
+    //     return html`
+    //         <vaadin-button id=${`maint${index+1}yearOwn`}>${this[`maint${index+1}yearOwn`]}</vaadin-button>
+    //     `
+    // })}
+
+
+    /* <whcg-number-field-box column name="Underhållsinsats 1">
+    <whcg-number-field label="År" id="maint1yearOwn" @valueChanged=${this.valueChanged.bind(this)} value=${this.maint1yearOwn} placeholder="...antal"></whcg-number-field>
+    <whcg-number-field label="Kostnad" id="maint1costOwn" @valueChanged=${this.valueChanged.bind(this)} value=${this.maint1costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
+    </whcg-number-field-box>
+    <whcg-number-field-box column name="Underhållsinsats 2">
+    <whcg-number-field label="År" id="maint2yearOwn"  @valueChanged=${this.valueChanged.bind(this)} value=${this.maint2yearOwn} placeholder="...antal"></whcg-number-field>
+    <whcg-number-field label="Kostnad" id="maint2costOwn" @valueChanged=${this.valueChanged.bind(this)} value=${this.maint2costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
+    </whcg-number-field-box>
+    <whcg-number-field-box column name="Underhållsinsats 3">
+    <whcg-number-field label="År" id="maint3yearOwn"  @valueChanged=${this.valueChanged.bind(this)} value=${this.maint3yearOwn} placeholder="...antal"></whcg-number-field>
+    <whcg-number-field label="Kostnad" id="maint3costOwn" @valueChanged=${this.valueChanged.bind(this)} value=${this.maint3costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
+    </whcg-number-field-box>
+    <whcg-number-field-box column name="Underhållsinsats 4">
+    <whcg-number-field label="År" id="maint4yearOwn"  @valueChanged=${this.valueChanged.bind(this)} value=${this.maint4yearOwn} placeholder="...antal"></whcg-number-field>
+    <whcg-number-field label="Kostnad" id="maint4costOwn" @valueChanged=${this.valueChanged.bind(this)} value=${this.maint4costOwn} suffix="kr" placeholder="...antal"></whcg-number-field>
+    </whcg-number-field-box> */
 
     class XThree extends LitElement {
 
