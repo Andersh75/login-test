@@ -330,3 +330,146 @@ export function setChartJsObj({set, name, label, datapackage}) {
 
 
 
+
+
+
+let floatpUtil = (function () {
+	function trimToUndefined(str) {
+		if (str === undefined) {
+			return undefined;
+		}
+		
+		str = str.trim();
+		
+		return str.length > 0 ? str : undefined;
+	};
+	
+	function Counter() {
+		var counter = 0;
+		return function() {
+			return counter++;
+		};
+	};
+	
+	function Ring(values) {
+		var i = 0;
+		
+		return function() {
+			if (! (i < values.length)) {
+				i = 0;
+			}
+			
+			return values[i++];
+		};
+	};
+	
+	function mapm(reducer, arrs) {
+		let count = undefined;
+		arrs.forEach(function(arr) {
+			if (count === undefined || arr.length < count)
+				count = arr.length;
+		});
+		
+		const result = [];
+		for (let i = 0 ; i < count ; i++) {
+			const args = [];
+			arrs.forEach(function(arr) {
+				args.push(arr[i]);
+			});
+			
+			const interm = args.reduce(reducer);
+			result.push(interm);
+		}
+		return result;
+    };
+    
+    function mapmTwo(fn, arrs) {
+		let count = undefined;
+		arrs.forEach(function(arr) {
+			if (count === undefined || arr.length < count)
+				count = arr.length;
+		});
+		
+		const result = [];
+		for (let i = 0 ; i < count ; i++) {
+			const args = [];
+			arrs.forEach(function(arr) {
+				args.push(arr[i]);
+			});
+			
+			const interm = fn.apply(args);
+			result.push(interm);
+		}
+		return result;
+    };
+    
+
+	function mapplus(arrs) {
+		return mapm(function(a, b) { return a + b; }, arrs);
+	};
+	function mapminus(arrs) {
+		return mapm(function(a, b) { return a - b; }, arrs);
+	};
+	
+	function findFunction(context, name) {
+		var namespaces = name.split('.');
+		var func = namespaces.pop();
+		
+		for(var i = 0; i < namespaces.length; i++) {
+			context = context[namespaces[i]];
+		}
+		
+		return context[func];
+	};
+	
+	function complement(p) {
+		return function() {
+			return !p.apply(this, arguments);
+		};
+	};
+	
+	return {
+		trimToUndefined:trimToUndefined,
+		Counter:Counter,
+		Ring:Ring,
+		mapm:mapm,
+		mapplus:mapplus,
+		mapminus:mapminus,
+		findFunction:findFunction,
+		complement:complement
+	};
+})();
+
+
+export function mapmv(fn, arrs) {
+    console.log('fn');
+    console.log(fn);
+    console.log('arrs');
+    console.log(arrs);
+    let count = undefined;
+    arrs.forEach(function(arr) {
+        if (count === undefined || arr.length < count)
+            count = arr.length;
+    });
+    
+    const result = [];
+    for (let i = 0 ; i < count ; i++) {
+        const args = [];
+        arrs.forEach(function(arr) {
+            args.push(arr[i]);
+        });
+
+        console.log('args');
+        console.log(args);
+        
+        const interm = fn.apply(null, args);
+        result.push(interm);
+    }
+
+    console.log('result');
+    console.log(result);
+    return result;
+};
+
+
+

@@ -61,6 +61,10 @@ export function reducer(state, action) {
     case 'MAIN4YEAROWN_VALUE':
         return {...state, maint4yearOwn: action.payload}
 
+    case 'MAINYEARSOWN_VALUE':
+        return {...state, maintyearsOwn: [...state.maintyearsOwn.push(JSON.stringify(action.payload))]}
+    case 'MAINCOSTSOWN_VALUE':
+        return {...state, maintcostsOwn: [...state.maintcostsOwn.push(JSON.stringify(action.payload))]}
 
     case 'EXP1YEAR_VALUE':
         return {...state, exp1year: action.payload}

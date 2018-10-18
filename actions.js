@@ -221,9 +221,18 @@ export const action = {
           payload: payload
         };
       },
-
-
-
+      maintyearsOwnValue: (payload) => {
+        return {
+          type: MAINYEARSOWN_VALUE,
+          payload: payload
+        };
+      },
+      maintcostsOwnValue: (payload) => {
+        return {
+          type: MAINCOSTSOWN_VALUE,
+          payload: payload
+        };
+      },
       exp1yearValue: (payload) => {
         return {
           type: EXP1YEAR_VALUE,

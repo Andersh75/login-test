@@ -10,11 +10,9 @@ export const initState = {
     initialPriceHeatRent: 10,
     compoundrateAreaRent: 0.03,
     initialPriceAreaRent: 10,
+    maintyearsOwn: JSON.stringify([1, 2, 3, 4]),
+    maintcostsOwn: JSON.stringify([10, 20, 30, 40]),
 
-
-
-
-    
     one: 74,
     two: 47,
     three: 7,

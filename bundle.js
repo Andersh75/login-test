@@ -25281,6 +25281,10 @@ var MyModule = (function (exports) {
         case 'MAIN4YEAROWN_VALUE':
             return {...state, maint4yearOwn: action.payload}
 
+        case 'MAINYEARSOWN_VALUE':
+            return {...state, maintyearsOwn: [...state.maintyearsOwn.push(JSON.stringify(action.payload))]}
+        case 'MAINCOSTSOWN_VALUE':
+            return {...state, maintcostsOwn: [...state.maintcostsOwn.push(JSON.stringify(action.payload))]}
 
         case 'EXP1YEAR_VALUE':
             return {...state, exp1year: action.payload}
@@ -25354,11 +25358,9 @@ var MyModule = (function (exports) {
         initialPriceHeatRent: 10,
         compoundrateAreaRent: 0.03,
         initialPriceAreaRent: 10,
+        maintyearsOwn: JSON.stringify([1, 2, 3, 4]),
+        maintcostsOwn: JSON.stringify([10, 20, 30, 40]),
 
-
-
-
-        
         one: 74,
         two: 47,
         three: 7,
@@ -28204,9 +28206,18 @@ var MyModule = (function (exports) {
               payload: payload
             };
           },
-
-
-
+          maintyearsOwnValue: (payload) => {
+            return {
+              type: MAINYEARSOWN_VALUE,
+              payload: payload
+            };
+          },
+          maintcostsOwnValue: (payload) => {
+            return {
+              type: MAINCOSTSOWN_VALUE,
+              payload: payload
+            };
+          },
           exp1yearValue: (payload) => {
             return {
               type: EXP1YEAR_VALUE,
@@ -32385,6 +32396,37 @@ var MyModule = (function (exports) {
         return whcgChartJsTransformer(whcgChartJsTransformerData)
     }
 
+
+    function mapmv(fn, arrs) {
+        console.log('fn');
+        console.log(fn);
+        console.log('arrs');
+        console.log(arrs);
+        let count = undefined;
+        arrs.forEach(function(arr) {
+            if (count === undefined || arr.length < count)
+                count = arr.length;
+        });
+        
+        const result = [];
+        for (let i = 0 ; i < count ; i++) {
+            const args = [];
+            arrs.forEach(function(arr) {
+                args.push(arr[i]);
+            });
+
+            console.log('args');
+            console.log(args);
+            
+            const interm = fn.apply(null, args);
+            result.push(interm);
+        }
+
+        console.log('result');
+        console.log(result);
+        return result;
+    }
+
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -35815,34 +35857,33 @@ var MyModule = (function (exports) {
     class XTwo extends LitElement {
 
         firstUpdated(changedProps) {
-            this.constructor.props().forEach(prop => this[`${prop.propKey}$`] = new BehaviorSubject(0));
-
-            let maintOwns = [
-                {
-                    maintOwnSet: this.maint1OwnSet$,
-                    maintcostsOwn: this.maint1costOwn$,
-                    maintyearsOwn: this.maint1yearOwn$
-                },
-                {
-                    maintOwnSet: this.maint2OwnSet$,
-                    maintcostsOwn: this.maint2costOwn$,
-                    maintyearsOwn: this.maint2yearOwn$
-                },
-                {
-                    maintOwnSet: this.maint3OwnSet$,
-                    maintcostsOwn: this.maint3costOwn$,
-                    maintyearsOwn: this.maint3yearOwn$
-                },
-                {
-                    maintOwnSet: this.maint4OwnSet$,
-                    maintcostsOwn: this.maint4costOwn$,
-                    maintyearsOwn: this.maint4yearOwn$
+            this.constructor.props().forEach(prop => {
+                console.log(prop.rx);
+                if(prop.rx) {
+                    this[`${prop.propKey}$`] = new BehaviorSubject(0);
                 }
-            ];
+            });
+
+
+            let maintOwns = [];
 
             maintOwns.forEach((item, i) => {
                 combineLatest(item.maintcostsOwn, this.numberofyears$, item.maintyearsOwn).subscribe((values) => this[`maint${String(i+1)}OwnSet`] = setMaker({value: values[0], period: values[1], key: values[2]}));
             });
+
+            var f = (x, y, z) => {
+                console.log('z');
+                console.log(z);
+                return {
+                    yearid: 'maint' + String(z + 1) + 'yearOwn',
+                    yearvalue: x,
+                    costvalue: y,
+                    costid: 'maint' + String(z + 1) + 'costOwn'
+                }
+              };
+              
+
+            combineLatest(this.maintyearsOwn$, this.maintcostsOwn$).subscribe((values) => this.list = mapmv(f, [...values, [0, 1, 2, 3]]));
 
             this.zipAndAddSets = zipAndOperateSetsFactory('add');
             this.zipAndMultiplySets = zipAndOperateSetsFactory('multiply');
@@ -35871,11 +35912,38 @@ var MyModule = (function (exports) {
             super.updated(changedProps);
             changedProps.forEach((value, key) => {
                 this.constructor.props().forEach(prop => {
-                    if(prop.propKey === key) {
+                    if(prop.propKey === key && prop.rx) {
                         this[`${prop.propKey}$`].next(this[prop.propKey]);
                     }
                  });
             });
+
+            if(changedProps.has('maintyearsOwn')) {
+                console.log('MYO CHANGED');
+            }
+
+            // let maintOwns = [
+            //     {
+            //         maintOwnSet: this.maint1OwnSet$,
+            //         maintcostsOwn: this.maintcostsOwn$[0],
+            //         maintyearsOwn: this.maintyearsOwn$[0]
+            //     },
+            //     {
+            //         maintOwnSet: this.maint2OwnSet$,
+            //         maintcostsOwn: this.maintcostsOwn$[1],
+            //         maintyearsOwn: this.maintyearsOwn$[1]
+            //     },
+            //     {
+            //         maintOwnSet: this.maint3OwnSet$,
+            //         maintcostsOwn: this.maintcostsOwn$[2],
+            //         maintyearsOwn: this.maintyearsOwn$[2]
+            //     },
+            //     {
+            //         maintOwnSet: this.maint4OwnSet$,
+            //         maintcostsOwn: this.maintcostsOwn$[3],
+            //         maintyearsOwn: this.maintyearsOwn$[3]
+            //     }
+            // ]
         }
 
         
@@ -35887,81 +35955,75 @@ var MyModule = (function (exports) {
 
         static props() {
             return [
-            { propKey: 'costAreaOwnSet', propValue: {type: Object} },
-            { propKey: 'initialCostAreaOwn', propValue: {type: String} },
-            { propKey: 'compondedCostHeatOwnSet', propValue: {type: Object} },
-            { propKey: 'initialAmountAreaOwnSet', propValue: {type: Object} },
-            { propKey: 'costHeatOwnSet', propValue: {type: Object} },
-            { propKey: 'initialAmountAreaOwn', propValue: {type: String} },
-            { propKey: 'numberofyears', propValue: {type: String} },
-            { propKey: 'inflationrate', propValue: {type: String} },
-            { propKey: 'initialPriceHeatOwn', propValue: {type: String} },
-            { propKey: 'initialPriceAreaOwn', propValue: {type: String} },
-            { propKey: 'initialAmountHeatOwn', propValue: {type: String} },
-            { propKey: 'initialCostHeatOwn', propValue: {type: String} },
-            { propKey: 'initialPriceRepairOwn', propValue: {type: String} },
-            { propKey: 'compoundrateRepairOwn', propValue: {type: String} },
-            { propKey: 'priceRepairOwnSet', propValue: {type: Object} },
-            { propKey: 'compondedCostRepairOwnSet', propValue: {type: Object} },
-            { propKey: 'chartJsCompoundedCostRepairOwnObj', propValue: {type: Object} },
-            { propKey: 'maint1yearOwn', propValue: {type: String} },
-            { propKey: 'maint2yearOwn', propValue: {type: String} },
-            { propKey: 'maint3yearOwn', propValue: {type: String} },
-            { propKey: 'maint4yearOwn', propValue: {type: String} },
-            { propKey: 'maint1costOwn', propValue: {type: String} },
-            { propKey: 'maint2costOwn', propValue: {type: String} },
-            { propKey: 'maint3costOwn', propValue: {type: String} },
-            { propKey: 'maint4costOwn', propValue: {type: String} },
-            { propKey: 'maint1OwnSet', propValue: {type: Object} },
-            { propKey: 'maint2OwnSet', propValue: {type: Object} },
-            { propKey: 'maint3OwnSet', propValue: {type: Object} },
-            { propKey: 'maint4OwnSet', propValue: {type: Object} },
-            { propKey: 'maintAllOwnSet', propValue: {type: Object} },
-            { propKey: 'chartJsMaintAllOwnObj', propValue: {type: Object} },
-            { propKey: 'chartJsCostAreaOwnObj', propValue: {type: Object} },
-            { propKey: 'chartJsCompondedCostHeatOwnObj', propValue: {type: Object} },
-            // { propKey: 'list', propValue: {type: Array} },
+            { propKey: 'costAreaOwnSet', propValue: {type: Object}, rx: true },
+            { propKey: 'initialCostAreaOwn', propValue: {type: String}, rx: true },
+            { propKey: 'compondedCostHeatOwnSet', propValue: {type: Object}, rx: true },
+            { propKey: 'initialAmountAreaOwnSet', propValue: {type: Object}, rx: true },
+            { propKey: 'costHeatOwnSet', propValue: {type: Object}, rx: true },
+            { propKey: 'initialAmountAreaOwn', propValue: {type: String}, rx: true },
+            { propKey: 'numberofyears', propValue: {type: String}, rx: true },
+            { propKey: 'inflationrate', propValue: {type: String}, rx: true },
+            { propKey: 'initialPriceHeatOwn', propValue: {type: String}, rx: true },
+            { propKey: 'initialPriceAreaOwn', propValue: {type: String}, rx: true },
+            { propKey: 'initialAmountHeatOwn', propValue: {type: String}, rx: true },
+            { propKey: 'initialCostHeatOwn', propValue: {type: String}, rx: true },
+            { propKey: 'initialPriceRepairOwn', propValue: {type: String}, rx: true },
+            { propKey: 'compoundrateRepairOwn', propValue: {type: String}, rx: true },
+            { propKey: 'priceRepairOwnSet', propValue: {type: Object}, rx: true },
+            { propKey: 'compondedCostRepairOwnSet', propValue: {type: Object}, rx: true },
+            { propKey: 'chartJsCompoundedCostRepairOwnObj', propValue: {type: Object}, rx: true },
+            { propKey: 'maintyearsOwn', propValue: {type: Array}, rx: true },
+            { propKey: 'maintcostsOwn', propValue: {type: Array}, rx: true },
+            { propKey: 'maint1yearOwn', propValue: {type: String}, rx: true },
+            { propKey: 'maint2yearOwn', propValue: {type: String}, rx: true },
+            { propKey: 'maint3yearOwn', propValue: {type: String}, rx: true },
+            { propKey: 'maint4yearOwn', propValue: {type: String}, rx: true },
+            { propKey: 'maint1costOwn', propValue: {type: String}, rx: true },
+            { propKey: 'maint2costOwn', propValue: {type: String}, rx: true },
+            { propKey: 'maint3costOwn', propValue: {type: String}, rx: true },
+            { propKey: 'maint4costOwn', propValue: {type: String}, rx: true },
+            { propKey: 'maint1OwnSet', propValue: {type: Object}, rx: true },
+            { propKey: 'maint2OwnSet', propValue: {type: Object}, rx: true },
+            { propKey: 'maint3OwnSet', propValue: {type: Object}, rx: true },
+            { propKey: 'maint4OwnSet', propValue: {type: Object}, rx: true },
+            { propKey: 'maintAllOwnSet', propValue: {type: Object}, rx: true },
+            { propKey: 'chartJsMaintAllOwnObj', propValue: {type: Object}, rx: true },
+            { propKey: 'chartJsCostAreaOwnObj', propValue: {type: Object}, rx: true },
+            { propKey: 'chartJsCompondedCostHeatOwnObj', propValue: {type: Object}, rx: true },
+            { propKey: 'list', propValue: {type: Array}, rx: false },
             ]
         };
 
 
         constructor() {
             super();
-            this.list = [
-                {
-                    yearid: 'maint1yearOwn',
-                    yearvalue: this.maint1yearOwn,
-                    costvalue: this.maint1costOwn,
-                    costid: 'maint1costOwn'
-                },
-                {
-                    yearid: 'maint2yearOwn',
-                    yearvalue: this.maint2yearOwn,
-                    costvalue: this.maint2costOwn,
-                    costid: 'maint2costOwn'
-                },
-                {
-                    yearid: 'maint3yearOwn',
-                    yearvalue: this.maint3yearOwn,
-                    costvalue: this.maint3costOwn,
-                    costid: 'maint3costOwn'
-                },
-                {
-                    yearid: 'maint4yearOwn',
-                    yearvalue: this.maint4yearOwn,
-                    costvalue: this.maint4costOwn,
-                    costid: 'maint4costOwn'
-                }
-            ];
+            this.list = [];
         }
 
-        
+        addMaint(e) {
+            console.log('CLICKED');
+            this.list = [...this.list, {
+                    yearid: 'maint' + String(this.list.length + 1) + 'yearOwn',
+                    yearvalue: this['maintyearsOwn'][this.list.length + 1],
+                    costvalue: this['maintcostsOwn'][this.list.length + 1],
+                    costid: 'maint' + String(this.list.length + 1) + 'costOwn'
+            }];
+        }
+
+        removeMaint(e) {
+            console.log('CLICKED');
+            this.list = [...this.list.slice(0, -1)];
+        }
 
         render() {
+            console.log('RENDER');
+            console.log(this.list);
             return html`
         ${grid}
         <style>
         </style>
+        <vaadin-button id="onemore" @click=${this.addMaint.bind(this)}>ONE MORE</vaadin-button>
+        <vaadin-button id="onemore" @click=${this.removeMaint.bind(this)}>ONE Less</vaadin-button>
         <div class="grid-12">
             <whcg-section-chart-text-inputlong class="col1span12">
                 <span slot="title">PLANERAT UNDERHÅLL</span>
@@ -35970,16 +36032,14 @@ var MyModule = (function (exports) {
                 <span slot="text">Pellentesque sit amet nisl odio. Duis erat libero, placerat vitae mi at, bibendum porta nisi. Proin fermentum mi et nibh sollicitudin, in interdum mauris molestie. Aliquam fermentum dolor pulvinar tempus blandit. Cras aliquam lectus ut dolor ornare aliquam. Curabitur lobortis ut nibh in sollicitudin. In viverra facilisis magna, a tempus lorem dictum at. Ut porta vehicula lacus, nec mollis libero rutrum id. Aliquam quis tristique risus.
                 </span>
                 <whcg-box-container slot="input" name="Underhållsinsatser">
-                ${this.list.map((item, index) => {
-                    return html`
-                        <whcg-number-field-box column name="Underhållsinsats 1">
-                            <whcg-number-field label="År" id=${`maint${index+1}yearOwn`} @valueChanged=${this.valueChanged.bind(this)} value=${this[`maint${index+1}yearOwn`]} placeholder="...antal"></whcg-number-field>
-                            <whcg-number-field label="Kostnad" id=${`maint${index+1}costOwn`} @valueChanged=${this.valueChanged.bind(this)} value=${this[`maint${index+1}costOwn`]} suffix="kr" placeholder="...antal"></whcg-number-field>
-                        </whcg-number-field-box>
-                    `
-                })}
-                    
-
+                    ${this.list.map((item, index) => {
+                        return html`
+                            <whcg-number-field-box column name=${`Underhållsinsats ${index+1}`}>
+                                <whcg-number-field label="År" id=${item.yearid} @valueChanged=${this.valueChanged.bind(this)} value=${item.yearvalue} placeholder="...antal"></whcg-number-field>
+                                <whcg-number-field label="Kostnad" id=${item.costid} @valueChanged=${this.valueChanged.bind(this)} value=${item.costvalue} suffix="kr" placeholder="...antal"></whcg-number-field>
+                            </whcg-number-field-box>
+                        `
+                    })}
                 </whcg-box-container>
             </whcg-section-chart-text-inputlong>
             
@@ -36035,9 +36095,11 @@ var MyModule = (function (exports) {
 
 
         _stateChanged(state) {
+            console.log('STATE');
+            console.log(state);
             this.constructor.props().forEach(prop => {
                 if (this[prop.propKey] !== state[prop.propKey] && state[prop.propKey] != undefined) {
-                    this[prop.propKey] = state[prop.propKey];
+                    this[prop.propKey] = JSON.parse(state[prop.propKey]);
                 }
             });
         }
