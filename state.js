@@ -12,18 +12,10 @@ export const initState = {
     initialPriceAreaRent: 10,
     maintyearsOwn: JSON.stringify([1, 2, 3, 4]),
     maintcostsOwn: JSON.stringify([10, 20, 30, 40]),
-
-    one: 74,
-    two: 47,
-    three: 7,
-    four: 7,
-    five: 6,
-    six: 1,
     discountrate: '0.07',
     inflationrate: '0.04',
     startyear: 2018,
     numberofyears: 10,
-
     initialEstablishCostPerSqmOwn: 70,
     krPerKwhOwn: 10,
     maint1yearOwn: 10,
@@ -34,8 +26,6 @@ export const initState = {
     maint2costOwn: 10,
     maint3costOwn: 10,
     maint4costOwn: 10,
-    
-    
     exp1year: 10,
     exp2year: 10,
     exp3year: 10,
@@ -52,5 +42,4 @@ export const initState = {
     dec2area: 10,
     dec3area: 10,
     dec4area: 10,
-
 }

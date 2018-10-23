@@ -48,6 +48,8 @@ export class XOne extends LitElement {
     }
 
     _stateChanged(state) {
+        console.log('STATE IN ONE');
+        console.log(state);
         this.constructor.props().forEach(prop => {
             if (this[prop.propKey] !== state[prop.propKey]) {
                 this[prop.propKey] = state[prop.propKey];

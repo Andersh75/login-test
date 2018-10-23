@@ -22,19 +22,6 @@ export function reducer(state, action) {
         return {...state, compoundrateAreaRent: action.payload}
     case 'INITIALPRICEAREARENT_VALUE':
         return {...state, initialPriceAreaRent: action.payload}
-
-    case 'ONE_INCREMENT':
-        return {...state, one: state.one + 1}
-    case 'TWO_INCREMENT':
-        return {...state, two: state.two + 1}
-    case 'THREE_VALUE':
-        return {...state, three: action.payload}
-    case 'FOUR_VALUE':
-        return {...state, four: action.payload}
-    case 'FIVE_VALUE':
-        return {...state, five: action.payload}
-    case 'SIX_VALUE':
-        return {...state, six: action.payload}
     case 'DISCOUNTRATE_VALUE':
         return {...state, discountrate: action.payload}
     case 'INFLATIONRATE_VALUE':
@@ -101,8 +88,6 @@ export function reducer(state, action) {
 
     case 'KRPERKWH_VALUE':
         return {...state, krperkwh: action.payload}
-    case 'TESTVALUE_VALUE':
-        return {...state, testvalue: action.payload}
     default:
         return state
     }

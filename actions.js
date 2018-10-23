@@ -10,19 +10,10 @@ const INITIALPRICEHEATRENT_VALUE = 'INITIALPRICEHEATRENT_VALUE';
 const COMPOUNDRATEAREARENT_VALUE = 'COMPOUNDRATEAREARENT_VALUE';
 const INITIALPRICEAREARENT_VALUE = 'INITIALPRICEAREARENT_VALUE';
 
-
-const THREE_VALUE = 'THREE_VALUE';
-const FOUR_VALUE = 'FOUR_VALUE';
-const FIVE_VALUE = 'FIVE_VALUE';
-const SIX_VALUE = 'SIX_VALUE';
 const DISCOUNTRATE_VALUE = 'DISCOUNTRATE_VALUE';
 const INFLATIONRATE_VALUE = 'INFLATIONRATE_VALUE';
 const STARTYEAR_VALUE = 'STARTYEAR_VALUE';
 const NUMBEROFYEARS_VALUE = 'NUMBEROFYEARS_VALUE';
-
-const INITIALESTABLISHCOSTPERSQMOWN_VALUE = 'INITIALESTABLISHCOSTPERSQMOWN_VALUE';
-
-const KRPERKWHOWN_VALUE = 'KRPERKWHOWN_VALUE';
 const MAIN1COSTOWN_VALUE = 'MAIN1COSTOWN_VALUE';
 const MAIN2COSTOWN_VALUE = 'MAIN2COSTOWN_VALUE';
 const MAIN3COSTOWN_VALUE = 'MAIN3COSTOWN_VALUE';
@@ -124,30 +115,6 @@ export const action = {
         payload: payload
       };
     },
-    threevalue: (payload) => {
-        return {
-          type: THREE_VALUE,
-          payload: payload
-        };
-      },
-      fourvalue: (payload) => {
-        return {
-          type: FOUR_VALUE,
-          payload: payload
-        };
-      },
-      fivevalue: (payload) => {
-        return {
-          type: FIVE_VALUE,
-          payload: payload
-        };
-      },
-      sixvalue: (payload) => {
-        return {
-          type: SIX_VALUE,
-          payload: payload
-        };
-      },
       discountrateValue: (payload) => {
         return {
           type: DISCOUNTRATE_VALUE,
@@ -328,13 +295,5 @@ export const action = {
           type: DEC4AREA_VALUE,
           payload: payload
         };
-      },
-
-
-      testvalueValue: (payload) => {
-        return {
-          type: TESTVALUE_VALUE,
-          payload: payload
-        };
-      }   
+      }
 }

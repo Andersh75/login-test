@@ -212,7 +212,13 @@ export function setsPeriodOperator({sets, mode}) {
         acc = 1;
     }
 
+    console.log('sets!');
+    console.log(sets);
+
     let setKeys = Object.keys(sets[0]);
+
+    console.log('setKeys');
+    console.log(setKeys);
 
     let setValues = setKeys.map(setKey => {
         return sets.reduce((acc, set, index) => {
